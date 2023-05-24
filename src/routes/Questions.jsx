@@ -1,13 +1,36 @@
-import { useLoaderData } from "react-router";
+import { Link, useLoaderData } from "react-router-dom";
 import { timeAgo } from "../lib/helpers";
 
-export async function loader() {
+export async function loader({ request, params }) {
   const [questions, tags, users] = await Promise.all([
     fetch("/api/questions").then((res) => res.json()),
     fetch("/api/tags").then((res) => res.json()),
     fetch("/api/users").then((res) => res.json()),
   ]);
 
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q");
+  const tagName = params.tagName;
+
+  if (q) {
+    return {
+      questions: questions.filter((question) =>
+        question.title.toLowerCase().includes(q.toLowerCase())
+      ),
+      tags,
+      users,
+    };
+  }
+
+  if (tagName) {
+    return {
+      questions: questions.filter((question) =>
+        question.tagIds.includes(tags.find((tag) => tag.name === tagName).id)
+      ),
+      tags,
+      users,
+    };
+  }
   return { questions, tags, users };
 }
 
@@ -55,7 +78,12 @@ export default function Questions() {
                         role="button"
                         tabIndex={0}
                       >
-                        <span className="truncate px-3">{tag.name}</span>
+                        <Link
+                          to={`/questions/tagged/${tag.name}`}
+                          className="truncate px-3"
+                        >
+                          {tag.name}
+                        </Link>
                       </div>
                     ))}
                 </div>
