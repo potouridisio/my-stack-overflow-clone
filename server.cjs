@@ -58,35 +58,12 @@ app.get("/questions", (_req, res) => {
       id: 1,
       title: "How to loop through an array in JavaScript?",
       body: "I have an array of items and need to iterate over them. What is the best way to achieve this?",
-      votes: 10,
+      voteCount: 10,
       userId: 1,
       tagIds: [1, 3],
       createdAt: "2022-01-01T12:00:00Z",
       updatedAt: "2022-01-02T10:30:00Z",
-      answers: [
-        {
-          id: 1,
-          body: "You can use a for loop or array.forEach() to iterate over the array.",
-          votes: 5,
-          userId: 2,
-          createdAt: "2022-01-01T13:30:00Z",
-          updatedAt: "2022-01-01T14:45:00Z",
-          comments: [
-            {
-              id: 1,
-              body: "Great solution!",
-              userId: 3,
-              createdAt: "2022-01-01T14:00:00Z",
-            },
-            {
-              id: 2,
-              body: "I prefer using array.map() for better readability.",
-              userId: 1,
-              createdAt: "2022-01-01T14:15:00Z",
-            },
-          ],
-        },
-      ],
+      answerCount: 1,
     },
   ]);
 });
