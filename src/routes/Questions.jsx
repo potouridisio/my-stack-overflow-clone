@@ -24,9 +24,16 @@ export default function Questions() {
     <main className="grow p-6">
       <div className="relative flex min-h-[4rem] items-center px-6" />
 
-      <h2 className="mb-[0.35em] text-2xl leading-[1.334] tracking-normal">
-        All Questions
-      </h2>
+      <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
+        <div className="relative flex min-h-[4rem] items-center">
+          <div className="m-0 flex-[1] text-xl font-medium leading-[1.6] tracking-[0.0075em]">
+            All Questions
+          </div>
+          <button className="relative m-0 box-border inline-flex min-w-[64px] cursor-pointer select-none appearance-none items-center justify-center rounded border-0 bg-[#1976d2] px-4 py-1.5 align-middle text-sm font-medium uppercase leading-[1.75] tracking-[0.02857em] text-white no-underline outline-0 hover:bg-[#1565c0] hover:no-underline hover:shadow-[0px_2px_4px_-1px_rgba(0,_0,_0,_0.2),_0px_4px_5px_0px_rgba(0,_0,_0,_0.14),_0px_1px_10px_0px_rgba(0,0,0,0.12)]">
+            Ask Question
+          </button>
+        </div>
+      </div>
 
       <div className="w-full">
         <div className="flex flex-col space-y-4">
