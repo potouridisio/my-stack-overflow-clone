@@ -1,4 +1,5 @@
 import { useLoaderData } from "react-router";
+import { yearAgo } from "../lib/helpers.js";
 
 export async function loader() {
   const [questions, tags, users] = await Promise.all([
@@ -45,9 +46,10 @@ export default function Questions() {
                       {users.map(
                         (user) =>
                           user.id === question.userId &&
-                          `${user.name} ${user.reputation} asked 1 year ago`
+                          `${user.name} ${
+                            user.reputation
+                          } asked ${yearAgo()} year ago`
                       )}
-                      John Doe 1000 asked 1 year ago
                     </p>
                   </div>
 
