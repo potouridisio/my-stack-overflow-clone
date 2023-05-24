@@ -56,7 +56,7 @@ export default function Questions() {
                   {tags
                     .filter((tag) => question.tagIds.includes(tag.id))
                     .map((tag) => (
-                      <div className="flex items-center p-2">
+                      <div key={tag.id} className="flex items-center p-2">
                         <div className="flex flex-row space-x-2">
                           <div
                             className="relative m-0 box-border inline-flex h-8 max-w-full cursor-pointer select-none appearance-none items-center justify-center whitespace-nowrap rounded-2xl border-0 bg-black bg-opacity-[0.08] p-0 align-middle text-[0.8125rem] text-black text-opacity-[0.87] no-underline outline-0 hover:bg-opacity-[0.12]"
