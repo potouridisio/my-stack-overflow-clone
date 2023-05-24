@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Public from "./routes/Public";
-import Questions from "./routes/Questions";
+import Questions, { loader as questionsLoader } from "./routes/Questions";
 import Root from "./routes/Root";
 import Tags from "./routes/Tags";
 import Users from "./routes/Users";
@@ -17,6 +17,7 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Questions />,
+            loader: questionsLoader,
           },
           {
             path: "tags",

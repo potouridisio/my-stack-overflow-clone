@@ -1,4 +1,20 @@
+import { useLoaderData } from "react-router";
+
+export async function loader() {
+  const [questions, tags, users] = await Promise.all([
+    fetch("/api/questions").then((res) => res.json()),
+    fetch("/api/tags").then((res) => res.json()),
+    fetch("/api/users").then((res) => res.json()),
+  ]);
+
+  return { questions, tags, users };
+}
+
 export default function Questions() {
+  const { questions, tags, users } = useLoaderData();
+
+  console.log({ questions, tags, users });
+
   return (
     <main className="grow p-6">
       <div className="relative flex min-h-[4rem] items-center px-6" />
