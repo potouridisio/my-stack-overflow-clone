@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import Ask from "./routes/Ask";
 import Public from "./routes/Public";
 import Questions, { loader as questionsLoader } from "./routes/Questions";
 import Root from "./routes/Root";
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             loader: usersLoader,
           },
         ],
+      },
+      {
+        path: "questions/ask",
+        element: <Ask />,
       },
     ],
   },
