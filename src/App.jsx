@@ -4,7 +4,7 @@ import Ask from "./routes/Ask";
 import Public from "./routes/Public";
 import Questions, { loader as questionsLoader } from "./routes/Questions";
 import Root from "./routes/Root";
-import Tags from "./routes/Tags";
+import Tags, { loader as tagsLoader } from "./routes/Tags";
 import Users, { loader as usersLoader } from "./routes/Users";
 
 const router = createBrowserRouter([
@@ -23,6 +23,7 @@ const router = createBrowserRouter([
           {
             path: "tags",
             element: <Tags />,
+            loader: tagsLoader,
           },
           {
             path: "users",
