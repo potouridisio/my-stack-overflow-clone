@@ -3,9 +3,14 @@ import { Link, useLoaderData } from "react-router-dom";
 import { convertToRelativeDate, indexBy, truncateText } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function loader() {
+export async function loader({ request }) {
+  const url = new URL(request.url);
+  const searchTerm = url.searchParams.get("q");
+
   const [questions, tags, users] = await Promise.all([
-    fetch("/api/questions").then((res) => res.json()),
+    fetch(`/api/questions${searchTerm ? `?q=${searchTerm}` : ""}`).then((res) =>
+      res.json()
+    ),
     fetch("/api/tags").then((res) => res.json()),
     fetch("/api/users").then((res) => res.json()),
   ]);

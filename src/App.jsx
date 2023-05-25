@@ -17,7 +17,7 @@ const router = createBrowserRouter([
         element: <Public />,
         children: [
           {
-            index: true,
+            path: "/search?",
             element: <Questions />,
             loader: questionsLoader,
           },

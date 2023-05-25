@@ -1,8 +1,16 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 export default function Root() {
+  const navigate = useNavigate();
+
+  const handleKeyDown = (event) => {
+    if (event.keyCode === 13) {
+      navigate(`search?q=${event.target.value}`);
+    }
+  };
+
   return (
     <div className="flex">
       {/* Header */}
@@ -23,6 +31,7 @@ export default function Root() {
             <div className="relative box-border inline-flex cursor-text items-center leading-[1.4375em] tracking-[0.00938em] text-inherit">
               <input
                 className="m-0 box-content block h-[1.4375em] w-full min-w-0 border-0 p-2 pl-[calc(1em_+_32px)] tracking-[inherit] text-current [background:none] [font:inherit] placeholder:!block placeholder:text-current placeholder:opacity-[0.42] focus:outline-0"
+                onKeyDown={handleKeyDown}
                 placeholder="Search…"
               />
             </div>
