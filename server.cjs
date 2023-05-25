@@ -218,8 +218,6 @@ app.get("/questions", (_req, res) => {
 app.post("/questions", (req, res) => {
   const { title, body } = req.body;
 
-  console.log(req.body);
-
   const newQuestion = {
     id: 6,
     title,
