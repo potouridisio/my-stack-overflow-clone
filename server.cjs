@@ -3,6 +3,8 @@ const express = require("express");
 
 const app = express();
 
+app.use(express.json());
+
 app.get("/users", (_req, res) => {
   res.json([
     {
@@ -215,6 +217,8 @@ app.get("/questions", (_req, res) => {
 
 app.post("/questions", (req, res) => {
   const { title, body } = req.body;
+
+  console.log(req.body);
 
   const newQuestion = {
     id: 6,
