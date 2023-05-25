@@ -46,10 +46,10 @@ export default function Questions() {
               className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]"
               key={question.id}
             >
-              <button
+              <Link
                 className="group relative m-0 box-border block w-full cursor-pointer select-none appearance-none rounded-[inherit] border-0 bg-transparent p-0 align-middle text-inherit no-underline outline-0 [text-align:inherit]"
                 tabIndex={0}
-                type="button"
+                to={`questions/${question.id}`}
               >
                 <div className="p-4">
                   <p className="mb-[0.35em] text-sm leading-normal tracking-[0.00938em] text-black text-opacity-60">
@@ -71,7 +71,7 @@ export default function Questions() {
                   </p>
                 </div>
                 <span className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-[inherit] bg-current opacity-0 group-hover:opacity-[0.04]" />
-              </button>
+              </Link>
 
               <div className="flex items-center p-2">
                 <div className="flex flex-row space-x-2">

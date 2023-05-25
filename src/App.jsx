@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Ask from "./routes/Ask";
 import Public from "./routes/Public";
+import Question from "./routes/Question";
 import Questions, { loader as questionsLoader } from "./routes/Questions";
 import Root from "./routes/Root";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
@@ -29,6 +30,10 @@ const router = createBrowserRouter([
             path: "users",
             element: <Users />,
             loader: usersLoader,
+          },
+          {
+            path: "questions/:questionId",
+            element: <Question />,
           },
         ],
       },
