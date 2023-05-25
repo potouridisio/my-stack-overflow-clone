@@ -85,60 +85,70 @@ app.get("/tags", (_req, res) => {
       name: "javascript",
       description:
         "A programming language commonly used for client-side and server-side web development.",
+      occurrenceCount: 2,
     },
     {
       id: 2,
       name: "html",
       description:
         "The standard markup language for creating web pages and web applications.",
+      occurrenceCount: 2,
     },
     {
       id: 3,
       name: "css",
       description:
         "A style sheet language used for describing the look and formatting of a document written in HTML.",
+      occurrenceCount: 3,
     },
     {
       id: 4,
       name: "python",
       description:
         "A high-level programming language known for its readability and versatility.",
+      occurrenceCount: 1,
     },
     {
       id: 5,
       name: "java",
       description:
         "A widely-used programming language commonly used for building enterprise-scale applications.",
+      occurrenceCount: 1,
     },
     {
       id: 6,
       name: "php",
       description:
         "A server-side scripting language primarily used for web development.",
+      occurrenceCount: 1,
     },
     {
       id: 7,
       name: "c++",
       description:
         "A powerful general-purpose programming language often used for system-level programming and game development.",
+      occurrenceCount: 1,
     },
     {
       id: 8,
       name: "ruby",
       description:
         "A dynamic, object-oriented programming language known for its simplicity and productivity.",
+      occurrenceCount: 0,
     },
     {
       id: 9,
       name: "swift",
       description:
         "A programming language used for developing iOS, macOS, watchOS, and tvOS applications.",
+      occurrenceCount: 0,
     },
     {
       id: 10,
       name: "typescript",
       description:
         "A strongly typed superset of JavaScript that compiles to plain JavaScript.",
+      occurrenceCount: 0,
     },
   ]);
 });
