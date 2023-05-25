@@ -1,4 +1,5 @@
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
+import { useState } from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function loader() {
@@ -31,7 +32,14 @@ export default function Tags() {
                 role="button"
                 tabIndex={0}
               >
-                <span className="truncate px-3">{tag.name}</span>
+                <Link
+                  className="truncate px-3"
+                  to={`/questions/tagged/${tag.name}`}
+                >
+                  {tag.name}
+                </Link>
+
+                {/* <span className="truncate px-3">{tag.name}</span> */}
               </div>
 
               <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
