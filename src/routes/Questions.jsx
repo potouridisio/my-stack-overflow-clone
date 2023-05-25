@@ -46,25 +46,32 @@ export default function Questions() {
               className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]"
               key={question.id}
             >
-              <div className="p-4">
-                <p className="mb-[0.35em] text-sm leading-normal tracking-[0.00938em] text-black text-opacity-60">
-                  {question.voteCount} vote
-                  {question.voteCount === 1 ? "" : "s"} {question.answerCount}{" "}
-                  answer
-                  {question.answerCount === 1 ? "" : "s"}
-                </p>
-                <div className="m-0 text-2xl leading-[1.334] tracking-normal">
-                  {question.title}
+              <button
+                className="group relative m-0 box-border block w-full cursor-pointer select-none appearance-none rounded-[inherit] border-0 bg-transparent p-0 align-middle text-inherit no-underline outline-0 [text-align:inherit]"
+                tabIndex={0}
+                type="button"
+              >
+                <div className="p-4">
+                  <p className="mb-[0.35em] text-sm leading-normal tracking-[0.00938em] text-black text-opacity-60">
+                    {question.voteCount} vote
+                    {question.voteCount === 1 ? "" : "s"} {question.answerCount}{" "}
+                    answer
+                    {question.answerCount === 1 ? "" : "s"}
+                  </p>
+                  <div className="m-0 text-2xl leading-[1.334] tracking-normal">
+                    {question.title}
+                  </div>
+                  <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
+                    {truncateText(question.body, 200)}
+                  </p>
+                  <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
+                    {users[question.userId].name}{" "}
+                    {users[question.userId].reputation} asked{" "}
+                    {convertToRelativeDate(question.createdAt)}
+                  </p>
                 </div>
-                <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
-                  {truncateText(question.body, 200)}
-                </p>
-                <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
-                  {users[question.userId].name}{" "}
-                  {users[question.userId].reputation} asked{" "}
-                  {convertToRelativeDate(question.createdAt)}
-                </p>
-              </div>
+                <span className="pointer-events-none absolute bottom-0 left-0 right-0 top-0 overflow-hidden rounded-[inherit] bg-current opacity-0 group-hover:opacity-[0.04]" />
+              </button>
 
               <div className="flex items-center p-2">
                 <div className="flex flex-row space-x-2">
