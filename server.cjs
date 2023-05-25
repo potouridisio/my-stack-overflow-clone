@@ -213,6 +213,24 @@ app.get("/questions", (_req, res) => {
   ]);
 });
 
+app.post("/questions", (req, res) => {
+  const { title, body } = req.body;
+
+  const newQuestion = {
+    id: 6,
+    title,
+    body,
+    voteCount: 0,
+    userId: 1,
+    tagIds: [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    answerCount: 0,
+  };
+
+  res.json(newQuestion);
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
