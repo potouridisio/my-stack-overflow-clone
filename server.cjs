@@ -213,8 +213,17 @@ const questions = [
   },
 ];
 
-app.get("/questions", (_req, res) => {
-  res.json(questions);
+app.get("/questions", (req, res) => {
+  const { q } = req.query;
+
+  if (q) {
+    const filteredQuestions = questions.filter((question) =>
+      question.title.toLowerCase().includes(q.toLowerCase())
+    );
+    res.json(filteredQuestions);
+  } else {
+    res.json(questions);
+  }
 });
 
 app.post("/questions", (req, res) => {
@@ -233,16 +242,6 @@ app.post("/questions", (req, res) => {
   };
 
   res.json(newQuestion);
-});
-
-app.get("/questions/search", (req, res) => {
-  const { q } = req.query;
-
-  const filteredQuestions = questions.filter((question) =>
-    question.title.toLowerCase().includes(q.toLowerCase())
-  );
-
-  res.json(filteredQuestions);
 });
 
 app.listen(3000, () => {
