@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
@@ -8,9 +8,12 @@ export default function Root() {
       {/* Header */}
       <header className="fixed left-auto right-0 top-0 z-[1201] box-border flex w-full shrink-0 flex-col bg-[#1976d2] text-white shadow-[0px_2px_4px_-1px_rgba(0,0,0,0.2),_0px_4px_5px_0px_rgba(0,_0,_0,_0.14),_0px_1px_10px_0px_rgba(0,_0,_0,_0.12)]">
         <div className="relative flex min-h-[4rem] items-center px-6">
-          <div className="m-0 truncate text-xl font-medium leading-[1.6] tracking-[0.0075em]">
+          <Link
+            className="m-0 truncate text-xl font-medium leading-[1.6] tracking-[0.0075em]"
+            to="/"
+          >
             Stack Overflow Clone
-          </div>
+          </Link>
 
           {/* Search */}
           <div className="relative ml-6 mr-4 w-auto rounded bg-white bg-opacity-[0.15] hover:bg-opacity-[0.25]">
