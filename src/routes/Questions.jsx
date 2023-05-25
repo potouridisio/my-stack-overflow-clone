@@ -3,15 +3,27 @@ import { Link, useLoaderData } from "react-router-dom";
 import { convertToRelativeDate, indexBy, truncateText } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function loader() {
+export async function loader({ params }) {
   const [questions, tags, users] = await Promise.all([
     fetch("/api/questions").then((res) => res.json()),
     fetch("/api/tags").then((res) => res.json()),
     fetch("/api/users").then((res) => res.json()),
   ]);
 
+  const tagName = params.tagName;
+
+  if (tagName) {
+    return {
+      questions: questions.filter((question) =>
+        question.tagIds.includes(tags.find((tag) => tag.name === tagName).id)
+      ),
+      tags: indexBy(tags, "id"),
+      users,
+    };
+  }
+
   return {
-    questions,
+    questions: questions,
     tags: indexBy(tags, "id"),
     users: indexBy(users, "id"),
   };
