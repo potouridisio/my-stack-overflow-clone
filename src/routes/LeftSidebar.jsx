@@ -2,7 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 
 import { GlobeAmericasIcon } from "@heroicons/react/24/solid";
 
-export default function Public() {
+export default function LeftSidebar() {
   return (
     <>
       {/* Sidebar */}

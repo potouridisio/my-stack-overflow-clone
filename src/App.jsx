@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Ask from "./routes/Ask";
-import Public from "./routes/Public";
+import LeftSidebar from "./routes/LeftSidebar";
 import Question from "./routes/Question";
 import Questions, { loader as questionsLoader } from "./routes/Questions";
 import Root from "./routes/Root";
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
     element: <Root />,
     children: [
       {
-        element: <Public />,
+        element: <LeftSidebar />,
         children: [
           {
             path: "/search?",
