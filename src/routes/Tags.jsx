@@ -20,6 +20,31 @@ export default function Tags() {
         </div>
       </div>
 
+      <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
+        <div className="relative flex min-h-[4rem] items-center justify-end">
+          <div className="inline-flex rounded" role="group">
+            <button
+              className="relative m-0 box-border inline-flex cursor-pointer select-none appearance-none items-center justify-center rounded rounded-br-none rounded-tr-none border border-solid border-black border-opacity-[0.12] bg-[rgba(25,_118,_210,_0.08)] p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em] text-[rgb(25,_118,_210)] no-underline outline-0 hover:bg-[rgba(25,_118,_210,_0.12)] hover:no-underline"
+              type="button"
+            >
+              Popular
+            </button>
+            <button
+              className="relative m-0 -ml-px box-border inline-flex cursor-pointer select-none appearance-none items-center justify-center rounded rounded-bl-none rounded-br-none rounded-tl-none rounded-tr-none border border-solid border-black border-l-transparent border-opacity-[0.12] p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em] no-underline outline-0 hover:bg-[rgba(0,_0,_0,_0.04)] hover:no-underline"
+              type="button"
+            >
+              Name
+            </button>
+            <button
+              className="relative m-0 -ml-px box-border inline-flex cursor-pointer select-none appearance-none items-center justify-center rounded rounded-bl-none rounded-tl-none border border-solid border-black border-l-transparent border-opacity-[0.12] p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em] no-underline outline-0 hover:bg-[rgba(0,_0,_0,_0.04)] hover:no-underline"
+              type="button"
+            >
+              New
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-4 gap-4">
         {tags.map((tag) => (
           <div
