@@ -368,6 +368,22 @@ app.get("/questions/:id/answers", (req, res) => {
   }
 });
 
+app.post("/questions/:questionId/answers", (req, res) => {
+  const { questionId } = req.params;
+  const { body } = req.body;
+
+  const newAnswer = {
+    id: 13,
+    questionId: parseInt(questionId),
+    body,
+    userId: 1,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  res.json(newAnswer);
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
