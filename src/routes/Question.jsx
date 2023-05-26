@@ -29,6 +29,8 @@ export default function Question() {
     (a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)
   );
 
+  const questionUser = users.find((user) => user.id === question.userId);
+
   return (
     <main className="grow p-6">
       <div className="relative flex min-h-[4rem] items-center px-6" />
@@ -62,7 +64,9 @@ export default function Question() {
                 role="button"
                 tabIndex={0}
               >
-                <span className="truncate px-3">{tags[tagId - 1].name}</span>
+                <span className="truncate px-3">
+                  {tags.find((tag) => tag.id === tagId).name}
+                </span>
               </div>
             ))}
           </div>
@@ -71,8 +75,7 @@ export default function Question() {
         <div className="flex items-center justify-end p-2">
           <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
             asked {convertToRelativeDate(question.createdAt)}{" "}
-            {users[question.userId - 1].name}{" "}
-            {users[question.userId - 1].reputation}
+            {questionUser.name} {questionUser.reputation}
           </p>
         </div>
       </div>
@@ -87,23 +90,25 @@ export default function Question() {
 
       <div className="flex flex-col space-y-4">
         {/* Answer */}
-        {sortedAnswers.map((answer) => (
-          <div className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]">
-            <div className="p-4">
-              <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
-                {answer.body}
-              </p>
-            </div>
+        {sortedAnswers.map((answer) => {
+          const answerUser = users.find((user) => user.id === answer.userId);
+          return (
+            <div className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]">
+              <div className="p-4">
+                <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
+                  {answer.body}
+                </p>
+              </div>
 
-            <div className="flex items-center justify-end p-2">
-              <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
-                answered {convertToRelativeDate(answer.createdAt)}{" "}
-                {users.find((user) => user.id === answer.userId).name}{" "}
-                {users.find((user) => user.id === answer.userId).reputation}
-              </p>
+              <div className="flex items-center justify-end p-2">
+                <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
+                  answered {convertToRelativeDate(answer.createdAt)}{" "}
+                  {answerUser.name} {answerUser.reputation}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
