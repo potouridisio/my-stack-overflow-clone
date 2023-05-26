@@ -1,8 +1,28 @@
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 import TextField from "../components/TextField";
 
+export async function loader({ params }) {
+  const [question, users, tags, answers] = await Promise.all([
+    fetch(`/api/questions/${params.questionId}`).then((res) => res.json()),
+    fetch("/api/users").then((res) => res.json()),
+    fetch("/api/tags").then((res) => res.json()),
+    fetch(`/api/questions/${params.questionId}/answers`).then((res) =>
+      res.json()
+    ),
+  ]);
+
+  return {
+    question,
+    users,
+    tags,
+    answers,
+  };
+}
+
 export default function Question() {
+  const { question, users, tags, answers } = useLoaderData();
+
   return (
     <main className="grow p-6">
       <div className="relative flex min-h-[4rem] items-center px-6" />
