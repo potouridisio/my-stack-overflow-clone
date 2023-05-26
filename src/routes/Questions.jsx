@@ -53,7 +53,7 @@ export default function Questions() {
             <Link
               className="group relative m-0 box-border block w-full cursor-pointer select-none appearance-none rounded-[inherit] border-0 bg-transparent p-0 align-middle text-inherit no-underline outline-0 [text-align:inherit]"
               tabIndex={0}
-              to={`questions/${question.id}`}
+              to={`/questions/${question.id}`}
             >
               <div className="p-4">
                 <p className="mb-[0.35em] text-sm leading-normal tracking-[0.00938em] text-black text-opacity-60">
