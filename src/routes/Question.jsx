@@ -1,7 +1,26 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Form, Link, useLoaderData } from "react-router-dom";
 
 import TextField from "../components/TextField";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export async function action({ params, request }) {
+  const formData = await request.formData();
+
+  const newAnswer = {
+    body: formData.get("body"),
+  };
+
+  fetch(`/api/questions/${params.questionId}/answers`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newAnswer),
+  });
+
+  return null;
+}
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ params }) {
@@ -113,9 +132,14 @@ export default function Question() {
 
       <div className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]">
         <div className="p-4">
-          <form className="flex flex-col space-y-4" id="new-answer">
+          <Form
+            className="flex flex-col space-y-4"
+            id="new-answer"
+            method="post"
+          >
+            {/* uncontrolled */}
             <TextField multiline name="body" rows={4} />
-          </form>
+          </Form>
 
           <div className="flex justify-end">
             <button

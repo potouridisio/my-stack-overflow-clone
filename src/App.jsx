@@ -2,7 +2,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Ask from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
-import Question, { loader as questionLoader } from "./routes/Question";
+import Question, {
+  action as questionAction,
+  loader as questionLoader,
+} from "./routes/Question";
 import Questions, { loader as questionsLoader } from "./routes/Questions";
 import Root from "./routes/Root";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
@@ -35,6 +38,7 @@ const router = createBrowserRouter([
             path: "questions/:questionId",
             element: <Question />,
             loader: questionLoader,
+            action: questionAction,
           },
         ],
       },
