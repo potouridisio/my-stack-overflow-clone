@@ -244,6 +244,17 @@ app.post("/questions", (req, res) => {
   res.json(newQuestion);
 });
 
+app.get("/questions/:id", (req, res) => {
+  const { id } = req.params;
+  const question = questions.find((q) => q.id === parseInt(id));
+
+  if (question) {
+    res.json(question);
+  } else {
+    res.status(404).json({ error: "Question not found" });
+  }
+});
+
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
 });
