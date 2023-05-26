@@ -97,7 +97,7 @@ export default function Question() {
       <div className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]">
         <div className="p-4">
           <form className="flex flex-col space-y-4" id="new-answer">
-            <TextField label="Body" multiline name="body" rows={4} />
+            <TextField multiline name="body" rows={4} />
           </form>
 
           <div className="flex justify-end">
