@@ -80,89 +80,107 @@ app.get("/users", (_req, res) => {
   ]);
 });
 
-app.get("/tags", (_req, res) => {
-  res.json([
-    {
-      id: 1,
-      name: "javascript",
-      description:
-        "A programming language commonly used for client-side and server-side web development.",
-      occurrenceCount: 2,
-      createdAt: "2023-05-20T11:30:00Z",
-    },
-    {
-      id: 2,
-      name: "html",
-      description:
-        "The standard markup language for creating web pages and web applications.",
-      occurrenceCount: 2,
-      createdAt: "2023-05-21T14:30:00Z",
-    },
-    {
-      id: 3,
-      name: "css",
-      description:
-        "A style sheet language used for describing the look and formatting of a document written in HTML.",
-      occurrenceCount: 3,
-      createdAt: "2023-05-20T11:30:00Z",
-    },
-    {
-      id: 4,
-      name: "python",
-      description:
-        "A high-level programming language known for its readability and versatility.",
-      occurrenceCount: 1,
-      createdAt: "2023-05-24T15:30:00Z",
-    },
-    {
-      id: 5,
-      name: "java",
-      description:
-        "A widely-used programming language commonly used for building enterprise-scale applications.",
-      occurrenceCount: 1,
-      createdAt: "2023-05-22T18:45:00Z",
-    },
-    {
-      id: 6,
-      name: "php",
-      description:
-        "A server-side scripting language primarily used for web development.",
-      occurrenceCount: 1,
-      createdAt: "2023-05-24T15:30:00Z",
-    },
-    {
-      id: 7,
-      name: "c++",
-      description:
-        "A powerful general-purpose programming language often used for system-level programming and game development.",
-      occurrenceCount: 1,
-      createdAt: "2023-05-23T09:20:00Z",
-    },
-    {
-      id: 8,
-      name: "ruby",
-      description:
-        "A dynamic, object-oriented programming language known for its simplicity and productivity.",
-      occurrenceCount: 0,
-      createdAt: null,
-    },
-    {
-      id: 9,
-      name: "swift",
-      description:
-        "A programming language used for developing iOS, macOS, watchOS, and tvOS applications.",
-      occurrenceCount: 0,
-      createdAt: null,
-    },
-    {
-      id: 10,
-      name: "typescript",
-      description:
-        "A strongly typed superset of JavaScript that compiles to plain JavaScript.",
-      occurrenceCount: 0,
-      createdAt: null,
-    },
-  ]);
+const tags = [
+  {
+    id: 1,
+    name: "javascript",
+    description:
+      "A programming language commonly used for client-side and server-side web development.",
+    occurrenceCount: 2,
+    createdAt: "2023-05-20T11:30:00Z",
+  },
+  {
+    id: 2,
+    name: "html",
+    description:
+      "The standard markup language for creating web pages and web applications.",
+    occurrenceCount: 2,
+    createdAt: "2023-05-21T14:30:00Z",
+  },
+  {
+    id: 3,
+    name: "css",
+    description:
+      "A style sheet language used for describing the look and formatting of a document written in HTML.",
+    occurrenceCount: 3,
+    createdAt: "2023-05-20T11:30:00Z",
+  },
+  {
+    id: 4,
+    name: "python",
+    description:
+      "A high-level programming language known for its readability and versatility.",
+    occurrenceCount: 1,
+    createdAt: "2023-05-24T15:30:00Z",
+  },
+  {
+    id: 5,
+    name: "java",
+    description:
+      "A widely-used programming language commonly used for building enterprise-scale applications.",
+    occurrenceCount: 1,
+    createdAt: "2023-05-22T18:45:00Z",
+  },
+  {
+    id: 6,
+    name: "php",
+    description:
+      "A server-side scripting language primarily used for web development.",
+    occurrenceCount: 1,
+    createdAt: "2023-05-24T15:30:00Z",
+  },
+  {
+    id: 7,
+    name: "c++",
+    description:
+      "A powerful general-purpose programming language often used for system-level programming and game development.",
+    occurrenceCount: 1,
+    createdAt: "2023-05-23T09:20:00Z",
+  },
+  {
+    id: 8,
+    name: "ruby",
+    description:
+      "A dynamic, object-oriented programming language known for its simplicity and productivity.",
+    occurrenceCount: 0,
+    createdAt: null,
+  },
+  {
+    id: 9,
+    name: "swift",
+    description:
+      "A programming language used for developing iOS, macOS, watchOS, and tvOS applications.",
+    occurrenceCount: 0,
+    createdAt: null,
+  },
+  {
+    id: 10,
+    name: "typescript",
+    description:
+      "A strongly typed superset of JavaScript that compiles to plain JavaScript.",
+    occurrenceCount: 0,
+    createdAt: null,
+  },
+];
+
+app.get("/tags", (req, res) => {
+  const { sortBy } = req.query;
+
+  let sortedTags = [...tags];
+
+  if (sortBy === "popularity") {
+    sortedTags = sortedTags.sort(
+      (a, b) => b.occurrenceCount - a.occurrenceCount
+    );
+  } else if (sortBy === "name") {
+    sortedTags = sortedTags.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortBy === "latest") {
+    sortedTags = sortedTags.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  }
+
+  res.json(sortedTags);
 });
 
 const questions = [
