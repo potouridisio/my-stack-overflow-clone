@@ -19,6 +19,7 @@ export default function Question() {
         </div>
       </div>
 
+      {/* Question */}
       <div className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]">
         <div className="p-4">
           <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
@@ -52,6 +53,34 @@ export default function Question() {
           <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
             asked 5 days ago John Doe 1000
           </p>
+        </div>
+      </div>
+
+      <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
+        <div className="relative flex min-h-[4rem] items-center">
+          <div className="m-0 text-xl font-medium leading-[1.6] tracking-[0.0075em] text-inherit">
+            1 Answer
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col space-y-4">
+        {/* Answer */}
+        <div className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]">
+          <div className="p-4">
+            <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
+              One of the recommended ways to loop through an array in JavaScript
+              is to use the &apos;forEach&apos; method. It provides a more
+              concise syntax and handles the iteration automatically.
+              Here&apos;s an example:
+            </p>
+          </div>
+
+          <div className="flex items-center justify-end p-2">
+            <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
+              answered 4 days ago Jane Smith 2500
+            </p>
+          </div>
         </div>
       </div>
     </main>
