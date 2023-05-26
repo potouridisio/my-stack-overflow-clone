@@ -17,26 +17,28 @@ export default function TextField({
 
   return (
     <div className="relative inline-flex min-w-0 flex-col border-0 p-0 align-top">
-      <label
-        className={`pointer-events-none absolute left-0 top-0 z-[1] block ${
-          isFocused || value !== ""
-            ? "max-w-[calc(133%_-_32px)]"
-            : "max-w-[calc(100%_-_24px)]"
-        } origin-[left_top] translate-x-3.5 ${
-          isFocused || value !== ""
-            ? "-translate-y-[9px] scale-75"
-            : "translate-y-[9px] scale-100"
-        } truncate p-0 leading-[1.4375em] tracking-[0.00938em] ${
-          error
-            ? "text-[rgb(211,_47,_47)]"
-            : isFocused
-            ? "text-[rgb(25,_118,_210)]"
-            : "text-black text-opacity-60"
-        }`}
-        htmlFor={id}
-      >
-        {label}
-      </label>
+      {label ? (
+        <label
+          className={`pointer-events-none absolute left-0 top-0 z-[1] block ${
+            isFocused || value !== ""
+              ? "max-w-[calc(133%_-_32px)]"
+              : "max-w-[calc(100%_-_24px)]"
+          } origin-[left_top] translate-x-3.5 ${
+            isFocused || value !== ""
+              ? "-translate-y-[9px] scale-75"
+              : "translate-y-[9px] scale-100"
+          } truncate p-0 leading-[1.4375em] tracking-[0.00938em] ${
+            error
+              ? "text-[rgb(211,_47,_47)]"
+              : isFocused
+              ? "text-[rgb(25,_118,_210)]"
+              : "text-black text-opacity-60"
+          }`}
+          htmlFor={id}
+        >
+          {label}
+        </label>
+      ) : null}
       <div
         className={`relative box-border inline-flex cursor-text items-center rounded${
           multiline ? " px-3.5 py-[8.5px]" : ""
@@ -88,25 +90,36 @@ export default function TextField({
               : "border-black border-opacity-[0.23]"
           } px-2 text-left`}
         >
+          {/*  */}
           <legend
-            className={`invisible block h-[11px] w-auto ${
+            className={`${label ? "invisible block h-[11px] " : ""}w-auto ${
               isFocused || value !== "" ? "max-w-full" : "max-w-[0.01px]"
-            } overflow-hidden whitespace-nowrap p-0 text-[0.75em] [float:unset]`}
+            } overflow-hidden${label ? " whitespace-nowrap" : ""} p-0 ${
+              label ? "text-[0.75em]" : "leading-[11px]"
+            } [float:unset]`}
           >
-            <span className="visible inline-block px-[5px] opacity-0">
-              {label}
+            <span
+              className={
+                label
+                  ? "visible inline-block px-[5px] opacity-0"
+                  : "leading-[11px]"
+              }
+            >
+              {label ? label : <>&#8203;</>}
             </span>
           </legend>
         </fieldset>
       </div>
-      <p
-        className={`mx-3.5 mt-[3px] text-left text-xs leading-[1.66] tracking-[0.03333em] ${
-          error ? "text-[rgb(211,_47,_47)]" : "text-black text-opacity-60"
-        }`}
-        id={`${id}-helper-text`}
-      >
-        {helperText}
-      </p>
+      {helperText ? (
+        <p
+          className={`mx-3.5 mt-[3px] text-left text-xs leading-[1.66] tracking-[0.03333em] ${
+            error ? "text-[rgb(211,_47,_47)]" : "text-black text-opacity-60"
+          }`}
+          id={`${id}-helper-text`}
+        >
+          {helperText}
+        </p>
+      ) : null}
     </div>
   );
 }
