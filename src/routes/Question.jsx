@@ -137,7 +137,6 @@ export default function Question() {
             id="new-answer"
             method="post"
           >
-            {/* uncontrolled */}
             <TextField multiline name="body" rows={4} />
           </Form>
 
