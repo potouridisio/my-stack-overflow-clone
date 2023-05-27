@@ -8,6 +8,7 @@ import Question, {
 } from "./routes/Question";
 import Questions, { loader as questionsLoader } from "./routes/Questions";
 import Root from "./routes/Root";
+import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
 import Users, { loader as usersLoader } from "./routes/Users";
 
@@ -20,9 +21,14 @@ const router = createBrowserRouter([
         element: <LeftSidebar />,
         children: [
           {
-            path: "/search?",
-            element: <Questions />,
-            loader: questionsLoader,
+            element: <Sidebar />,
+            children: [
+              {
+                path: "/search?",
+                element: <Questions />,
+                loader: questionsLoader,
+              },
+            ],
           },
           {
             path: "tags",
