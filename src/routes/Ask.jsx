@@ -1,9 +1,30 @@
+import { Form, redirect } from "react-router-dom";
+
 import TextField from "../components/TextField";
 
-// Validation messages:
-// Title is missing.
-// Title must be at least 15 characters.
-// Body is missing.
+// eslint-disable-next-line react-refresh/only-export-components
+export async function action({ request }) {
+  const formData = await request.formData();
+
+  const newQuestion = {
+    body: formData.get("body"),
+    title: formData.get("title"),
+    tagIds: [],
+    userId: 1,
+  };
+
+  const response = await fetch("/api/questions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newQuestion),
+  });
+
+  const jsonData = await response.json();
+
+  return redirect(`/questions/${jsonData.id}`);
+}
 
 export default function Ask() {
   return (
@@ -75,7 +96,11 @@ export default function Ask() {
             </div>
           </div>
 
-          <form className="flex flex-col space-y-4" id="new-question">
+          <Form
+            className="flex flex-col space-y-4"
+            id="new-question"
+            method="post"
+          >
             <TextField
               autoFocus
               helperText="Be specific and imagine you're asking a question to another person"
@@ -91,7 +116,7 @@ export default function Ask() {
               name="body"
               rows={4}
             />
-          </form>
+          </Form>
 
           <div className="flex justify-end">
             <button

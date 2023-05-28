@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import Ask from "./routes/Ask";
+import Ask, { action as askAction } from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
 import Question, {
   action as questionAction,
@@ -51,6 +51,7 @@ const router = createBrowserRouter([
       {
         path: "questions/ask",
         element: <Ask />,
+        action: askAction,
       },
     ],
   },
