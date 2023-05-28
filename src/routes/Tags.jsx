@@ -1,4 +1,5 @@
 import { useLoaderData, useSearchParams } from "react-router-dom";
+import { selectedTabStyle } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export function loader({ request }) {
@@ -42,22 +43,7 @@ export default function Tags() {
         <div className="relative flex min-h-[4rem] items-center justify-end">
           <div className="inline-flex rounded" role="group">
             <button
-              className={`relative m-0 box-border inline-flex cursor-pointer select-none appearance-none items-center 
-                          justify-center rounded rounded-br-none rounded-tr-none border border-solid border-black 
-                          border-opacity-[0.12]${
-                            // eslint-disable-next-line no-constant-condition
-                            tab === "popular"
-                              ? " bg-[rgba(25,_118,_210,_0.08)]"
-                              : ""
-                          } p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em]${
-                // eslint-disable-next-line no-constant-condition
-                tab === "popular" ? " text-[rgb(25,_118,_210)]" : ""
-              } no-underline outline-0 ${
-                // eslint-disable-next-line no-constant-condition
-                tab === "popular"
-                  ? "hover:bg-[rgba(25,_118,_210,_0.12)]"
-                  : "hover:bg-[rgba(0,_0,_0,_0.04)]"
-              } hover:no-underline`}
+              className={selectedTabStyle(tab, "popular")}
               type="button"
               onClick={() => setParams({ tab: "popular" })}
             >
@@ -65,22 +51,7 @@ export default function Tags() {
             </button>
 
             <button
-              className={`relative m-0 box-border inline-flex cursor-pointer select-none appearance-none items-center 
-                          justify-center rounded rounded-br-none rounded-tr-none border border-solid border-black 
-                          border-opacity-[0.12]${
-                            // eslint-disable-next-line no-constant-condition
-                            tab === "name"
-                              ? " bg-[rgba(25,_118,_210,_0.08)]"
-                              : ""
-                          } p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em]${
-                // eslint-disable-next-line no-constant-condition
-                tab === "name" ? " text-[rgb(25,_118,_210)]" : ""
-              } no-underline outline-0 ${
-                // eslint-disable-next-line no-constant-condition
-                tab === "name"
-                  ? "hover:bg-[rgba(25,_118,_210,_0.12)]"
-                  : "hover:bg-[rgba(0,_0,_0,_0.04)]"
-              } hover:no-underline`}
+              className={selectedTabStyle(tab, "name")}
               type="button"
               onClick={() => setParams({ tab: "name" })}
             >
@@ -88,20 +59,7 @@ export default function Tags() {
             </button>
 
             <button
-              className={`relative m-0 box-border inline-flex cursor-pointer select-none appearance-none items-center 
-                        justify-center rounded rounded-br-none rounded-tr-none border border-solid border-black 
-                        border-opacity-[0.12]${
-                          // eslint-disable-next-line no-constant-condition
-                          tab === "new" ? " bg-[rgba(25,_118,_210,_0.08)]" : ""
-                        } p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em]${
-                // eslint-disable-next-line no-constant-condition
-                tab === "new" ? " text-[rgb(25,_118,_210)]" : ""
-              } no-underline outline-0 ${
-                // eslint-disable-next-line no-constant-condition
-                tab === "new"
-                  ? "hover:bg-[rgba(25,_118,_210,_0.12)]"
-                  : "hover:bg-[rgba(0,_0,_0,_0.04)]"
-              } hover:no-underline`}
+              className={selectedTabStyle(tab, "new")}
               type="button"
               onClick={() => setParams({ tab: "new" })}
             >
