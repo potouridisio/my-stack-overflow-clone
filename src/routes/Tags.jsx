@@ -1,8 +1,25 @@
 import { useLoaderData, useSearchParams } from "react-router-dom";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function loader() {
-  return fetch(`/api/tags`);
+export function loader({ request }) {
+  const url = new URL(request.url);
+  const tab = url.searchParams.get("tab");
+
+  let sortBy = "";
+
+  switch (tab) {
+    case "popular":
+      sortBy = "popularity";
+      break;
+    case "name":
+      sortBy = "name";
+      break;
+    case "new":
+      sortBy = "latest";
+      break;
+  }
+
+  return fetch(`/api/tags${tab ? `?sortBy=${sortBy}` : ""}`);
 }
 
 export default function Tags() {
