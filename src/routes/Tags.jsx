@@ -1,17 +1,36 @@
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useSearchParams } from "react-router-dom";
+import { selectedTabStyle } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function loader() {
-  return fetch("/api/tags");
+export function loader({ request }) {
+  const url = new URL(request.url);
+  const tab = url.searchParams.get("tab");
+
+  let sortBy = "";
+
+  switch (tab) {
+    case "popular":
+      sortBy = "popularity";
+      break;
+    case "name":
+      sortBy = "name";
+      break;
+    case "new":
+      sortBy = "latest";
+      break;
+  }
+
+  return fetch(`/api/tags${tab ? `?sortBy=${sortBy}` : ""}`);
 }
 
 export default function Tags() {
   const tags = useLoaderData();
+  const [params, setParams] = useSearchParams();
+  const tab = params.get("tab");
 
   return (
     <main className="grow p-6">
       <div className="relative flex min-h-[4rem] items-center px-6" />
-
       <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
         <div className="relative flex min-h-[4rem] items-center">
           <div className="m-0 text-xl font-medium leading-[1.6] tracking-[0.0075em] text-inherit">
@@ -24,31 +43,25 @@ export default function Tags() {
         <div className="relative flex min-h-[4rem] items-center justify-end">
           <div className="inline-flex rounded" role="group">
             <button
-              className={`relative m-0 box-border inline-flex cursor-pointer select-none appearance-none items-center justify-center rounded rounded-br-none rounded-tr-none border border-solid border-black border-opacity-[0.12]${
-                // eslint-disable-next-line no-constant-condition
-                true ? " bg-[rgba(25,_118,_210,_0.08)]" : ""
-              } p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em]${
-                // eslint-disable-next-line no-constant-condition
-                true ? " text-[rgb(25,_118,_210)]" : ""
-              } no-underline outline-0 ${
-                // eslint-disable-next-line no-constant-condition
-                true
-                  ? "hover:bg-[rgba(25,_118,_210,_0.12)]"
-                  : "hover:bg-[rgba(0,_0,_0,_0.04)]"
-              } hover:no-underline`}
+              className={selectedTabStyle(tab, "popular")}
               type="button"
+              onClick={() => setParams({ tab: "popular" })}
             >
               Popular
             </button>
+
             <button
-              className="relative m-0 -ml-px box-border inline-flex cursor-pointer select-none appearance-none items-center justify-center rounded rounded-bl-none rounded-br-none rounded-tl-none rounded-tr-none border border-solid border-black border-l-transparent border-opacity-[0.12] p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em] no-underline outline-0 hover:bg-[rgba(0,_0,_0,_0.04)] hover:no-underline"
+              className={selectedTabStyle(tab, "name")}
               type="button"
+              onClick={() => setParams({ tab: "name" })}
             >
               Name
             </button>
+
             <button
-              className="relative m-0 -ml-px box-border inline-flex cursor-pointer select-none appearance-none items-center justify-center rounded rounded-bl-none rounded-tl-none border border-solid border-black border-l-transparent border-opacity-[0.12] p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em] no-underline outline-0 hover:bg-[rgba(0,_0,_0,_0.04)] hover:no-underline"
+              className={selectedTabStyle(tab, "new")}
               type="button"
+              onClick={() => setParams({ tab: "new" })}
             >
               New
             </button>

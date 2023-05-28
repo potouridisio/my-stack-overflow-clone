@@ -53,3 +53,18 @@ export function truncateText(text, maxLength) {
 
   return truncatedText;
 }
+
+export function selectedTabStyle(tab, selectedTab) {
+  return `relative m-0 box-border inline-flex cursor-pointer select-none appearance-none items-center 
+          justify-center rounded rounded-br-none rounded-tr-none border border-solid border-black 
+          border-opacity-[0.12]${
+            tab === selectedTab ? " bg-[rgba(25,_118,_210,_0.08)]" : ""
+          } 
+          p-[7px] align-middle text-[0.8125rem] font-medium uppercase leading-[1.75] tracking-[0.02857em]${
+            tab === selectedTab ? " text-[rgb(25,_118,_210)]" : ""
+          } no-underline outline-0 ${
+    tab === selectedTab
+      ? "hover:bg-[rgba(25,_118,_210,_0.12)]"
+      : "hover:bg-[rgba(0,_0,_0,_0.04)]"
+  } hover:no-underline`;
+}
