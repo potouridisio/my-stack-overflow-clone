@@ -9,6 +9,7 @@ export async function action({ params, request }) {
 
   const newAnswer = {
     body: formData.get("body"),
+    userId: 1,
   };
 
   fetch(`/api/questions/${params.questionId}/answers`, {
