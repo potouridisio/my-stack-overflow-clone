@@ -1,5 +1,7 @@
 import { Form, Link, useActionData, useLoaderData } from "react-router-dom";
 
+import Button from "@mui/material/Button";
+
 import TextField from "../components/TextField";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
@@ -75,12 +77,9 @@ export default function Question() {
           <div className="m-0 flex-[1] text-xl font-medium leading-[1.6] tracking-[0.0075em]">
             {question.title}
           </div>
-          <Link
-            className="relative m-0 box-border inline-flex min-w-[64px] cursor-pointer select-none appearance-none items-center justify-center rounded border-0 bg-[#1976d2] px-4 py-1.5 align-middle text-sm font-medium uppercase leading-[1.75] tracking-[0.02857em] text-white no-underline outline-0 hover:bg-[#1565c0] hover:no-underline hover:shadow-[0px_2px_4px_-1px_rgba(0,_0,_0,_0.2),_0px_4px_5px_0px_rgba(0,_0,_0,_0.14),_0px_1px_10px_0px_rgba(0,0,0,0.12)]"
-            to="/questions/ask"
-          >
+          <Button component={Link} to="/questions/ask" variant="contained">
             Ask Question
-          </Link>
+          </Button>
         </div>
       </div>
 
@@ -169,13 +168,14 @@ export default function Question() {
           </Form>
 
           <div className="flex justify-end">
-            <button
-              className="relative m-0 ml-2 mt-6 box-border inline-flex min-w-[64px] cursor-pointer select-none appearance-none items-center justify-center rounded border-0 bg-[#1976d2] px-4 py-1.5 align-middle text-sm font-medium uppercase leading-[1.75] tracking-[0.02857em] text-white no-underline outline-0 hover:bg-[#1565c0] hover:no-underline hover:shadow-[0px_2px_4px_-1px_rgba(0,_0,_0,_0.2),_0px_4px_5px_0px_rgba(0,_0,_0,_0.14),_0px_1px_10px_0px_rgba(0,0,0,0.12)]"
+            <Button
               form="new-answer"
+              sx={{ ml: 1, mt: 3 }}
               type="submit"
+              variant="contained"
             >
               Post Your Answer
-            </button>
+            </Button>
           </div>
         </div>
       </div>

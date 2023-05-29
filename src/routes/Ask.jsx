@@ -1,5 +1,7 @@
 import { Form, redirect } from "react-router-dom";
 
+import Button from "@mui/material/Button";
+
 import TextField from "../components/TextField";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -119,13 +121,9 @@ export default function Ask() {
           </Form>
 
           <div className="flex justify-end">
-            <button
-              className="relative m-0 ml-2 mt-6 box-border inline-flex min-w-[64px] cursor-pointer select-none appearance-none items-center justify-center rounded border-0 bg-[#1976d2] px-4 py-1.5 align-middle text-sm font-medium uppercase leading-[1.75] tracking-[0.02857em] text-white no-underline outline-0 hover:bg-[#1565c0] hover:no-underline hover:shadow-[0px_2px_4px_-1px_rgba(0,_0,_0,_0.2),_0px_4px_5px_0px_rgba(0,_0,_0,_0.14),_0px_1px_10px_0px_rgba(0,0,0,0.12)]"
-              form="new-question"
-              type="submit"
-            >
+            <Button form="new-question" type="submit" variant="contained">
               Post your question
-            </button>
+            </Button>
           </div>
         </div>
       </div>
