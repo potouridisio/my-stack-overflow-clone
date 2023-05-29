@@ -1,6 +1,52 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import SearchIcon from "@mui/icons-material/Search";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import InputBase from "@mui/material/InputBase";
+import { styled, alpha } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+
+const Search = styled("div")(({ theme }) => ({
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(3),
+    width: "auto",
+  },
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  borderRadius: theme.shape.borderRadius,
+  marginLeft: 0,
+  marginRight: theme.spacing(2),
+  position: "relative",
+  width: "100%",
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  alignItems: "center",
+  display: "flex",
+  height: "100%",
+  justifyContent: "center",
+  padding: theme.spacing(0, 2),
+  pointerEvents: "none",
+  position: "absolute",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  "& .MuiInputBase-input": {
+    [theme.breakpoints.up("md")]: {
+      width: "20ch",
+    },
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+  },
+  color: "inherit",
+}));
 
 export default function Root() {
   const navigate = useNavigate();
@@ -12,34 +58,32 @@ export default function Root() {
   };
 
   return (
-    <div className="flex">
+    <Box sx={{ display: "flex" }}>
       {/* Header */}
-      <header className="fixed left-auto right-0 top-0 z-[1201] box-border flex w-full shrink-0 flex-col bg-[#1976d2] text-white shadow-[0px_2px_4px_-1px_rgba(0,0,0,0.2),_0px_4px_5px_0px_rgba(0,_0,_0,_0.14),_0px_1px_10px_0px_rgba(0,_0,_0,_0.12)]">
-        <div className="relative flex min-h-[4rem] items-center px-6">
-          <Link
-            className="m-0 truncate text-xl font-medium leading-[1.6] tracking-[0.0075em]"
-            to="/"
-          >
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <Toolbar>
+          <Typography component={Link} noWrap to="/" variant="h6">
             Stack Overflow Clone
-          </Link>
+          </Typography>
 
           {/* Search */}
-          <div className="relative ml-6 mr-4 w-auto rounded bg-white bg-opacity-[0.15] hover:bg-opacity-[0.25]">
-            <div className="pointer-events-none absolute flex h-full items-center justify-center px-4">
-              <MagnifyingGlassIcon className="inline-block h-[1em] w-[1em] shrink-0 select-none stroke-current text-2xl" />
-            </div>
-            <div className="relative box-border inline-flex cursor-text items-center leading-[1.4375em] tracking-[0.00938em] text-inherit">
-              <input
-                className="m-0 box-content block h-[1.4375em] w-full min-w-0 border-0 p-2 pl-[calc(1em_+_32px)] tracking-[inherit] text-current [background:none] [font:inherit] placeholder:!block placeholder:text-current placeholder:opacity-[0.42] focus:outline-0"
-                onKeyDown={handleKeyDown}
-                placeholder="Search…"
-              />
-            </div>
-          </div>
-        </div>
-      </header>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              inputProps={{ "aria-label": "search" }}
+              onKeyDown={handleKeyDown}
+              placeholder="Search…"
+            />
+          </Search>
+        </Toolbar>
+      </AppBar>
 
       <Outlet />
-    </div>
+    </Box>
   );
 }
