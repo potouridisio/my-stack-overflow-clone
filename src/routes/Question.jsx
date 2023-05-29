@@ -1,7 +1,17 @@
-import { Form, Link, useLoaderData } from "react-router-dom";
+import { Form, Link, useActionData, useLoaderData } from "react-router-dom";
 
 import TextField from "../components/TextField";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
+
+function validateAnswerBody(body) {
+  if (!body) {
+    return "Body is missing.";
+  }
+
+  if (body.length < 30) {
+    return `Body must be at least 30 characters; you entered ${body.length}.`;
+  }
+}
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function action({ params, request }) {
@@ -12,15 +22,25 @@ export async function action({ params, request }) {
     userId: 1,
   };
 
-  fetch(`/api/questions/${params.questionId}/answers`, {
+  const fieldErrors = {
+    body: validateAnswerBody(newAnswer.body),
+  };
+
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return {
+      fieldErrors,
+    };
+  }
+
+  await fetch(`/api/questions/${params.questionId}/answers`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(newAnswer),
-  });
+  }).then((res) => res.json());
 
-  return null;
+  return {};
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -43,6 +63,7 @@ export async function loader({ params }) {
 }
 
 export default function Question() {
+  const actionData = useActionData();
   const { question, tags, users, answers } = useLoaderData();
 
   return (
@@ -138,7 +159,13 @@ export default function Question() {
             id="new-answer"
             method="post"
           >
-            <TextField multiline name="body" rows={4} />
+            <TextField
+              error={actionData?.fieldErrors?.body}
+              helperText={actionData?.fieldErrors?.body}
+              multiline
+              name="body"
+              rows={4}
+            />
           </Form>
 
           <div className="flex justify-end">
