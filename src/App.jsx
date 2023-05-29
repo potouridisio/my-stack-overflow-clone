@@ -1,5 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
+
 import Ask, { action as askAction } from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
 import Question, {
@@ -58,5 +60,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ScopedCssBaseline>
+      <RouterProvider router={router} />
+    </ScopedCssBaseline>
+  );
 }
