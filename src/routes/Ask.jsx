@@ -1,8 +1,7 @@
 import { Form, redirect } from "react-router-dom";
 
 import Button from "@mui/material/Button";
-
-import TextField from "../components/TextField";
+import TextField from "@mui/material/TextField";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function action({ request }) {
@@ -109,6 +108,7 @@ export default function Ask() {
               label="Title"
               name="title"
               placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+              size="small"
             />
 
             <TextField
@@ -117,6 +117,7 @@ export default function Ask() {
               multiline
               name="body"
               rows={4}
+              size="small"
             />
           </Form>
 
