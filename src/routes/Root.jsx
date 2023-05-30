@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
@@ -65,7 +65,15 @@ export default function Root() {
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar>
-          <Typography component={Link} noWrap to="/" variant="h6">
+          <Typography
+            component="div"
+            noWrap
+            onClick={() => navigate("/")}
+            role="button"
+            sx={{ cursor: "pointer" }}
+            tabIndex={0}
+            variant="h6"
+          >
             Stack Overflow Clone
           </Typography>
 
