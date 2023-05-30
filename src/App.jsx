@@ -51,9 +51,14 @@ const router = createBrowserRouter([
         ],
       },
       {
-        path: "questions/ask",
-        element: <Ask />,
-        action: askAction,
+        element: <Sidebar />,
+        children: [
+          {
+            path: "questions/ask",
+            element: <Ask />,
+            action: askAction,
+          },
+        ],
       },
     ],
   },
