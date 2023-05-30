@@ -63,7 +63,7 @@ export default function Tags() {
           <Grid key={tag.id} xs={3}>
             <Card>
               <CardContent>
-                <Chip label={tag.name} sx={{ mb: 1.5 }} />
+                <Chip label={tag.name} onClick={() => {}} sx={{ mb: 1.5 }} />
                 <Typography color="text.secondary">
                   {tag.description}
                 </Typography>

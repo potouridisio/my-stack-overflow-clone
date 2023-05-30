@@ -98,7 +98,7 @@ export default function Question() {
 
           <Stack direction="row" spacing={1}>
             {question.tagIds.map((tagId) => (
-              <Chip key={tagId} label={tags[tagId].name} />
+              <Chip key={tagId} label={tags[tagId].name} onClick={() => {}} />
             ))}
           </Stack>
         </CardContent>
