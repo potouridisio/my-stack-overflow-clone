@@ -1,6 +1,5 @@
 import { Form, redirect, useActionData } from "react-router-dom";
 
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -74,18 +73,11 @@ export default function Ask() {
       <Toolbar />
 
       <Card>
-        <AppBar
-          color="inherit"
-          component="div"
-          elevation={0}
-          sx={{ position: "relative" }}
-        >
-          <Toolbar>
-            <Typography component="div" variant="h6">
-              Ask a public question
-            </Typography>
-          </Toolbar>
-        </AppBar>
+        <Toolbar>
+          <Typography component="div" variant="h6">
+            Ask a public question
+          </Typography>
+        </Toolbar>
 
         <CardContent>
           <Stack component={Form} id="new-question" method="post" spacing={2}>
@@ -115,6 +107,7 @@ export default function Ask() {
             />
           </Stack>
         </CardContent>
+
         <CardActions sx={{ justifyContent: "flex-end" }}>
           <Button form="new-question" size="small" type="submit">
             Post your question
