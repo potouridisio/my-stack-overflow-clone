@@ -4,14 +4,27 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function loader() {
-  return fetch("/api/tags");
+export function loader({ request }) {
+  const url = new URL(request.url);
+  const tab = url.searchParams.get("tab");
+
+  let sortBy = "";
+
+  if (tab === "popular") {
+    sortBy = "popularity";
+  } else if (tab === "name") {
+    sortBy = "name";
+  } else if (tab === "new") {
+    sortBy = "latest";
+  }
+
+  return fetch(`/api/tags${sortBy ? `?sortBy=${sortBy}` : ""}`);
 }
 
 export default function Tags() {
   const tags = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
-  const tab = searchParams.get("tab");
+  const tab = searchParams.get("tab") || "popular";
 
   return (
     <main className="grow p-6">
@@ -30,7 +43,9 @@ export default function Tags() {
           <ToggleButtonGroup
             color="primary"
             exclusive
-            onChange={(_event, value) => setSearchParams({ tab: value })}
+            onChange={(_event, value) =>
+              value && setSearchParams({ tab: value })
+            }
             size="small"
             value={tab}
           >
