@@ -3,8 +3,8 @@ import { useLoaderData } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Unstable_Grid2";
+import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -51,13 +51,11 @@ export default function Users() {
                   {user.reputation}
                 </Typography>
 
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" divider={<>,</>} spacing={1}>
                   {user.tagIds.map((tagId) => (
-                    <Chip
-                      key={tagId}
-                      label={tags[tagId].name}
-                      onClick={() => {}}
-                    />
+                    <Link href="#" key={tagId}>
+                      {tags[tagId].name}
+                    </Link>
                   ))}
                 </Stack>
               </CardContent>
