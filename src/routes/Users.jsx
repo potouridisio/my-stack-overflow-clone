@@ -1,5 +1,14 @@
 import { useLoaderData } from "react-router-dom";
 
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Unstable_Grid2";
+import Stack from "@mui/material/Stack";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+
 import { indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -16,52 +25,46 @@ export default function Users() {
   const { tags, users } = useLoaderData();
 
   return (
-    <main className="grow p-6">
-      <div className="relative flex min-h-[4rem] items-center px-6" />
+    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Toolbar />
 
-      <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
-        <div className="relative flex min-h-[4rem] items-center">
-          <div className="m-0 text-xl font-medium leading-[1.6] tracking-[0.0075em] text-inherit">
-            Users
-          </div>
-        </div>
-      </div>
+      <Toolbar disableGutters>
+        <Typography component="div" variant="h6">
+          Users
+        </Typography>
+      </Toolbar>
 
-      <div className="grid grid-cols-4 gap-4">
+      <Grid container spacing={2}>
         {users.map((user) => (
-          <div
-            className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]"
-            key={user.id}
-          >
-            <div className="p-4">
-              <div className="m-0 text-2xl leading-[1.334] tracking-normal">
-                {user.name}
-              </div>
-              <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
-                {user.location}
-              </p>
-              <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
-                {user.reputation}
-              </p>
-            </div>
+          <Grid key={user.id} xs={3}>
+            <Card>
+              <CardContent>
+                <Typography component="div" variant="h5">
+                  {user.name}
+                </Typography>
 
-            <div className="flex items-center p-2">
-              <div className="flex flex-row space-x-2">
-                {user.tagIds.map((tagId) => (
-                  <div
-                    className="relative m-0 box-border inline-flex h-8 max-w-full cursor-pointer select-none appearance-none items-center justify-center whitespace-nowrap rounded-2xl border-0 bg-black bg-opacity-[0.08] p-0 align-middle text-[0.8125rem] text-black text-opacity-[0.87] no-underline outline-0 hover:bg-opacity-[0.12]"
-                    key={tagId}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <span className="truncate px-3">{tags[tagId].name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+                <Typography color="text.secondary" sx={{ mb: 1.5 }}>
+                  {user.location}
+                </Typography>
+
+                <Typography sx={{ mb: 1.5 }} variant="body2">
+                  {user.reputation}
+                </Typography>
+
+                <Stack direction="row" spacing={1}>
+                  {user.tagIds.map((tagId) => (
+                    <Chip
+                      key={tagId}
+                      label={tags[tagId].name}
+                      onClick={() => {}}
+                    />
+                  ))}
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </div>
-    </main>
+      </Grid>
+    </Box>
   );
 }
