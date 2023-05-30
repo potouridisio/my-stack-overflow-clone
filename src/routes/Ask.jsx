@@ -91,8 +91,7 @@ export default function Ask() {
           <Stack component={Form} id="new-question" method="post" spacing={2}>
             <TextField
               autoFocus
-              // optional chaining operator
-              error={actionData?.fieldErrors?.title}
+              error={!!actionData?.fieldErrors?.title}
               helperText={
                 actionData?.fieldErrors?.title ||
                 "Be specific and imagine you're asking a question to another person"
@@ -103,7 +102,7 @@ export default function Ask() {
               size="small"
             />
             <TextField
-              error={actionData?.fieldErrors?.body}
+              error={!!actionData?.fieldErrors?.body}
               helperText={
                 actionData?.fieldErrors?.body ||
                 "Include all the information someone would need to answer your question"
