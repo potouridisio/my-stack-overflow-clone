@@ -1,7 +1,15 @@
 import { Form, Link, useActionData, useLoaderData } from "react-router-dom";
 
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import Chip from "@mui/material/Chip";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
 
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
@@ -69,116 +77,96 @@ export default function Question() {
   const { question, tags, users, answers } = useLoaderData();
 
   return (
-    <main className="grow p-6">
-      <div className="relative flex min-h-[4rem] items-center px-6" />
+    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Toolbar />
 
-      <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
-        <div className="relative flex min-h-[4rem] items-center">
-          <div className="m-0 flex-[1] text-xl font-medium leading-[1.6] tracking-[0.0075em]">
-            {question.title}
-          </div>
-          <Button component={Link} to="/questions/ask" variant="contained">
-            Ask Question
-          </Button>
-        </div>
-      </div>
+      <Toolbar disableGutters>
+        <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
+          {question.title}
+        </Typography>
+        <Button component={Link} to="/questions/ask" variant="contained">
+          Ask Question
+        </Button>
+      </Toolbar>
 
       {/* Question */}
-      <div className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]">
-        <div className="p-4">
-          <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
+      <Card>
+        <CardContent>
+          <Typography color="text.secondary" sx={{ mb: 1.5 }}>
             {question.body}
-          </p>
+          </Typography>
 
-          <div className="flex flex-row space-x-2">
+          <Stack direction="row" spacing={1}>
             {question.tagIds.map((tagId) => (
-              <div
-                className="relative m-0 box-border inline-flex h-8 max-w-full cursor-pointer select-none appearance-none items-center justify-center whitespace-nowrap rounded-2xl border-0 bg-black bg-opacity-[0.08] p-0 align-middle text-[0.8125rem] text-black text-opacity-[0.87] no-underline outline-0 hover:bg-opacity-[0.12]"
-                key={tagId}
-                role="button"
-                tabIndex={0}
-              >
-                <span className="truncate px-3">{tags[tagId].name}</span>
-              </div>
+              <Chip key={tagId} label={tags[tagId].name} />
             ))}
-          </div>
-        </div>
+          </Stack>
+        </CardContent>
 
-        <div className="flex items-center justify-end p-2">
-          <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
+        <CardActions sx={{ justifyContent: "flex-end" }}>
+          <Typography variant="body2">
             asked {convertToRelativeDate(question.createdAt)}{" "}
             {users[question.userId].name} {users[question.userId].reputation}
-          </p>
-        </div>
-      </div>
+          </Typography>
+        </CardActions>
+      </Card>
 
-      <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
-        <div className="relative flex min-h-[4rem] items-center">
-          <div className="m-0 text-xl font-medium leading-[1.6] tracking-[0.0075em] text-inherit">
-            {answers.length} Answer{answers.length === 1 ? "" : "s"}
-          </div>
-        </div>
-      </div>
+      {answers.length > 0 ? (
+        <>
+          <Toolbar disableGutters>
+            <Typography component="div" variant="h6">
+              {answers.length} Answer{answers.length === 1 ? "" : "s"}
+            </Typography>
+          </Toolbar>
 
-      <div className="flex flex-col space-y-4">
-        {/* Answer */}
-        {answers.map((answer) => (
-          <div
-            className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]"
-            key={answer.id}
-          >
-            <div className="p-4">
-              <p className="mb-3 leading-normal tracking-[0.00938em] text-black text-opacity-60">
-                {answer.body}
-              </p>
-            </div>
+          <Stack spacing={2}>
+            {answers.map((answer) => (
+              <Card key={answer.id}>
+                <CardContent>
+                  <Typography color="text.secondary" sx={{ mb: 1.5 }}>
+                    {answer.body}
+                  </Typography>
+                </CardContent>
 
-            <div className="flex items-center justify-end p-2">
-              <p className="m-0 text-sm leading-[1.43] tracking-[0.01071em]">
-                answered {convertToRelativeDate(answer.createdAt)}{" "}
-                {users[answer.userId].name} {users[answer.userId].reputation}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+                <CardActions sx={{ justifyContent: "flex-end" }}>
+                  <Typography variant="body2">
+                    answered {convertToRelativeDate(answer.createdAt)}{" "}
+                    {users[answer.userId].name}{" "}
+                    {users[answer.userId].reputation}
+                  </Typography>
+                </CardActions>
+              </Card>
+            ))}
+          </Stack>
+        </>
+      ) : null}
 
-      <div className="relative left-auto right-0 top-0 z-[1100] box-border flex w-full shrink-0 flex-col bg-transparent text-inherit">
-        <div className="relative flex min-h-[4rem] items-center">
-          <div className="m-0 text-xl font-medium leading-[1.6] tracking-[0.0075em] text-inherit">
-            Your Answer
-          </div>
-        </div>
-      </div>
+      <Toolbar disableGutters>
+        <Typography component="div" variant="h6">
+          Your Answer
+        </Typography>
+      </Toolbar>
 
-      <div className="overflow-hidden rounded bg-white text-black text-opacity-[0.87] shadow-[rgba(0,_0,_0,_0.2)_0px_2px_1px_-1px,_rgba(0,_0,_0,_0.14)_0px_1px_1px_0px,_rgba(0,_0,_0,_0.12)_0px_1px_3px_0px]">
-        <div className="p-4">
-          <Form
-            className="flex flex-col space-y-4"
-            id="new-answer"
-            method="post"
-          >
+      <Card>
+        <CardContent>
+          <Form id="new-answer" method="post">
             <TextField
               error={actionData?.fieldErrors?.body}
+              fullWidth
               helperText={actionData?.fieldErrors?.body}
               multiline
               name="body"
               rows={4}
             />
           </Form>
+        </CardContent>
 
-          <div className="flex justify-end">
-            <Button
-              form="new-answer"
-              sx={{ ml: 1, mt: 3 }}
-              type="submit"
-              variant="contained"
-            >
-              Post Your Answer
-            </Button>
-          </div>
-        </div>
-      </div>
-    </main>
+        <CardActions sx={{ justifyContent: "flex-end" }}>
+          <Button form="new-answer" size="small" type="submit">
+            Post Your Answer
+          </Button>
+        </CardActions>
+      </Card>
+    </Box>
   );
 }
