@@ -2,6 +2,7 @@ import { useLoaderData, useSearchParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Unstable_Grid2";
@@ -63,14 +64,17 @@ export default function Tags() {
             <Card>
               <CardContent>
                 <Chip label={tag.name} sx={{ mb: 1.5 }} />
-                <Typography color="text.secondary" sx={{ mb: 1.5 }}>
+                <Typography color="text.secondary">
                   {tag.description}
                 </Typography>
+              </CardContent>
+
+              <CardActions sx={{ justifyContent: "flex-end" }}>
                 <Typography variant="body2">
                   {tag.occurrenceCount} question
                   {tag.occurrenceCount === 1 ? "" : "s"}
                 </Typography>
-              </CardContent>
+              </CardActions>
             </Card>
           </Grid>
         ))}
