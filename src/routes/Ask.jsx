@@ -70,11 +70,16 @@ export default function Ask() {
   const actionData = useActionData();
 
   return (
-    <Box sx={{ flexGrow: 1, p: 3 }}>
+    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       <Toolbar />
 
       <Card>
-        <AppBar color="inherit" elevation={0} sx={{ position: "relative" }}>
+        <AppBar
+          color="inherit"
+          component="div"
+          elevation={0}
+          sx={{ position: "relative" }}
+        >
           <Toolbar>
             <Typography component="div" variant="h6">
               Ask a public question
