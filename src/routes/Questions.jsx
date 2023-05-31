@@ -1,5 +1,6 @@
 import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 
+import FilterListIcon from "@mui/icons-material/FilterList";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -8,6 +9,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Stack from "@mui/material/Stack";
+import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
@@ -55,16 +57,24 @@ export default function Questions() {
         <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
           {q ? "Search Results" : "All Questions"}
         </Typography>
+
         <Button component={Link} to="/questions/ask" variant="contained">
           Ask Question
         </Button>
       </Toolbar>
 
       <Toolbar disableGutters>
-        <Typography component="div" variant="subtitle1">
+        <Typography component="div" sx={{ flexGrow: 1 }} variant="subtitle1">
           {questions.length} {q ? "result" : "question"}
           {questions.length === 1 ? "" : "s"}
         </Typography>
+
+        {!q ? (
+          <ToggleButton size="small" value="filter">
+            <FilterListIcon fontSize="small" sx={{ mr: 0.5 }} />
+            Filter
+          </ToggleButton>
+        ) : null}
       </Toolbar>
 
       <Stack spacing={2}>
