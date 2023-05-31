@@ -1,4 +1,10 @@
-import { Link, useLoaderData, useSearchParams } from "react-router-dom";
+import {
+  Form,
+  Link,
+  useLoaderData,
+  useSearchParams,
+  useNavigate,
+} from "react-router-dom";
 import { useState } from "react";
 
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -57,10 +63,11 @@ const bull = (
 
 export default function Questions() {
   const { questions, tags, users } = useLoaderData();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
   const [showFilterOptions, setShowFilterOptions] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -103,96 +110,108 @@ export default function Questions() {
             mb: 4,
           }}
         >
-          <CardContent sx={{ display: "flex", gap: 20, mb: 0.8 }}>
-            <FormControl component="fieldset" variant="standard">
-              <FormLabel
-                component="legend"
-                sx={{ color: "black", fontWeight: 500, mb: 2 }}
-              >
-                Filter by
-              </FormLabel>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Checkbox name="No answers" />}
-                  label="No answers"
-                />
-                <FormControlLabel
-                  control={<Checkbox name="No accepted answer" />}
-                  label="No accepted answer"
-                />
-                <FormControlLabel
-                  control={<Checkbox name="Has bounty" />}
-                  label="Has bounty"
-                />
-              </FormGroup>
-            </FormControl>
-            <FormControl component="fieldset" variant="standard">
-              <FormLabel
-                component="legend"
-                sx={{ color: "black", fontWeight: 500, mb: 2 }}
-              >
-                Sorted by
-              </FormLabel>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Radio name="Newest" />}
-                  label="Newest"
-                />
-                <FormControlLabel
-                  control={<Radio name="Recent activity" />}
-                  label="Recent activity"
-                />
-                <FormControlLabel
-                  control={<Radio name="Highest score" />}
-                  label="Highest score"
-                />
-                <FormControlLabel
-                  control={<Radio name="Most frequent" />}
-                  label="Most frequent"
-                />
-                <FormControlLabel
-                  control={<Radio name="Bounty ending soon" />}
-                  label="Bounty ending soon"
-                />
-              </FormGroup>
-            </FormControl>
-            <FormControl component="fieldset" variant="standard">
-              <FormLabel
-                component="legend"
-                sx={{ color: "black", fontWeight: 500, mb: 2 }}
-              >
-                Tagged with
-              </FormLabel>
-              <FormGroup>
-                <FormControlLabel
-                  control={<Radio name="My watched tags" />}
-                  label="My watched tags"
-                />
-                <FormControlLabel
-                  control={<Radio name="The following tags" />}
-                  label="The following tags:"
-                />
-              </FormGroup>
-              <Input
-                sx={{
-                  border: 1,
-                  borderColor: "grey.500",
-                  borderRadius: "5%",
-                  ml: 4,
-                  mt: 2,
-                  p: 0.5,
-                  pr: 8,
-                }}
-                placeholder="e.g. Javascript or Python"
-              ></Input>
-            </FormControl>
+          <CardContent>
+            <Form
+              id="filterChoices"
+              sx={{ display: "flex", gap: 20, mb: 0.8 }}
+              method="POST"
+            >
+              <FormControl component="fieldset" variant="standard">
+                <FormLabel
+                  component="legend"
+                  sx={{ color: "black", fontWeight: 500, mb: 2 }}
+                >
+                  Filter by
+                </FormLabel>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Checkbox name="No answers" />}
+                    label="No answers"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox name="No accepted answer" />}
+                    label="No accepted answer"
+                  />
+                  <FormControlLabel
+                    control={<Checkbox name="Has bounty" />}
+                    label="Has bounty"
+                  />
+                </FormGroup>
+              </FormControl>
+              <FormControl component="fieldset" variant="standard">
+                <FormLabel
+                  component="legend"
+                  sx={{ color: "black", fontWeight: 500, mb: 2 }}
+                >
+                  Sorted by
+                </FormLabel>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Radio name="Newest" />}
+                    label="Newest"
+                  />
+                  <FormControlLabel
+                    control={<Radio name="Recent activity" />}
+                    label="Recent activity"
+                  />
+                  <FormControlLabel
+                    control={<Radio name="Highest score" />}
+                    label="Highest score"
+                  />
+                  <FormControlLabel
+                    control={<Radio name="Most frequent" />}
+                    label="Most frequent"
+                  />
+                  <FormControlLabel
+                    control={<Radio name="Bounty ending soon" />}
+                    label="Bounty ending soon"
+                  />
+                </FormGroup>
+              </FormControl>
+              <FormControl component="fieldset" variant="standard">
+                <FormLabel
+                  component="legend"
+                  sx={{ color: "black", fontWeight: 500, mb: 2 }}
+                >
+                  Tagged with
+                </FormLabel>
+                <FormGroup>
+                  <FormControlLabel
+                    control={<Radio name="My watched tags" />}
+                    label="My watched tags"
+                  />
+                  <FormControlLabel
+                    control={<Radio name="The following tags" />}
+                    label="The following tags:"
+                  />
+                </FormGroup>
+                <Input
+                  sx={{
+                    border: 1,
+                    borderColor: "grey.500",
+                    borderRadius: "5%",
+                    ml: 4,
+                    mt: 2,
+                    p: 0.5,
+                    pr: 8,
+                  }}
+                  placeholder="e.g. Javascript or Python"
+                ></Input>
+              </FormControl>
+            </Form>
           </CardContent>
 
           <CardActions sx={{ borderTop: 1, borderColor: "grey.400", p: 2 }}>
             <Button
+              form="filterChoices"
               size="medium"
               variant="contained"
               sx={{ textTransform: "capitalize" }}
+              type="submit"
+              onClick={(e) => {
+                e.stopPropagation();
+                navigate(`filter`);
+              }}
             >
               Apply Filter
             </Button>

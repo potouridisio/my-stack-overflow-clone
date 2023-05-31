@@ -30,6 +30,12 @@ const router = createBrowserRouter([
                 element: <Questions />,
                 loader: questionsLoader,
               },
+
+              {
+                path: "filter",
+                element: <Questions />,
+                loader: questionsLoader,
+              },
             ],
           },
           {
