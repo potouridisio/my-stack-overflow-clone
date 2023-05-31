@@ -52,17 +52,15 @@ export async function action({ request }) {
     };
   }
 
-  const response = await fetch("/api/questions", {
+  const question = await fetch("/api/questions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(newQuestion),
-  });
+  }).then((res) => res.json());
 
-  const jsonData = await response.json();
-
-  return redirect(`/questions/${jsonData.id}`);
+  return redirect(`/questions/${question.id}`);
 }
 
 export default function Ask() {
