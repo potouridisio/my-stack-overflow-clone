@@ -48,6 +48,7 @@ export default function Questions() {
   const { questions, tags, users } = useLoaderData();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
+  const isSearch = Boolean(q);
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -55,7 +56,7 @@ export default function Questions() {
 
       <Toolbar disableGutters>
         <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
-          {q ? "Search Results" : "All Questions"}
+          {isSearch ? "Search Results" : "All Questions"}
         </Typography>
 
         <Button component={Link} to="/questions/ask" variant="contained">
@@ -65,11 +66,11 @@ export default function Questions() {
 
       <Toolbar disableGutters>
         <Typography component="div" sx={{ flexGrow: 1 }} variant="subtitle1">
-          {questions.length} {q ? "result" : "question"}
+          {questions.length} {isSearch ? "result" : "question"}
           {questions.length === 1 ? "" : "s"}
         </Typography>
 
-        {!q ? (
+        {!isSearch ? (
           <ToggleButton size="small" value="filter">
             <FilterListIcon fontSize="small" sx={{ mr: 0.5 }} />
             Filter
