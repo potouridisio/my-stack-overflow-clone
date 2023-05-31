@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -8,6 +9,11 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
+import Checkbox from "@mui/material/Checkbox";
+import Collapse from "@mui/material/Collapse";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import FormLabel from "@mui/material/FormLabel";
 import Stack from "@mui/material/Stack";
 import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
@@ -49,6 +55,7 @@ export default function Questions() {
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
+  const [showFilters, setShowFilters] = useState(false);
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -71,13 +78,73 @@ export default function Questions() {
         </Typography>
 
         {!isSearch ? (
-          <ToggleButton size="small" value="filter">
+          <ToggleButton
+            onClick={() => setShowFilters((prev) => !prev)}
+            size="small"
+            value="filter"
+          >
             <FilterListIcon fontSize="small" sx={{ mr: 0.5 }} />
             Filter
           </ToggleButton>
         ) : null}
       </Toolbar>
-
+      <Collapse in={!showFilters}>
+        <Card variant="outlined">
+          <CardActionArea>
+            <CardContent>
+              <FormLabel component="legend">Filter by</FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      // checked={gilad}
+                      // onChange={handleChange}
+                      name="No answers"
+                    />
+                  }
+                  label="No answers"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      // checked={jason}
+                      // onChange={handleChange}
+                      name="No accepted answer"
+                    />
+                  }
+                  label="No accepted answer"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      // checked={antoine}
+                      // onChange={handleChange}
+                      name="Has bounty"
+                    />
+                  }
+                  label="Has bounty"
+                />
+              </FormGroup>
+            </CardContent>
+            <CardActions>
+              <Button
+                size="small"
+                variant="contained"
+                sx={{ bgcolor: "dodgerblue" }}
+              >
+                Aplly filter
+              </Button>
+              <Box sx={{ flexGrow: 1 }}></Box>
+              <Button size="small" variant="text">
+                Cancel
+              </Button>
+            </CardActions>
+          </CardActionArea>
+        </Card>
+      </Collapse>
       <Stack spacing={2}>
         {/* Question */}
         {questions.map((question) => (
