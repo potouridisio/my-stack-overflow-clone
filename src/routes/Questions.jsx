@@ -93,7 +93,7 @@ export default function Questions() {
           </ToggleButton>
         ) : null}
       </Toolbar>
-      <Collapse in={!showFilters}>
+      <Collapse in={showFilters}>
         <Card variant="outlined">
           <CardActionArea>
             <CardContent sx={{ display: "flex", flexWrap: "wrap" }}>
@@ -209,7 +209,9 @@ export default function Questions() {
                 Aplly filter
               </Button>
               <Box sx={{ flexGrow: 1 }}></Box>
+
               <Button
+                onClick={() => setShowFilters(false)}
                 size="small"
                 variant="text"
                 sx={{ textTransform: "none" }}
