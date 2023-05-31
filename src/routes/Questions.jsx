@@ -94,11 +94,16 @@ export default function Questions() {
         ) : null}
       </Toolbar>
       <Collapse in={showFilters}>
-        <Card variant="outlined">
+        <Card variant="outlined" sx={{ mb: "1rem", bgcolor: "#f2f2f2" }}>
           <CardActionArea>
             <CardContent sx={{ display: "flex", flexWrap: "wrap" }}>
               <Box>
-                <FormLabel component="legend">Filter by</FormLabel>
+                <FormLabel
+                  component="legend"
+                  sx={{ color: "black", fontWeight: 500 }}
+                >
+                  Filter by
+                </FormLabel>
                 <FormGroup>
                   <FormControlLabel
                     control={
@@ -137,7 +142,12 @@ export default function Questions() {
               </Box>
               <Box>
                 <FormControl>
-                  <FormLabel id="radio-buttons-sorted-by">Sorted by</FormLabel>
+                  <FormLabel
+                    id="radio-buttons-sorted-by"
+                    sx={{ color: "black", fontWeight: 500 }}
+                  >
+                    Sorted by
+                  </FormLabel>
                   <RadioGroup
                     aria-labelledby="radio-buttons-sorted-by"
                     defaultValue="newest"
@@ -173,7 +183,10 @@ export default function Questions() {
               </Box>
               <Box>
                 <FormControl>
-                  <FormLabel id="radio-buttons-tagged-with">
+                  <FormLabel
+                    id="radio-buttons-tagged-with"
+                    sx={{ color: "black", fontWeight: 500 }}
+                  >
                     Tagged with
                   </FormLabel>
                   <RadioGroup
@@ -200,13 +213,21 @@ export default function Questions() {
                 </FormControl>
               </Box>
             </CardContent>
-            <CardActions>
+            <CardActions
+              sx={{ borderTop: "1px solid #e3e3e3", padding: "1rem" }}
+            >
               <Button
                 size="small"
                 variant="contained"
-                sx={{ bgcolor: "dodgerblue", textTransform: "none" }}
+                sx={{
+                  bgcolor: "dodgerblue",
+                  textTransform: "none",
+                  fontWeight: 400,
+                  fontSize: "0.7rem",
+                  padding: "0.4rem",
+                }}
               >
-                Aplly filter
+                Apply filter
               </Button>
               <Box sx={{ flexGrow: 1 }}></Box>
 
