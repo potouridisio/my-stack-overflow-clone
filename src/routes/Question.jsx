@@ -151,7 +151,7 @@ export default function Question() {
         <CardContent>
           <Form id="new-answer" method="post">
             <TextField
-              error={actionData?.fieldErrors?.body}
+              error={!!actionData?.fieldErrors?.body}
               fullWidth
               helperText={actionData?.fieldErrors?.body}
               multiline
