@@ -24,7 +24,6 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import { convertToRelativeDate, indexBy, truncateText } from "../lib/utils";
-import { WrapText } from "@mui/icons-material";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ request }) {
@@ -95,152 +94,148 @@ export default function Questions() {
       </Toolbar>
       <Collapse in={showFilters}>
         <Card variant="outlined" sx={{ mb: "1rem", bgcolor: "#f2f2f2" }}>
-          <CardActionArea>
-            <CardContent sx={{ display: "flex", flexWrap: "wrap" }}>
-              <Box>
+          <CardContent sx={{ display: "flex", flexWrap: "wrap" }}>
+            <Box>
+              <FormLabel
+                component="legend"
+                sx={{ color: "black", fontWeight: 500 }}
+              >
+                Filter by
+              </FormLabel>
+              <FormGroup>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      // checked={gilad}
+                      // onChange={handleChange}
+                      name="No answers"
+                    />
+                  }
+                  label="No answers"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      // checked={jason}
+                      // onChange={handleChange}
+                      name="No accepted answer"
+                    />
+                  }
+                  label="No accepted answer"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      size="small"
+                      // checked={antoine}
+                      // onChange={handleChange}
+                      name="Has bounty"
+                    />
+                  }
+                  label="Has bounty"
+                />
+              </FormGroup>
+            </Box>
+            <Box>
+              <FormControl>
                 <FormLabel
-                  component="legend"
+                  id="radio-buttons-sorted-by"
                   sx={{ color: "black", fontWeight: 500 }}
                 >
-                  Filter by
+                  Sorted by
                 </FormLabel>
-                <FormGroup>
+                <RadioGroup
+                  aria-labelledby="radio-buttons-sorted-by"
+                  defaultValue="newest"
+                  name="sortedBy"
+                >
                   <FormControlLabel
-                    control={
-                      <Checkbox
-                        size="small"
-                        // checked={gilad}
-                        // onChange={handleChange}
-                        name="No answers"
-                      />
-                    }
-                    label="No answers"
+                    value="newest"
+                    control={<Radio size="small" />}
+                    label="Newest"
                   />
                   <FormControlLabel
-                    control={
-                      <Checkbox
-                        size="small"
-                        // checked={jason}
-                        // onChange={handleChange}
-                        name="No accepted answer"
-                      />
-                    }
-                    label="No accepted answer"
+                    value="recent activity"
+                    control={<Radio size="small" />}
+                    label="Recent activity"
                   />
                   <FormControlLabel
-                    control={
-                      <Checkbox
-                        size="small"
-                        // checked={antoine}
-                        // onChange={handleChange}
-                        name="Has bounty"
-                      />
-                    }
-                    label="Has bounty"
+                    value="highest score"
+                    control={<Radio size="small" />}
+                    label="Highest score"
                   />
-                </FormGroup>
-              </Box>
-              <Box>
-                <FormControl>
-                  <FormLabel
-                    id="radio-buttons-sorted-by"
-                    sx={{ color: "black", fontWeight: 500 }}
-                  >
-                    Sorted by
-                  </FormLabel>
-                  <RadioGroup
-                    aria-labelledby="radio-buttons-sorted-by"
-                    defaultValue="newest"
-                    name="sortedBy"
-                  >
-                    <FormControlLabel
-                      value="newest"
-                      control={<Radio size="small" />}
-                      label="Newest"
-                    />
-                    <FormControlLabel
-                      value="recent activity"
-                      control={<Radio size="small" />}
-                      label="Recent activity"
-                    />
-                    <FormControlLabel
-                      value="highest score"
-                      control={<Radio size="small" />}
-                      label="Highest score"
-                    />
-                    <FormControlLabel
-                      value="most frequent"
-                      control={<Radio size="small" />}
-                      label="Most frequent"
-                    />
-                    <FormControlLabel
-                      value="bounty ending soon"
-                      control={<Radio size="small" />}
-                      label="Bounty ending soon"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </Box>
-              <Box>
-                <FormControl>
-                  <FormLabel
-                    id="radio-buttons-tagged-with"
-                    sx={{ color: "black", fontWeight: 500 }}
-                  >
-                    Tagged with
-                  </FormLabel>
-                  <RadioGroup
-                    aria-labelledby="radio-buttons-tagged-with"
-                    defaultValue="followinTags"
-                    name="sortedBy"
-                  >
-                    <FormControlLabel
-                      value="watchedTags"
-                      control={<Radio size="small" />}
-                      label="My watched tags"
-                    />
-                    <FormControlLabel
-                      value="followinTags"
-                      control={<Radio size="small" />}
-                      label="The following tags:"
-                    />
-                  </RadioGroup>
-                  <TextField
-                    id="outlined-basic"
-                    variant="outlined"
-                    placeholder="e.g. javascript or python"
+                  <FormControlLabel
+                    value="most frequent"
+                    control={<Radio size="small" />}
+                    label="Most frequent"
                   />
-                </FormControl>
-              </Box>
-            </CardContent>
-            <CardActions
-              sx={{ borderTop: "1px solid #e3e3e3", padding: "1rem" }}
+                  <FormControlLabel
+                    value="bounty ending soon"
+                    control={<Radio size="small" />}
+                    label="Bounty ending soon"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </Box>
+            <Box>
+              <FormControl>
+                <FormLabel
+                  id="radio-buttons-tagged-with"
+                  sx={{ color: "black", fontWeight: 500 }}
+                >
+                  Tagged with
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="radio-buttons-tagged-with"
+                  defaultValue="followinTags"
+                  name="sortedBy"
+                >
+                  <FormControlLabel
+                    value="watchedTags"
+                    control={<Radio size="small" />}
+                    label="My watched tags"
+                  />
+                  <FormControlLabel
+                    value="followinTags"
+                    control={<Radio size="small" />}
+                    label="The following tags:"
+                  />
+                </RadioGroup>
+                <TextField
+                  id="outlined-basic"
+                  variant="outlined"
+                  placeholder="e.g. javascript or python"
+                />
+              </FormControl>
+            </Box>
+          </CardContent>
+          <CardActions sx={{ borderTop: "1px solid #e3e3e3", padding: "1rem" }}>
+            <Button
+              size="small"
+              variant="contained"
+              sx={{
+                bgcolor: "dodgerblue",
+                textTransform: "none",
+                fontWeight: 400,
+                fontSize: "0.7rem",
+                padding: "0.4rem",
+              }}
             >
-              <Button
-                size="small"
-                variant="contained"
-                sx={{
-                  bgcolor: "dodgerblue",
-                  textTransform: "none",
-                  fontWeight: 400,
-                  fontSize: "0.7rem",
-                  padding: "0.4rem",
-                }}
-              >
-                Apply filter
-              </Button>
-              <Box sx={{ flexGrow: 1 }}></Box>
+              Apply filter
+            </Button>
+            <Box sx={{ flexGrow: 1 }}></Box>
 
-              <Button
-                onClick={() => setShowFilters(false)}
-                size="small"
-                variant="text"
-                sx={{ textTransform: "none" }}
-              >
-                Cancel
-              </Button>
-            </CardActions>
-          </CardActionArea>
+            <Button
+              onClick={() => setShowFilters(false)}
+              size="small"
+              variant="text"
+              sx={{ textTransform: "none" }}
+            >
+              Cancel
+            </Button>
+          </CardActions>
         </Card>
       </Collapse>
       <Stack spacing={2}>
