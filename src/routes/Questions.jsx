@@ -11,15 +11,20 @@ import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Checkbox from "@mui/material/Checkbox";
 import Collapse from "@mui/material/Collapse";
+import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import { convertToRelativeDate, indexBy, truncateText } from "../lib/utils";
+import { WrapText } from "@mui/icons-material";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ request }) {
@@ -91,54 +96,124 @@ export default function Questions() {
       <Collapse in={!showFilters}>
         <Card variant="outlined">
           <CardActionArea>
-            <CardContent>
-              <FormLabel component="legend">Filter by</FormLabel>
-              <FormGroup>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      size="small"
-                      // checked={gilad}
-                      // onChange={handleChange}
-                      name="No answers"
+            <CardContent sx={{ display: "flex", flexWrap: "wrap" }}>
+              <Box>
+                <FormLabel component="legend">Filter by</FormLabel>
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        size="small"
+                        // checked={gilad}
+                        // onChange={handleChange}
+                        name="No answers"
+                      />
+                    }
+                    label="No answers"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        size="small"
+                        // checked={jason}
+                        // onChange={handleChange}
+                        name="No accepted answer"
+                      />
+                    }
+                    label="No accepted answer"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        size="small"
+                        // checked={antoine}
+                        // onChange={handleChange}
+                        name="Has bounty"
+                      />
+                    }
+                    label="Has bounty"
+                  />
+                </FormGroup>
+              </Box>
+              <Box>
+                <FormControl>
+                  <FormLabel id="radio-buttons-sorted-by">Sorted by</FormLabel>
+                  <RadioGroup
+                    aria-labelledby="radio-buttons-sorted-by"
+                    defaultValue="newest"
+                    name="sortedBy"
+                  >
+                    <FormControlLabel
+                      value="newest"
+                      control={<Radio size="small" />}
+                      label="Newest"
                     />
-                  }
-                  label="No answers"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      size="small"
-                      // checked={jason}
-                      // onChange={handleChange}
-                      name="No accepted answer"
+                    <FormControlLabel
+                      value="recent activity"
+                      control={<Radio size="small" />}
+                      label="Recent activity"
                     />
-                  }
-                  label="No accepted answer"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      size="small"
-                      // checked={antoine}
-                      // onChange={handleChange}
-                      name="Has bounty"
+                    <FormControlLabel
+                      value="highest score"
+                      control={<Radio size="small" />}
+                      label="Highest score"
                     />
-                  }
-                  label="Has bounty"
-                />
-              </FormGroup>
+                    <FormControlLabel
+                      value="most frequent"
+                      control={<Radio size="small" />}
+                      label="Most frequent"
+                    />
+                    <FormControlLabel
+                      value="bounty ending soon"
+                      control={<Radio size="small" />}
+                      label="Bounty ending soon"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl>
+                  <FormLabel id="radio-buttons-tagged-with">
+                    Tagged with
+                  </FormLabel>
+                  <RadioGroup
+                    aria-labelledby="radio-buttons-tagged-with"
+                    defaultValue="followinTags"
+                    name="sortedBy"
+                  >
+                    <FormControlLabel
+                      value="watchedTags"
+                      control={<Radio size="small" />}
+                      label="My watched tags"
+                    />
+                    <FormControlLabel
+                      value="followinTags"
+                      control={<Radio size="small" />}
+                      label="The following tags:"
+                    />
+                  </RadioGroup>
+                  <TextField
+                    id="outlined-basic"
+                    variant="outlined"
+                    placeholder="e.g. javascript or python"
+                  />
+                </FormControl>
+              </Box>
             </CardContent>
             <CardActions>
               <Button
                 size="small"
                 variant="contained"
-                sx={{ bgcolor: "dodgerblue" }}
+                sx={{ bgcolor: "dodgerblue", textTransform: "none" }}
               >
                 Aplly filter
               </Button>
               <Box sx={{ flexGrow: 1 }}></Box>
-              <Button size="small" variant="text">
+              <Button
+                size="small"
+                variant="text"
+                sx={{ textTransform: "none" }}
+              >
                 Cancel
               </Button>
             </CardActions>
