@@ -32,6 +32,7 @@ export function indexBy(array, key) {
   for (let i = 0; i < array.length; i++) {
     const item = array[i];
     const keyValue = item[key];
+
     indexedData[keyValue] = item;
   }
 
@@ -44,6 +45,7 @@ export function truncateText(text, maxLength) {
   }
 
   let truncatedText = text.substr(0, maxLength);
+
   truncatedText = truncatedText.substr(
     0,
     Math.min(truncatedText.length, truncatedText.lastIndexOf(" "))
