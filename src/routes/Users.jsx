@@ -51,9 +51,13 @@ export default function Users() {
                   {user.reputation}
                 </Typography>
 
-                <Stack direction="row" divider={<>,</>} spacing={1}>
+                <Stack direction="row" divider={<>,&nbsp;</>}>
                   {user.tagIds.map((tagId) => (
-                    <Link href="#" key={tagId}>
+                    <Link
+                      href="#"
+                      key={tagId}
+                      onClick={(event) => event.preventDefault()}
+                    >
                       {tags[tagId].name}
                     </Link>
                   ))}
