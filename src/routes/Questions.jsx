@@ -23,6 +23,7 @@ import Typography from "@mui/material/Typography";
 import { convertToRelativeDate, indexBy, truncateText } from "../lib/utils";
 import { FormatBold } from "@mui/icons-material";
 import {
+  CardHeader,
   Checkbox,
   FormControl,
   FormControlLabel,
@@ -60,6 +61,31 @@ const bull = (
     •
   </Box>
 );
+
+export const handle = {
+  questionSidebar: (
+    <>
+      <Card>
+        <CardHeader title="The Overflow Blog" />
+        <CardContent>
+          <Button>
+            More on our AI future: building course recommendations and a new
+            data platform
+          </Button>
+          <Button>
+            This product could help build a more equitable workplace (Ep. 575)
+          </Button>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader title="Related Tags" />
+        <CardContent>
+          <Button variant="contained">Javascript</Button>
+        </CardContent>
+      </Card>
+    </>
+  ),
+};
 
 export default function Questions() {
   const { questions, tags, users } = useLoaderData();
