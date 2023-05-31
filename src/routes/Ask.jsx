@@ -89,8 +89,8 @@ export default function Ask() {
               label="Title"
               name="title"
               placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
-              size="small"
             />
+
             <TextField
               error={!!actionData?.fieldErrors?.body}
               helperText={
@@ -101,7 +101,6 @@ export default function Ask() {
               multiline
               name="body"
               rows={4}
-              size="small"
             />
           </Stack>
         </CardContent>
