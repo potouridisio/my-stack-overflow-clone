@@ -1,4 +1,10 @@
-import { useLoaderData, useSearchParams } from "react-router-dom";
+import {
+  Form,
+  useActionData,
+  useLoaderData,
+  useSearchParams,
+} from "react-router-dom";
+import { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -10,9 +16,11 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import SearchIcon from "@mui/icons-material/Search";
+import { Input } from "@mui/material";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function loader({ request }) {
+export async function loader({ request }) {
   const url = new URL(request.url);
   const tab = url.searchParams.get("tab");
 
@@ -29,22 +37,63 @@ export function loader({ request }) {
   return fetch(`/api/tags${sortBy ? `?sortBy=${sortBy}` : ""}`);
 }
 
+export async function action({ request }) {
+  const formData = await request.formData();
+  const filterValue = formData.get("tagFilter");
+  return filterValue;
+}
+
 export default function Tags() {
-  const tags = useLoaderData();
+  let tags = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab") || "popular";
+
+  const [inputTagFilter, setInputTagFilter] = useState("");
+  if (inputTagFilter) {
+    tags = tags.filter((tag) =>
+      tag.name.toLowerCase().includes(inputTagFilter.toLowerCase())
+    );
+  }
+
+  let filterValue = useActionData();
+  if (filterValue) {
+    tags = tags.filter((tag) =>
+      tag.name.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       <Toolbar />
-
       <Toolbar disableGutters>
         <Typography component="div" variant="h6">
           Tags
         </Typography>
       </Toolbar>
 
-      <Toolbar disableGutters sx={{ justifyContent: "flex-end" }}>
+      <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            border: 1,
+            borderColor: "grey.500",
+            borderRadius: "5%",
+            p: 0.3,
+            pr: 8,
+          }}
+        >
+          <SearchIcon sx={{ mt: 0.5 }} />
+          <Form method="post">
+            <Input
+              disableUnderline={true}
+              onChange={(event) => setInputTagFilter(event.target.value)}
+              placeholder="Filter by tag name"
+              name="tagFilter"
+            />
+          </Form>
+        </Box>
+
         <ToggleButtonGroup
           color="primary"
           exclusive

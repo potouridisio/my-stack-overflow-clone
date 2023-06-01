@@ -8,11 +8,20 @@ import Question, {
   action as questionAction,
   loader as questionLoader,
 } from "./routes/Question";
-import Questions, { loader as questionsLoader } from "./routes/Questions";
+import Questions, {
+  handle as questionsHandle,
+  loader as questionsLoader,
+} from "./routes/Questions";
 import Root from "./routes/Root";
-import Sidebar from "./routes/Sidebar";
-import Tags, { loader as tagsLoader } from "./routes/Tags";
-import Users, { loader as usersLoader } from "./routes/Users";
+import Sidebar, { loader as tagsSidebarLoader } from "./routes/Sidebar";
+import Tags, {
+  action as filteredTagsAction,
+  loader as tagsLoader,
+} from "./routes/Tags";
+import Users, {
+  action as filteredUsersAction,
+  loader as usersLoader,
+} from "./routes/Users";
 
 const router = createBrowserRouter([
   {
@@ -24,9 +33,23 @@ const router = createBrowserRouter([
         children: [
           {
             element: <Sidebar />,
+            loader: tagsSidebarLoader,
             children: [
               {
-                path: "/search?",
+                path: "/",
+                element: <Questions />,
+                loader: questionsLoader,
+                handle: questionsHandle,
+              },
+
+              {
+                path: "search",
+                element: <Questions />,
+                loader: questionsLoader,
+              },
+
+              {
+                path: "filter",
                 element: <Questions />,
                 loader: questionsLoader,
               },
@@ -36,11 +59,13 @@ const router = createBrowserRouter([
             path: "tags",
             element: <Tags />,
             loader: tagsLoader,
+            action: filteredTagsAction,
           },
           {
             path: "users",
             element: <Users />,
             loader: usersLoader,
+            action: filteredUsersAction,
           },
           {
             path: "questions/:questionId",
