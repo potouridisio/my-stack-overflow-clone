@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
 
-import Ask, { action as askAction } from "./routes/Ask";
+import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
 import Question, {
   action as questionAction,
@@ -57,6 +57,7 @@ const router = createBrowserRouter([
             path: "questions/ask",
             element: <Ask />,
             action: askAction,
+            loader: askLoader,
           },
         ],
       },

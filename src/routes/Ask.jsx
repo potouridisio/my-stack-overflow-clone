@@ -1,5 +1,13 @@
-import { Form, redirect, useActionData } from "react-router-dom";
+import { useState } from "react";
+import {
+  Form,
+  Link,
+  redirect,
+  useActionData,
+  useLoaderData,
+} from "react-router-dom";
 
+import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -9,6 +17,8 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+
+import { indexBy } from "../lib/utils";
 
 function validateQuestionBody(body) {
   if (!body) {
@@ -30,20 +40,32 @@ function validateQuestionTitle(title) {
   }
 }
 
+function validateQuestionTags(tags) {
+  if (tags.length === 0) {
+    return "Please enter at least one tag.";
+  }
+
+  if (tags.length > 5) {
+    return "Please enter no more than 5 tags.";
+  }
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export async function action({ request }) {
   const formData = await request.formData();
 
+  const tags = formData.get("tags");
   const newQuestion = {
     body: formData.get("body"),
     title: formData.get("title"),
-    tagIds: [],
+    tagIds: tags !== "" ? tags.split`,`.map(Number) : [],
     userId: 1,
   };
 
   const fieldErrors = {
     body: validateQuestionBody(newQuestion.body),
     title: validateQuestionTitle(newQuestion.title),
+    tags: validateQuestionTags(newQuestion.tagIds),
   };
 
   if (Object.values(fieldErrors).some(Boolean)) {
@@ -63,8 +85,17 @@ export async function action({ request }) {
   return redirect(`/questions/${question.id}`);
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+export async function loader() {
+  const tags = await fetch("/api/tags").then((res) => res.json());
+
+  return indexBy(tags, "id");
+}
+
 export default function Ask() {
   const actionData = useActionData();
+  const tags = useLoaderData();
+  const [selectedTags, setSelectedTags] = useState([]);
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -102,6 +133,29 @@ export default function Ask() {
               name="body"
               rows={4}
             />
+
+            <Autocomplete
+              multiple
+              onChange={(_event, value) => setSelectedTags(value)}
+              options={Object.keys(tags)}
+              getOptionLabel={(option) => tags[option].name}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  error={!!actionData?.fieldErrors?.tags}
+                  helperText={
+                    actionData?.fieldErrors?.tags ||
+                    "Add up to 5 tags to describe what your question is about"
+                  }
+                  label="Tags"
+                  placeholder="e.g. (database ruby .net)"
+                  variant="outlined"
+                />
+              )}
+              value={selectedTags}
+            />
+
+            <input name="tags" type="hidden" value={selectedTags.join()} />
           </Stack>
         </CardContent>
 
