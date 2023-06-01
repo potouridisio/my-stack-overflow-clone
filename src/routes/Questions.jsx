@@ -63,24 +63,26 @@ const bull = (
 );
 
 export const handle = {
-  questionSidebar: (
+  questionSidebar: (tags) => (
     <>
-      <Card>
-        <CardHeader title="The Overflow Blog" />
-        <CardContent>
-          <Button>
+      <Card sx={{ border: 1, borderColor: "grey.500", mt: 5, ml: 2, mr: 2 }}>
+        <CardHeader title="The Overflow Blog" sx={{ borderBottom: 1 }} />
+        <CardContent sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
+          <Link to={""}>
             More on our AI future: building course recommendations and a new
             data platform
-          </Button>
-          <Button>
+          </Link>
+          <Link to={""}>
             This product could help build a more equitable workplace (Ep. 575)
-          </Button>
+          </Link>
         </CardContent>
       </Card>
       <Card>
-        <CardHeader title="Related Tags" />
-        <CardContent>
-          <Button variant="contained">Javascript</Button>
+        <CardHeader title="Related Tags" sx={{ mt: 4 }} />
+        <CardContent sx={{ display: "flex", flexDirection: "column", gap: 5 }}>
+          {tags.map((tag) => (
+            <Button variant="contained">{tag.name}</Button>
+          ))}
         </CardContent>
       </Card>
     </>
@@ -212,6 +214,7 @@ export default function Questions() {
                   />
                 </FormGroup>
                 <Input
+                  disableUnderline={true}
                   sx={{
                     border: 1,
                     borderColor: "grey.500",
