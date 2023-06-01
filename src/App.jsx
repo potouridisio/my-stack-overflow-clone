@@ -2,7 +2,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import ScopedCssBaseline from "@mui/material/ScopedCssBaseline";
 
-import Ask, { action as askAction } from "./routes/Ask";
+import Ask, { action as askAction, handle as askHandle } from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
 import Question, {
   action as questionAction,
@@ -10,7 +10,7 @@ import Question, {
 } from "./routes/Question";
 import Questions, { loader as questionsLoader } from "./routes/Questions";
 import Root from "./routes/Root";
-import Sidebar, { handle as askHandle } from "./routes/Sidebar";
+import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
 import Users, { loader as usersLoader } from "./routes/Users";
 
@@ -26,7 +26,12 @@ const router = createBrowserRouter([
             element: <Sidebar />,
             children: [
               {
-                path: "/search?",
+                path: "/",
+                element: <Questions />,
+                loader: questionsLoader,
+              },
+              {
+                path: "search",
                 element: <Questions />,
                 loader: questionsLoader,
               },
@@ -52,12 +57,12 @@ const router = createBrowserRouter([
       },
       {
         element: <Sidebar />,
-        handle: askHandle,
         children: [
           {
             path: "questions/ask",
             element: <Ask />,
             action: askAction,
+            handle: askHandle,
           },
         ],
       },

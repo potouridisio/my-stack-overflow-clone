@@ -1,14 +1,49 @@
 import { Form, redirect, useActionData } from "react-router-dom";
 
 import Box from "@mui/material/Box";
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+
+export const handle = {
+  advice: (
+    <>
+      <Card sx={{ mt: "30vh" }}>
+        <CardHeader
+          title="Writing a good title"
+          titleTypographyProps={{ fontSize: "1rem" }}
+          sx={{ bgcolor: "#f2f2f2", borderBottom: "2px solid lightGrey" }}
+        >
+          Writing a good title
+        </CardHeader>
+        <CardContent>
+          <Box sx={{ display: "flex", gap: 4 }}>
+            <BorderColorOutlinedIcon
+              fontSize="large"
+              sx={{ alignSelf: "center" }}
+            />
+            <Box>
+              <Typography sx={{ fontSize: "0.9rem", mb: "0.5rem" }}>
+                Your title should summarize the problem.
+              </Typography>
+              <Typography sx={{ fontSize: "0.9rem" }}>
+                You might find that you have a better idea of your title after
+                writing out the rest of the question.
+              </Typography>
+            </Box>
+          </Box>
+        </CardContent>
+      </Card>
+    </>
+  ),
+};
 
 function validateQuestionBody(body) {
   if (!body) {
