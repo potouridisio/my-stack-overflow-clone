@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import CssBaseline from "@mui/material/CssBaseline";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
@@ -65,11 +66,21 @@ const router = createBrowserRouter([
   },
 ]);
 
+const theme = createTheme({
+  components: {
+    MuiCard: {
+      defaultProps: {
+        variant: "outlined",
+      },
+    },
+  },
+});
+
 export default function App() {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <RouterProvider router={router} />
-    </>
+    </ThemeProvider>
   );
 }
