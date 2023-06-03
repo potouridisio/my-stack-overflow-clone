@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useLoaderData, useSearchParams } from "react-router-dom";
 
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -7,7 +8,15 @@ import Card from "@mui/material/Card";
 import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
+import Collapse from "@mui/material/Collapse";
+import FormControl from "@mui/material/FormControl";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormGroup from "@mui/material/FormGroup";
+import FormLabel from "@mui/material/FormLabel";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
 import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
@@ -49,6 +58,7 @@ export default function Questions() {
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
+  const [selected, setSelected] = useState(false);
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -71,12 +81,95 @@ export default function Questions() {
         </Typography>
 
         {!isSearch ? (
-          <ToggleButton size="small" value="filter">
+          <ToggleButton
+            onChange={() => setSelected(!selected)}
+            selected={selected}
+            size="small"
+            value="filter"
+          >
             <FilterListIcon fontSize="small" sx={{ mr: 0.5 }} />
             Filter
           </ToggleButton>
         ) : null}
       </Toolbar>
+
+      <Collapse in={selected} timeout="auto" unmountOnExit>
+        <Card sx={{ mb: 2 }}>
+          <CardContent>
+            <Box sx={{ display: "flex" }}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Filter by</FormLabel>
+                <FormGroup>
+                  {[
+                    ["No answers", "NoAnswers"],
+                    ["No accepted answer", "NoAcceptedAnswer"],
+                    ["Has bounty", "Bounty"],
+                  ].map(([label, value]) => (
+                    <FormControlLabel
+                      control={<Checkbox name="filterId" value={value} />}
+                      key={value}
+                      label={label}
+                    />
+                  ))}
+                </FormGroup>
+              </FormControl>
+
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Sorted by</FormLabel>
+                <RadioGroup>
+                  {[
+                    ["Newest", "Newest"],
+                    ["Recent activity", "RecentActivity"],
+                    ["Highest score", "MostVotes"],
+                    ["Most frequent", "MostFrequent"],
+                    ["Bounty ending soon", "BountyEndingSoon"],
+                  ].map(([label, value]) => (
+                    <FormControlLabel
+                      control={<Radio name="sortId" value={value} />}
+                      key={value}
+                      label={label}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Tagged with</FormLabel>
+                <RadioGroup>
+                  {[
+                    ["My watched tags", "Watched"],
+                    ["The following tags:", "Specified"],
+                  ].map(([label, value]) => (
+                    <FormControlLabel
+                      control={<Radio name="tagModeId" value={value} />}
+                      key={value}
+                      label={label}
+                    />
+                  ))}
+                </RadioGroup>
+              </FormControl>
+            </Box>
+          </CardContent>
+
+          <CardActions>
+            <Button
+              form="filter-form"
+              size="small"
+              variant="contained"
+              type="submit"
+            >
+              Apply filter
+            </Button>
+            <Button size="small" variant="outlined">
+              Save custom filter
+            </Button>
+            <Box sx={{ flexGrow: 1 }} />
+            <Button onClick={() => setSelected(false)} size="small">
+              Cancel
+            </Button>
+          </CardActions>
+        </Card>
+      </Collapse>
 
       <Stack spacing={2}>
         {/* Question */}
