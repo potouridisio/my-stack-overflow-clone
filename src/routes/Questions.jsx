@@ -82,6 +82,7 @@ export default function Questions() {
 
         {!isSearch ? (
           <ToggleButton
+            color="primary"
             onChange={() => setSelected(!selected)}
             selected={selected}
             size="small"
