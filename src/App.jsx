@@ -68,6 +68,11 @@ const router = createBrowserRouter([
 
 const theme = createTheme({
   components: {
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+      },
+    },
     MuiCard: {
       defaultProps: {
         variant: "outlined",
