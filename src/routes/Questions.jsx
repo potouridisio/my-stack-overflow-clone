@@ -48,15 +48,6 @@ export async function loader({ request }) {
   };
 }
 
-const bull = (
-  <Box
-    component="span"
-    sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-  >
-    •
-  </Box>
-);
-
 export default function Questions() {
   const { questions, tags, users } = useLoaderData();
   const [searchParams] = useSearchParams();
@@ -181,17 +172,30 @@ export default function Questions() {
         {questions.map((question) => (
           <Card key={question.id}>
             <CardContent>
-              <Typography
-                color="text.secondary"
-                gutterBottom
-                sx={{ fontSize: 14 }}
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ alignItems: "center", mb: 1.5 }}
               >
-                {question.voteCount} vote
-                {question.voteCount === 1 ? "" : "s"}
-                {bull}
-                {question.answerCount} answer
-                {question.answerCount === 1 ? "" : "s"}
-              </Typography>
+                <Typography color="text.secondary" sx={{ fontSize: 14 }}>
+                  {question.voteCount} vote
+                  {question.voteCount === 1 ? "" : "s"}
+                </Typography>
+                {question.answerCount > 0 ? (
+                  <Chip
+                    color="success"
+                    label={`${question.answerCount} answer${
+                      question.answerCount === 1 ? "" : "s"
+                    }`}
+                    variant="outlined"
+                  />
+                ) : (
+                  <Typography color="text.secondary" sx={{ fontSize: 14 }}>
+                    {question.answerCount} answer
+                    {question.answerCount === 1 ? "" : "s"}
+                  </Typography>
+                )}
+              </Stack>
 
               <Link
                 component={RouterLink}
@@ -215,7 +219,9 @@ export default function Questions() {
 
             <CardActions sx={{ justifyContent: "flex-end" }}>
               <Typography variant="body2">
-                {users[question.userId].name}{" "}
+                <Link href="#" onClick={(event) => event.preventDefault()}>
+                  {users[question.userId].name}
+                </Link>{" "}
                 {users[question.userId].reputation} asked{" "}
                 {convertToRelativeDate(question.createdAt)}
               </Typography>
