@@ -27,6 +27,18 @@ db.serialize(() => {
   );
 
   db.run(
+    `CREATE TABLE filters (
+      filterIds TEXT,
+      id INTEGER PRIMARY KEY,
+      name TEXT,
+      sortId TEXT,
+      tagModeId TEXT,
+      userId INTEGER,
+      FOREIGN KEY (userId) REFERENCES users(id)
+    )`
+  );
+
+  db.run(
     `CREATE TABLE questions (
       answerCount INTEGER,
       body TEXT,

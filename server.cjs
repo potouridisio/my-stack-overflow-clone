@@ -264,6 +264,98 @@ app.get("/users", (req, res) => {
   }
 });
 
+// Get all filters for a user
+app.get("/users/:userId/filters", (req, res) => {
+  const userId = req.params.userId; // Extract the userId from the URL parameter
+
+  // Retrieve all filters associated with the given userId from the database
+  db.all("SELECT * FROM filters WHERE userId = ?", [userId], (err, filters) => {
+    if (err) {
+      // Handle any errors
+      res.status(500).json({ error: "Internal server error" });
+    } else {
+      // Return the filters as a response
+      res.json(filters);
+    }
+  });
+});
+
+// Create a filter for a user
+app.post("/users/:userId/filters", (req, res) => {
+  const userId = req.params.userId; // Extract the userId from the URL parameter
+  const { filterIds, sortId, tagModeId, name } = req.body; // Assuming the required fields are provided in the request body
+
+  // Insert the new filter associated with the given userId into the database
+  db.run(
+    "INSERT INTO filters (userId, filterIds, sortId, tagModeId, name) VALUES (?, ?, ?, ?, ?)",
+    [userId, filterIds, sortId, tagModeId, name],
+    function (err) {
+      if (err) {
+        // Handle any errors
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        // Return the ID of the newly created filter
+        res.json({ id: this.lastID });
+      }
+    }
+  );
+});
+
+// Delete a filter for a user
+app.delete("/users/:userId/filters/:filterId", (req, res) => {
+  const userId = req.params.userId; // Extract the userId from the URL parameter
+  const filterId = req.params.filterId; // Extract the filterId from the URL parameter
+
+  // Delete the filter with the given filterId and userId from the database
+  db.run(
+    "DELETE FROM filters WHERE id = ? AND userId = ?",
+    [filterId, userId],
+    function (err) {
+      if (err) {
+        // Handle any errors
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        // Check if any rows were affected
+        if (this.changes === 0) {
+          // No matching filter found
+          res.status(404).json({ error: "Filter not found" });
+        } else {
+          // Filter successfully deleted
+          res.sendStatus(204);
+        }
+      }
+    }
+  );
+});
+
+// Edit a filter for a user
+app.put("/users/:userId/filters/:filterId", (req, res) => {
+  const userId = req.params.userId; // Extract the userId from the URL parameter
+  const filterId = req.params.filterId; // Extract the filterId from the URL parameter
+  const { filterIds, sortId, tagModeId, name } = req.body; // Assuming the fields to be updated are provided in the request body
+
+  // Update the filter with the given filterId and userId in the database
+  db.run(
+    "UPDATE filters SET filterIds = ?, sortId = ?, tagModeId = ?, name = ? WHERE id = ? AND userId = ?",
+    [filterIds, sortId, tagModeId, name, filterId, userId],
+    function (err) {
+      if (err) {
+        // Handle any errors
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        // Check if any rows were affected
+        if (this.changes === 0) {
+          // No matching filter found
+          res.status(404).json({ error: "Filter not found" });
+        } else {
+          // Filter successfully updated
+          res.sendStatus(204);
+        }
+      }
+    }
+  );
+});
+
 const PORT = 3000; // Choose the desired port for your server
 
 app.listen(PORT, () => {
