@@ -1,4 +1,9 @@
-import { Form, Link, useActionData, useLoaderData } from "react-router-dom";
+import {
+  Form,
+  Link as RouterLink,
+  useActionData,
+  useLoaderData,
+} from "react-router-dom";
 
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -6,6 +11,7 @@ import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
@@ -84,7 +90,7 @@ export default function Question() {
         <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
           {question.title}
         </Typography>
-        <Button component={Link} to="/questions/ask" variant="contained">
+        <Button component={RouterLink} to="/questions/ask" variant="contained">
           Ask Question
         </Button>
       </Toolbar>
@@ -106,7 +112,10 @@ export default function Question() {
         <CardActions sx={{ justifyContent: "flex-end" }}>
           <Typography variant="body2">
             asked {convertToRelativeDate(question.createdAt)}{" "}
-            {users[question.userId].name} {users[question.userId].reputation}
+            <Link href="#" onClick={(event) => event.preventDefault()}>
+              {users[question.userId].name}
+            </Link>{" "}
+            {users[question.userId].reputation}
           </Typography>
         </CardActions>
       </Card>
@@ -131,7 +140,9 @@ export default function Question() {
                 <CardActions sx={{ justifyContent: "flex-end" }}>
                   <Typography variant="body2">
                     answered {convertToRelativeDate(answer.createdAt)}{" "}
-                    {users[answer.userId].name}{" "}
+                    <Link href="#" onClick={(event) => event.preventDefault()}>
+                      {users[answer.userId].name}
+                    </Link>{" "}
                     {users[answer.userId].reputation}
                   </Typography>
                 </CardActions>

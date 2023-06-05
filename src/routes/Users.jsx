@@ -39,7 +39,12 @@ export default function Users() {
           <Grid key={user.id} xs={3}>
             <Card>
               <CardContent>
-                <Typography component="div" variant="h5">
+                <Typography
+                  component={Link}
+                  href="#"
+                  onClick={(event) => event.preventDefault()}
+                  variant="h5"
+                >
                   {user.name}
                 </Typography>
 
