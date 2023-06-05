@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import { blue } from "@mui/material/colors";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
@@ -66,7 +67,9 @@ const router = createBrowserRouter([
   },
 ]);
 
-const theme = createTheme({
+let theme = createTheme();
+
+theme = createTheme(theme, {
   components: {
     MuiButton: {
       defaultProps: {
@@ -76,6 +79,18 @@ const theme = createTheme({
     MuiCard: {
       defaultProps: {
         variant: "outlined",
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        underline: "none",
+      },
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            color: theme.palette.mode === "dark" ? blue[400] : blue[800],
+          },
+        },
       },
     },
   },
