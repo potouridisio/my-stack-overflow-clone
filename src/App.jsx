@@ -71,6 +71,13 @@ let theme = createTheme();
 
 theme = createTheme(theme, {
   components: {
+    MuiAutocomplete: {
+      defaultProps: {
+        ChipProps: {
+          size: "small",
+        },
+      },
+    },
     MuiButton: {
       defaultProps: {
         disableElevation: true,
@@ -79,6 +86,16 @@ theme = createTheme(theme, {
     MuiCard: {
       defaultProps: {
         variant: "outlined",
+      },
+    },
+    MuiChip: {
+      defaultProps: {
+        size: "small",
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: theme.shape.borderRadius,
+        },
       },
     },
     MuiLink: {
