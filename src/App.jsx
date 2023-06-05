@@ -76,6 +76,7 @@ theme = createTheme(theme, {
         ChipProps: {
           size: "small",
         },
+        size: "small",
       },
     },
     MuiButton: {
@@ -108,6 +109,11 @@ theme = createTheme(theme, {
             color: theme.palette.mode === "dark" ? blue[400] : blue[800],
           },
         },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        size: "small",
       },
     },
   },
