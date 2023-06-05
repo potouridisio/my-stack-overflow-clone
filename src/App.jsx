@@ -89,6 +89,11 @@ theme = createTheme(theme, {
         variant: "outlined",
       },
     },
+    MuiCheckbox: {
+      defaultProps: {
+        size: "small",
+      },
+    },
     MuiChip: {
       defaultProps: {
         size: "small",
@@ -109,6 +114,11 @@ theme = createTheme(theme, {
             color: theme.palette.mode === "dark" ? blue[400] : blue[800],
           },
         },
+      },
+    },
+    MuiRadio: {
+      defaultProps: {
+        size: "small",
       },
     },
     MuiTextField: {
