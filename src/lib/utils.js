@@ -38,20 +38,3 @@ export function indexBy(array, key) {
 
   return indexedData;
 }
-
-export function truncateText(text, maxLength) {
-  if (text.length <= maxLength) {
-    return text;
-  }
-
-  let truncatedText = text.substr(0, maxLength);
-
-  truncatedText = truncatedText.substr(
-    0,
-    Math.min(truncatedText.length, truncatedText.lastIndexOf(" "))
-  );
-
-  truncatedText += "...";
-
-  return truncatedText;
-}

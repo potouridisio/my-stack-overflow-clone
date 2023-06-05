@@ -26,7 +26,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-import { convertToRelativeDate, indexBy, truncateText } from "../lib/utils";
+import { convertToRelativeDate, indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ request }) {
@@ -195,15 +195,12 @@ export default function Questions() {
 
               <Link
                 component={RouterLink}
+                sx={{ display: "block", mb: 1.5 }}
                 to={`/questions/${question.id}`}
                 variant="h5"
               >
                 {question.title}
               </Link>
-
-              <Typography color="text.secondary" sx={{ mb: 1.5 }}>
-                {truncateText(question.body, 200)}
-              </Typography>
 
               <Stack direction="row" spacing={1}>
                 {question.tagIds.map((tagId) => (
