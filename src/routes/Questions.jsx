@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { Link, useLoaderData, useSearchParams } from "react-router-dom";
+import {
+  Link as RouterLink,
+  useLoaderData,
+  useSearchParams,
+} from "react-router-dom";
 
 import FilterListIcon from "@mui/icons-material/FilterList";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import CardActionArea from "@mui/material/CardActionArea";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
@@ -15,6 +18,7 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
+import Link from "@mui/material/Link";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
@@ -69,7 +73,7 @@ export default function Questions() {
           {isSearch ? "Search Results" : "All Questions"}
         </Typography>
 
-        <Button component={Link} to="/questions/ask" variant="contained">
+        <Button component={RouterLink} to="/questions/ask" variant="contained">
           Ask Question
         </Button>
       </Toolbar>
@@ -176,42 +180,41 @@ export default function Questions() {
         {/* Question */}
         {questions.map((question) => (
           <Card key={question.id}>
-            <CardActionArea component={Link} to={`/questions/${question.id}`}>
-              <CardContent>
-                <Typography
-                  color="text.secondary"
-                  gutterBottom
-                  sx={{ fontSize: 14 }}
-                >
-                  {question.voteCount} vote
-                  {question.voteCount === 1 ? "" : "s"}
-                  {bull}
-                  {question.answerCount} answer
-                  {question.answerCount === 1 ? "" : "s"}
-                </Typography>
+            <CardContent>
+              <Typography
+                color="text.secondary"
+                gutterBottom
+                sx={{ fontSize: 14 }}
+              >
+                {question.voteCount} vote
+                {question.voteCount === 1 ? "" : "s"}
+                {bull}
+                {question.answerCount} answer
+                {question.answerCount === 1 ? "" : "s"}
+              </Typography>
 
-                <Typography component="div" variant="h5">
-                  {question.title}
-                </Typography>
+              <Link
+                component={RouterLink}
+                to={`/questions/${question.id}`}
+                variant="h5"
+              >
+                {question.title}
+              </Link>
 
-                <Typography color="text.secondary" sx={{ mb: 1.5 }}>
-                  {truncateText(question.body, 200)}
-                </Typography>
+              <Typography color="text.secondary" sx={{ mb: 1.5 }}>
+                {truncateText(question.body, 200)}
+              </Typography>
 
-                <Stack direction="row" spacing={1}>
-                  {question.tagIds.map((tagId) => (
-                    <Chip
-                      key={tagId}
-                      label={tags[tagId].name}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                      }}
-                    />
-                  ))}
-                </Stack>
-              </CardContent>
-            </CardActionArea>
+              <Stack direction="row" spacing={1}>
+                {question.tagIds.map((tagId) => (
+                  <Chip
+                    key={tagId}
+                    label={tags[tagId].name}
+                    onClick={() => {}}
+                  />
+                ))}
+              </Stack>
+            </CardContent>
 
             <CardActions sx={{ justifyContent: "flex-end" }}>
               <Typography variant="body2">
