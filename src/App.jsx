@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import { blue } from "@mui/material/colors";
 import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { ThemeProvider } from "@mui/material/styles";
 
+import theme from "./lib/theme";
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
 import Question, {
@@ -66,68 +66,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
-let theme = createTheme();
-
-theme = createTheme(theme, {
-  components: {
-    MuiAutocomplete: {
-      defaultProps: {
-        ChipProps: {
-          size: "small",
-        },
-        size: "small",
-      },
-    },
-    MuiButton: {
-      defaultProps: {
-        disableElevation: true,
-      },
-    },
-    MuiCard: {
-      defaultProps: {
-        variant: "outlined",
-      },
-    },
-    MuiCheckbox: {
-      defaultProps: {
-        size: "small",
-      },
-    },
-    MuiChip: {
-      defaultProps: {
-        size: "small",
-      },
-      styleOverrides: {
-        root: {
-          borderRadius: theme.shape.borderRadius,
-        },
-      },
-    },
-    MuiLink: {
-      defaultProps: {
-        underline: "none",
-      },
-      styleOverrides: {
-        root: {
-          "&:hover": {
-            color: theme.palette.mode === "dark" ? blue[400] : blue[800],
-          },
-        },
-      },
-    },
-    MuiRadio: {
-      defaultProps: {
-        size: "small",
-      },
-    },
-    MuiTextField: {
-      defaultProps: {
-        size: "small",
-      },
-    },
-  },
-});
 
 export default function App() {
   return (
