@@ -5,20 +5,28 @@ import {
   useSearchParams,
 } from "react-router-dom";
 
+import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
+import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
+import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
@@ -47,6 +55,49 @@ export async function loader({ request }) {
     users: indexBy(users, "id"),
   };
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const handle = {
+  // eslint-disable-next-line no-unused-vars
+  sidebar: (_data) => (
+    <List>
+      <ListItem>
+        <Card sx={{ flexGrow: 1 }}>
+          <CardHeader
+            title="Custom Filters"
+            titleTypographyProps={{ variant: "subtitle1" }}
+          />
+          <List>
+            <ListItem
+              disablePadding
+              secondaryAction={
+                <IconButton aria-label="delete" edge="end">
+                  <DeleteIcon fontSize="small" />
+                </IconButton>
+              }
+            >
+              <ListItemButton selected>
+                <ListItemText primary="No answers" />
+              </ListItemButton>
+            </ListItem>
+
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemText primary="Newest" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+          <Divider />
+          <List>
+            <ListItemButton>
+              <ListItemText primary="Create a custom filter" />
+            </ListItemButton>
+          </List>
+        </Card>
+      </ListItem>
+    </List>
+  ),
+};
 
 export default function Questions() {
   const { questions, tags, users } = useLoaderData();
