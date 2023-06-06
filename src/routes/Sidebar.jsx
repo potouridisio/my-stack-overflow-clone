@@ -25,6 +25,7 @@ export default function Sidebar() {
       {/* Sidebar */}
       <Drawer
         anchor="right"
+        PaperProps={{ sx: { position: "relative" } }}
         sx={{
           [`& .MuiDrawer-paper`]: {
             boxSizing: "border-box",
