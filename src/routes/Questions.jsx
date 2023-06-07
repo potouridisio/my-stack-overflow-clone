@@ -86,15 +86,17 @@ export const handle = {
               title="Custom Filters"
               titleTypographyProps={{ variant: "subtitle1" }}
             />
-            <List>
-              {data.filters.map((filter) => (
-                <ListItem disablePadding key={filter.id}>
-                  <ListItemButton>
-                    <ListItemText primary={filter.name} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
+            {data.filters.length > 0 ? (
+              <List>
+                {data.filters.map((filter) => (
+                  <ListItem disablePadding key={filter.id}>
+                    <ListItemButton>
+                      <ListItemText primary={filter.name} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            ) : null}
             <Divider />
             <List>
               <ListItemButton onClick={toggle}>
