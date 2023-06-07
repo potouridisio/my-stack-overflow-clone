@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+import Draggable from "react-draggable";
 import {
   Link as RouterLink,
   useLoaderData,
@@ -5,6 +7,7 @@ import {
 } from "react-router-dom";
 import { create } from "zustand";
 
+import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -15,19 +18,26 @@ import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
+import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+import Paper from "@mui/material/Paper";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -98,12 +108,35 @@ export const handle = {
   },
 };
 
+function PaperComponent(props) {
+  const nodeRef = useRef(null);
+
+  return (
+    <Draggable
+      cancel={'[class*="MuiDialogContent-root"]'}
+      handle="#draggable-dialog-title"
+      nodeRef={nodeRef}
+    >
+      <Paper {...props} ref={nodeRef} />
+    </Draggable>
+  );
+}
+
 export default function Questions() {
   const { expanded, toggle } = useFilterStore();
   const { questions, tags, users } = useLoaderData();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -206,9 +239,49 @@ export default function Questions() {
             >
               Apply filter
             </Button>
-            <Button size="small" variant="outlined">
+
+            <Button onClick={handleClickOpen} size="small" variant="outlined">
               Save custom filter
             </Button>
+            <Dialog
+              fullWidth
+              maxWidth="sm"
+              onClose={handleClose}
+              open={open}
+              PaperComponent={PaperComponent}
+            >
+              <DialogTitle
+                id="draggable-dialog-title"
+                style={{ cursor: "move" }}
+              >
+                Create a custom filter
+                <IconButton
+                  aria-label="close"
+                  onClick={handleClose}
+                  sx={{
+                    color: (theme) => theme.palette.grey[500],
+                    position: "absolute",
+                    right: 8,
+                    top: 8,
+                  }}
+                >
+                  <CloseIcon />
+                </IconButton>
+              </DialogTitle>
+              <DialogContent>
+                <TextField
+                  fullWidth
+                  label="Filter title"
+                  margin="dense"
+                  placeholder="Give your custom filter a title"
+                />
+              </DialogContent>
+              <DialogActions sx={{ justifyContent: "flex-start", p: 3, pt: 0 }}>
+                <Button variant="contained">Save filter</Button>
+                <Button onClick={handleClose}>Cancel</Button>
+              </DialogActions>
+            </Dialog>
+
             <Box sx={{ flexGrow: 1 }} />
             <Button onClick={toggle} size="small">
               Cancel
