@@ -82,10 +82,7 @@ export const handle = {
         <ListItem>
           {/* TODO: extract to function */}
           <Card sx={{ flexGrow: 1 }}>
-            <CardHeader
-              title="Custom Filters"
-              titleTypographyProps={{ variant: "subtitle1" }}
-            />
+            <CardHeader title="Custom Filters" />
             {data.filters.length > 0 ? (
               <List>
                 {data.filters.map((filter) => (
