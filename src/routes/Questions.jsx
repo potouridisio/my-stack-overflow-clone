@@ -5,7 +5,6 @@ import {
 } from "react-router-dom";
 import { create } from "zustand";
 
-import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -21,7 +20,6 @@ import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
 import FormLabel from "@mui/material/FormLabel";
-import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -41,18 +39,20 @@ export async function loader({ request }) {
   const url = new URL(request.url);
   const searchTerm = url.searchParams.get("q");
 
-  const [questions, tags, users] = await Promise.all([
+  const [questions, tags, users, filters] = await Promise.all([
     fetch(`/api/questions${searchTerm ? `?q=${searchTerm}` : ""}`).then((res) =>
       res.json()
     ),
     fetch("/api/tags").then((res) => res.json()),
     fetch("/api/users").then((res) => res.json()),
+    fetch("/api/users/1/filters").then((res) => res.json()),
   ]);
 
   return {
     questions,
     tags: indexBy(tags, "id"),
     users: indexBy(users, "id"),
+    filters,
   };
 }
 
@@ -63,8 +63,7 @@ const useFilterStore = create((set) => ({
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const handle = {
-  // eslint-disable-next-line no-unused-vars
-  sidebar: (_data) => {
+  sidebar: (data) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const toggle = useFilterStore((state) => state.toggle);
 
@@ -78,24 +77,13 @@ export const handle = {
               titleTypographyProps={{ variant: "subtitle1" }}
             />
             <List>
-              <ListItem
-                disablePadding
-                secondaryAction={
-                  <IconButton aria-label="delete" edge="end">
-                    <DeleteIcon fontSize="small" />
-                  </IconButton>
-                }
-              >
-                <ListItemButton selected>
-                  <ListItemText primary="No answers" />
-                </ListItemButton>
-              </ListItem>
-
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemText primary="Newest" />
-                </ListItemButton>
-              </ListItem>
+              {data.filters.map((filter) => (
+                <ListItem disablePadding key={filter.id}>
+                  <ListItemButton>
+                    <ListItemText primary={filter.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
             </List>
             <Divider />
             <List>
