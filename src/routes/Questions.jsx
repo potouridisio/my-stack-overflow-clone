@@ -1,9 +1,9 @@
-import { useState } from "react";
 import {
   Link as RouterLink,
   useLoaderData,
   useSearchParams,
 } from "react-router-dom";
+import { create } from "zustand";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
@@ -99,12 +99,17 @@ export const handle = {
   ),
 };
 
+const useFilterStore = create((set) => ({
+  expanded: false,
+  toggle: () => set((state) => ({ expanded: !state.expanded })),
+}));
+
 export default function Questions() {
+  const { expanded, toggle } = useFilterStore();
   const { questions, tags, users } = useLoaderData();
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
-  const [selected, setSelected] = useState(false);
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -129,8 +134,8 @@ export default function Questions() {
         {!isSearch ? (
           <ToggleButton
             color="primary"
-            onChange={() => setSelected(!selected)}
-            selected={selected}
+            onChange={toggle}
+            selected={expanded}
             size="small"
             value="filter"
           >
@@ -140,7 +145,7 @@ export default function Questions() {
         ) : null}
       </Toolbar>
 
-      <Collapse in={selected} timeout="auto" unmountOnExit>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Card sx={{ mb: 2 }}>
           <CardContent>
             <Box sx={{ display: "flex" }}>
@@ -211,7 +216,7 @@ export default function Questions() {
               Save custom filter
             </Button>
             <Box sx={{ flexGrow: 1 }} />
-            <Button onClick={() => setSelected(false)} size="small">
+            <Button onClick={toggle} size="small">
               Cancel
             </Button>
           </CardActions>
