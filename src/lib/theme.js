@@ -23,6 +23,13 @@ theme = createTheme(theme, {
         variant: "outlined",
       },
     },
+    MuiCardHeader: {
+      defaultProps: {
+        titleTypographyProps: {
+          variant: "subtitle1",
+        },
+      },
+    },
     MuiCheckbox: {
       defaultProps: {
         size: "small",
