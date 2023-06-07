@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import {
+  Form,
   Link as RouterLink,
   useLoaderData,
   useSearchParams,
@@ -127,6 +128,7 @@ export default function Questions() {
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
+  const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -173,119 +175,146 @@ export default function Questions() {
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Card sx={{ mb: 2 }}>
-          <CardContent>
-            <Box sx={{ display: "flex" }}>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Filter by</FormLabel>
-                <FormGroup>
-                  {[
-                    ["No answers", "NoAnswers"],
-                    ["No accepted answer", "NoAcceptedAnswer"],
-                    ["Has bounty", "Bounty"],
-                  ].map(([label, value]) => (
-                    <FormControlLabel
-                      control={<Checkbox name="filterId" value={value} />}
-                      key={value}
-                      label={label}
-                    />
-                  ))}
-                </FormGroup>
-              </FormControl>
+          <Form method="post">
+            <CardContent>
+              <Box sx={{ display: "flex" }}>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Filter by</FormLabel>
+                  <FormGroup>
+                    {[
+                      ["No answers", "NoAnswers"],
+                      ["No accepted answer", "NoAcceptedAnswer"],
+                      ["Has bounty", "Bounty"],
+                    ].map(([label, value]) => (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={filterIds.includes(value)}
+                            name="filterId"
+                            onChange={() => {
+                              if (filterIds.includes(value)) {
+                                setFilterIds(
+                                  filterIds.filter((id) => id !== value)
+                                );
+                              } else {
+                                setFilterIds([...filterIds, value]);
+                              }
+                            }}
+                            value={value}
+                          />
+                        }
+                        key={value}
+                        label={label}
+                      />
+                    ))}
+                  </FormGroup>
+                </FormControl>
 
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Sorted by</FormLabel>
-                <RadioGroup>
-                  {[
-                    ["Newest", "Newest"],
-                    ["Recent activity", "RecentActivity"],
-                    ["Highest score", "MostVotes"],
-                    ["Most frequent", "MostFrequent"],
-                    ["Bounty ending soon", "BountyEndingSoon"],
-                  ].map(([label, value]) => (
-                    <FormControlLabel
-                      control={<Radio name="sortId" value={value} />}
-                      key={value}
-                      label={label}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
+                <input name="filterIds" type="hidden" value={filterIds} />
 
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Tagged with</FormLabel>
-                <RadioGroup>
-                  {[
-                    ["My watched tags", "Watched"],
-                    ["The following tags:", "Specified"],
-                  ].map(([label, value]) => (
-                    <FormControlLabel
-                      control={<Radio name="tagModeId" value={value} />}
-                      key={value}
-                      label={label}
-                    />
-                  ))}
-                </RadioGroup>
-              </FormControl>
-            </Box>
-          </CardContent>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Sorted by</FormLabel>
+                  <RadioGroup>
+                    {[
+                      ["Newest", "Newest"],
+                      ["Recent activity", "RecentActivity"],
+                      ["Highest score", "MostVotes"],
+                      ["Most frequent", "MostFrequent"],
+                      ["Bounty ending soon", "BountyEndingSoon"],
+                    ].map(([label, value]) => (
+                      <FormControlLabel
+                        control={<Radio name="sortId" value={value} />}
+                        key={value}
+                        label={label}
+                      />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
 
-          <CardActions>
-            <Button
-              form="filter-form"
-              size="small"
-              variant="contained"
-              type="submit"
-            >
-              Apply filter
-            </Button>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Tagged with</FormLabel>
+                  <RadioGroup>
+                    {[
+                      ["My watched tags", "Watched"],
+                      ["The following tags:", "Specified"],
+                    ].map(([label, value]) => (
+                      <FormControlLabel
+                        control={<Radio name="tagModeId" value={value} />}
+                        key={value}
+                        label={label}
+                      />
+                    ))}
+                  </RadioGroup>
+                </FormControl>
+              </Box>
+            </CardContent>
 
-            <Button onClick={handleClickOpen} size="small" variant="outlined">
-              Save custom filter
-            </Button>
-            <Dialog
-              fullWidth
-              maxWidth="sm"
-              onClose={handleClose}
-              open={open}
-              PaperComponent={PaperComponent}
-            >
-              <DialogTitle
-                id="draggable-dialog-title"
-                style={{ cursor: "move" }}
+            <CardActions>
+              <Button
+                form="filter-form"
+                size="small"
+                variant="contained"
+                type="submit"
               >
-                Create a custom filter
-                <IconButton
-                  aria-label="close"
-                  onClick={handleClose}
-                  sx={{
-                    color: (theme) => theme.palette.grey[500],
-                    position: "absolute",
-                    right: 8,
-                    top: 8,
-                  }}
-                >
-                  <CloseIcon />
-                </IconButton>
-              </DialogTitle>
-              <DialogContent>
-                <TextField
-                  fullWidth
-                  label="Filter title"
-                  margin="dense"
-                  placeholder="Give your custom filter a title"
-                />
-              </DialogContent>
-              <DialogActions sx={{ justifyContent: "flex-start", p: 3, pt: 0 }}>
-                <Button variant="contained">Save filter</Button>
-                <Button onClick={handleClose}>Cancel</Button>
-              </DialogActions>
-            </Dialog>
+                Apply filter
+              </Button>
 
-            <Box sx={{ flexGrow: 1 }} />
-            <Button onClick={toggle} size="small">
-              Cancel
-            </Button>
-          </CardActions>
+              <Button onClick={handleClickOpen} size="small" variant="outlined">
+                Save custom filter
+              </Button>
+              <Dialog
+                disablePortal
+                keepMounted
+                fullWidth
+                maxWidth="sm"
+                onClose={handleClose}
+                open={open}
+                PaperComponent={PaperComponent}
+              >
+                <DialogTitle
+                  id="draggable-dialog-title"
+                  style={{ cursor: "move" }}
+                >
+                  Create a custom filter
+                  <IconButton
+                    aria-label="close"
+                    onClick={handleClose}
+                    sx={{
+                      color: (theme) => theme.palette.grey[500],
+                      position: "absolute",
+                      right: 8,
+                      top: 8,
+                    }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </DialogTitle>
+
+                <DialogContent>
+                  <TextField
+                    fullWidth
+                    label="Filter title"
+                    margin="dense"
+                    name="name"
+                    placeholder="Give your custom filter a title"
+                  />
+                </DialogContent>
+                <DialogActions
+                  sx={{ justifyContent: "flex-start", p: 3, pt: 0 }}
+                >
+                  <Button type="submit" variant="contained">
+                    Save filter
+                  </Button>
+                  <Button onClick={handleClose}>Cancel</Button>
+                </DialogActions>
+              </Dialog>
+
+              <Box sx={{ flexGrow: 1 }} />
+              <Button onClick={toggle} size="small">
+                Cancel
+              </Button>
+            </CardActions>
+          </Form>
         </Card>
       </Collapse>
 
