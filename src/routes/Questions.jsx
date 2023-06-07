@@ -56,53 +56,59 @@ export async function loader({ request }) {
   };
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const handle = {
-  // eslint-disable-next-line no-unused-vars
-  sidebar: (_data) => (
-    <List>
-      <ListItem>
-        <Card sx={{ flexGrow: 1 }}>
-          <CardHeader
-            title="Custom Filters"
-            titleTypographyProps={{ variant: "subtitle1" }}
-          />
-          <List>
-            <ListItem
-              disablePadding
-              secondaryAction={
-                <IconButton aria-label="delete" edge="end">
-                  <DeleteIcon fontSize="small" />
-                </IconButton>
-              }
-            >
-              <ListItemButton selected>
-                <ListItemText primary="No answers" />
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding>
-              <ListItemButton>
-                <ListItemText primary="Newest" />
-              </ListItemButton>
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItemButton>
-              <ListItemText primary="Create a custom filter" />
-            </ListItemButton>
-          </List>
-        </Card>
-      </ListItem>
-    </List>
-  ),
-};
-
 const useFilterStore = create((set) => ({
   expanded: false,
   toggle: () => set((state) => ({ expanded: !state.expanded })),
 }));
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const handle = {
+  // eslint-disable-next-line no-unused-vars
+  sidebar: (_data) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const toggle = useFilterStore((state) => state.toggle);
+
+    return (
+      <List>
+        <ListItem>
+          {/* TODO: extract to function */}
+          <Card sx={{ flexGrow: 1 }}>
+            <CardHeader
+              title="Custom Filters"
+              titleTypographyProps={{ variant: "subtitle1" }}
+            />
+            <List>
+              <ListItem
+                disablePadding
+                secondaryAction={
+                  <IconButton aria-label="delete" edge="end">
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                }
+              >
+                <ListItemButton selected>
+                  <ListItemText primary="No answers" />
+                </ListItemButton>
+              </ListItem>
+
+              <ListItem disablePadding>
+                <ListItemButton>
+                  <ListItemText primary="Newest" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+            <List>
+              <ListItemButton onClick={toggle}>
+                <ListItemText primary="Create a custom filter" />
+              </ListItemButton>
+            </List>
+          </Card>
+        </ListItem>
+      </List>
+    );
+  },
+};
 
 export default function Questions() {
   const { expanded, toggle } = useFilterStore();
