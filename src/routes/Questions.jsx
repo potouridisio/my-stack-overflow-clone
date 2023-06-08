@@ -139,6 +139,14 @@ export default function Questions() {
     setOpen(false);
   };
 
+  const handleToggleFilterId = (filterId) => {
+    if (filterIds.includes(filterId)) {
+      setFilterIds(filterIds.filter((id) => id !== filterId));
+    } else {
+      setFilterIds([...filterIds, filterId]);
+    }
+  };
+
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       <Toolbar />
@@ -191,15 +199,7 @@ export default function Questions() {
                           <Checkbox
                             checked={filterIds.includes(value)}
                             name="filterId"
-                            onChange={() => {
-                              if (filterIds.includes(value)) {
-                                setFilterIds(
-                                  filterIds.filter((id) => id !== value)
-                                );
-                              } else {
-                                setFilterIds([...filterIds, value]);
-                              }
-                            }}
+                            onChange={() => handleToggleFilterId(value)}
                             value={value}
                           />
                         }
