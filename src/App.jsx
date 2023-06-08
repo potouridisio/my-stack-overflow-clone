@@ -11,6 +11,7 @@ import Question, {
   loader as questionLoader,
 } from "./routes/Question";
 import Questions, {
+  action as questionsAction,
   handle as questionsHandle,
   loader as questionsLoader,
 } from "./routes/Questions";
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
                 element: <Questions />,
                 loader: questionsLoader,
                 handle: questionsHandle,
+                action: questionsAction,
               },
               {
                 path: "search",

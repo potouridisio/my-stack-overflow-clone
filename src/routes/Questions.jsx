@@ -108,6 +108,17 @@ export const handle = {
   },
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
+export async function action({ request }) {
+  const formData = await request.formData();
+
+  const newFilter = Object.fromEntries(formData);
+
+  console.log({ newFilter });
+
+  return {};
+}
+
 function PaperComponent(props) {
   const nodeRef = useRef(null);
 
