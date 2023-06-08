@@ -76,24 +76,24 @@ const useFilterStore = create((set) => ({
 export async function action({ request }) {
   const filterData = await request.formData();
 
-  const filterFormData = {
+  const filter = {
     filterBy: filterData.get("filterIds"),
-    sortBy: filterData.get("sortIds"),
-    taggedWith: filterData.get("tagModeeId"),
+    sortBy: filterData.get("sortId"),
+    taggedWith: filterData.get("tagModeId"),
     name: filterData.get("name"),
   };
-
-  console.log(filterFormData);
 
   fetch("/api/users/1/filters", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(filterFormData),
+    body: JSON.stringify(filter),
   });
 
-  return redirect("/");
+  return redirect(
+    `/?filters=${filter.filterBy}&sort=${filter.sortBy}&tagMode=${filter.taggedWith}`
+  );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -108,7 +108,7 @@ export const handle = {
           {/* TODO: extract to function */}
           <Card sx={{ flexGrow: 1 }}>
             <CardHeader title="Custom Filters" />
-            {console.log(data)}
+
             {data.filters.length > 0 ? (
               <List>
                 {data.filters.map((filter) => (
