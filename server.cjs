@@ -285,17 +285,40 @@ app.post("/users/:userId/filters", (req, res) => {
   const userId = req.params.userId; // Extract the userId from the URL parameter
   const { filterIds, sortId, tagModeId, name } = req.body; // Assuming the required fields are provided in the request body
 
-  // Insert the new filter associated with the given userId into the database
-  db.run(
-    "INSERT INTO filters (userId, filterIds, sortId, tagModeId, name) VALUES (?, ?, ?, ?, ?)",
-    [userId, filterIds, sortId, tagModeId, name],
-    function (err) {
+  // Check if a filter with the same values already exists for the user
+  const checkDuplicateQuery =
+    "SELECT * FROM filters WHERE userId = ? AND filterIds = ? AND sortId = ? AND tagModeId = ?";
+
+  db.get(
+    checkDuplicateQuery,
+    [userId, filterIds, sortId, tagModeId],
+    (err, existingFilter) => {
       if (err) {
         // Handle any errors
         res.status(500).json({ error: "Internal server error" });
+      } else if (existingFilter) {
+        // Return an error message if an exact duplicate filter already exists
+        res.status(400).json({
+          error: `Cannot create an exact duplicate of your existing filter named ${existingFilter.name}`,
+        });
       } else {
-        // Return the ID of the newly created filter
-        res.json({ id: this.lastID });
+        // Insert the new filter associated with the given userId into the database
+        const insertQuery =
+          "INSERT INTO filters (userId, filterIds, sortId, tagModeId, name) VALUES (?, ?, ?, ?, ?)";
+
+        db.run(
+          insertQuery,
+          [userId, filterIds, sortId, tagModeId, name],
+          function (err) {
+            if (err) {
+              // Handle any errors
+              res.status(500).json({ error: "Internal server error" });
+            } else {
+              // Return the ID of the newly created filter
+              res.json({ id: this.lastID });
+            }
+          }
+        );
       }
     }
   );
