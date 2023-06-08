@@ -5,6 +5,7 @@ import {
   Link as RouterLink,
   useLoaderData,
   useSearchParams,
+  redirect,
 } from "react-router-dom";
 import { create } from "zustand";
 
@@ -19,6 +20,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
+
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -42,6 +44,8 @@ import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
@@ -72,6 +76,29 @@ const useFilterStore = create((set) => ({
   toggle: () => set((state) => ({ expanded: !state.expanded })),
 }));
 
+export async function action({ request }) {
+  const filterData = await request.formData();
+
+  const filter = {
+    filterBy: filterData.get("filterIds"),
+    sortBy: filterData.get("sortId"),
+    taggedWith: filterData.get("tagModeId"),
+    name: filterData.get("name"),
+  };
+
+  fetch("/api/users/1/filters", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(filter),
+  });
+
+  return redirect(
+    `/?filters=${filter.filterBy}&sort=${filter.sortBy}&tagMode=${filter.taggedWith}`
+  );
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const handle = {
   sidebar: (data) => {
@@ -84,12 +111,22 @@ export const handle = {
           {/* TODO: extract to function */}
           <Card sx={{ flexGrow: 1 }}>
             <CardHeader title="Custom Filters" />
+
             {data.filters.length > 0 ? (
               <List>
                 {data.filters.map((filter) => (
                   <ListItem disablePadding key={filter.id}>
                     <ListItemButton>
                       <ListItemText primary={filter.name} />
+                      <IconButton
+                        aria-label="delete"
+                        size="small"
+                        sx={{
+                          color: "red",
+                        }}
+                      >
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
                     </ListItemButton>
                   </ListItem>
                 ))}
@@ -194,7 +231,7 @@ export default function Questions() {
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Card sx={{ mb: 2 }}>
-          <Form method="post">
+          <Form method="post" action="/">
             <CardContent>
               <Box sx={{ display: "flex" }}>
                 <FormControl component="fieldset">
