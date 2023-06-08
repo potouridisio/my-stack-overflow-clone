@@ -231,7 +231,7 @@ export default function Questions() {
 
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Sorted by</FormLabel>
-                  <RadioGroup>
+                  <RadioGroup defaultValue="Newest" name="sortId">
                     {[
                       ["Newest", "Newest"],
                       ["Recent activity", "RecentActivity"],
@@ -240,9 +240,10 @@ export default function Questions() {
                       ["Bounty ending soon", "BountyEndingSoon"],
                     ].map(([label, value]) => (
                       <FormControlLabel
-                        control={<Radio name="sortId" value={value} />}
+                        control={<Radio />}
                         key={value}
                         label={label}
+                        value={value}
                       />
                     ))}
                   </RadioGroup>
@@ -250,15 +251,16 @@ export default function Questions() {
 
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Tagged with</FormLabel>
-                  <RadioGroup>
+                  <RadioGroup defaultValue="Specified" name="tagModeId">
                     {[
                       ["My watched tags", "Watched"],
                       ["The following tags:", "Specified"],
                     ].map(([label, value]) => (
                       <FormControlLabel
-                        control={<Radio name="tagModeId" value={value} />}
+                        control={<Radio />}
                         key={value}
                         label={label}
+                        value={value}
                       />
                     ))}
                   </RadioGroup>
