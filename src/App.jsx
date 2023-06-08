@@ -13,6 +13,7 @@ import Question, {
 import Questions, {
   handle as questionsHandle,
   loader as questionsLoader,
+  action as filterAction,
 } from "./routes/Questions";
 import Root from "./routes/Root";
 import Sidebar from "./routes/Sidebar";
@@ -23,6 +24,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    action: filterAction,
     children: [
       {
         element: <LeftSidebar />,

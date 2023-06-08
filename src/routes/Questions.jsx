@@ -5,6 +5,7 @@ import {
   Link as RouterLink,
   useLoaderData,
   useSearchParams,
+  redirect,
 } from "react-router-dom";
 import { create } from "zustand";
 
@@ -72,6 +73,29 @@ const useFilterStore = create((set) => ({
   toggle: () => set((state) => ({ expanded: !state.expanded })),
 }));
 
+export async function action({ request }) {
+  const filterData = await request.formData();
+
+  const filterFormData = {
+    filterBy: filterData.get("filterIds"),
+    sortBy: filterData.get("sortIds"),
+    taggedWith: filterData.get("tagModeeId"),
+    name: filterData.get("name"),
+  };
+
+  console.log(filterFormData);
+
+  fetch("/api/users/1/filters", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(filterFormData),
+  });
+
+  return redirect("/");
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const handle = {
   sidebar: (data) => {
@@ -84,6 +108,7 @@ export const handle = {
           {/* TODO: extract to function */}
           <Card sx={{ flexGrow: 1 }}>
             <CardHeader title="Custom Filters" />
+            {console.log(data)}
             {data.filters.length > 0 ? (
               <List>
                 {data.filters.map((filter) => (
@@ -175,7 +200,7 @@ export default function Questions() {
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Card sx={{ mb: 2 }}>
-          <Form method="post">
+          <Form method="post" action="/">
             <CardContent>
               <Box sx={{ display: "flex" }}>
                 <FormControl component="fieldset">
