@@ -216,7 +216,6 @@ export default function Questions() {
                         control={
                           <Checkbox
                             checked={filterIds.includes(value)}
-                            name="filterId"
                             onChange={() => handleToggleFilterId(value)}
                             value={value}
                           />
