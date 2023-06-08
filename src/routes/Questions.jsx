@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Draggable from "react-draggable";
 import {
   Form,
@@ -136,18 +136,11 @@ function PaperComponent(props) {
 export default function Questions() {
   const { expanded, toggle } = useFilterStore();
   const { questions, tags, users } = useLoaderData();
-  const inputRef = useRef(null);
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
   const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (inputRef.current && open) {
-      inputRef.current.focus();
-    }
-  }, [open]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -312,7 +305,6 @@ export default function Questions() {
                 <DialogContent>
                   <TextField
                     fullWidth
-                    inputRef={inputRef}
                     label="Filter title"
                     margin="dense"
                     name="name"
