@@ -20,6 +20,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
+
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -43,6 +44,8 @@ import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
@@ -115,6 +118,15 @@ export const handle = {
                   <ListItem disablePadding key={filter.id}>
                     <ListItemButton>
                       <ListItemText primary={filter.name} />
+                      <IconButton
+                        aria-label="delete"
+                        size="small"
+                        sx={{
+                          color: "red",
+                        }}
+                      >
+                        <DeleteIcon fontSize="inherit" />
+                      </IconButton>
                     </ListItemButton>
                   </ListItem>
                 ))}
