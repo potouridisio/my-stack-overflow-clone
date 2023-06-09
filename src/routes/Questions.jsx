@@ -1,21 +1,24 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import {
   Form,
   Link as RouterLink,
+  redirect,
+  useActionData,
   useLoaderData,
+  useNavigation,
   useSearchParams,
 } from "react-router-dom";
 import { create } from "zustand";
 
 import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
@@ -23,7 +26,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
@@ -32,8 +34,6 @@ import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -43,7 +43,10 @@ import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
+import CustomFilters from "../components/CustomFilters";
+import WatchedTags from "../components/WatchedTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
+import IgnoredTags from "../components/IgnoredTags";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ request }) {
@@ -67,68 +70,70 @@ export async function loader({ request }) {
   };
 }
 
-const useFilterStore = create((set) => ({
+// eslint-disable-next-line react-refresh/only-export-components
+export const useFilterStore = create((set) => ({
   expanded: false,
   toggle: () => set((state) => ({ expanded: !state.expanded })),
 }));
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const handle = {
-  sidebar: (data) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const toggle = useFilterStore((state) => state.toggle);
+  sidebar: (data) => (
+    <List>
+      <ListItem>
+        <CustomFilters filters={data.filters} />
+      </ListItem>
 
-    return (
-      <List>
-        <ListItem>
-          {/* TODO: extract to function */}
-          <Card sx={{ flexGrow: 1 }}>
-            <CardHeader title="Custom Filters" />
-            {data.filters.length > 0 ? (
-              <List>
-                {data.filters.map((filter) => (
-                  <ListItem disablePadding key={filter.id}>
-                    <ListItemButton>
-                      <ListItemText primary={filter.name} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
-            ) : null}
-            <Divider />
-            <List>
-              <ListItemButton onClick={toggle}>
-                <ListItemText primary="Create a custom filter" />
-              </ListItemButton>
-            </List>
-          </Card>
-        </ListItem>
-      </List>
-    );
-  },
+      <ListItem>
+        <IgnoredTags tags={data.tags} />
+      </ListItem>
+
+      <ListItem>
+        <WatchedTags tags={data.tags} />
+      </ListItem>
+    </List>
+  ),
 };
 
-export async function action({ request }) {
-  let formData = await request.formData();
-  let name = formData.get("name");
-  let filterIds = formData.get("selectedFilters");
-  let sortId = formData.get("sortId");
-  let tagModeId = formData.get("tagModeId");
+function validateFilterName(name) {
+  if (!name) {
+    return "Title is missing.";
+  }
+}
 
-  if (name) {
-    fetch("/api/users/1/filters", {
-      method: "POST",
-      body: JSON.stringify({
-        name,
-        filterIds,
-        sortId,
-        tagModeId,
-      }),
-      headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
+// eslint-disable-next-line react-refresh/only-export-components
+export async function action({ request }) {
+  const formData = await request.formData();
+
+  const newFilter = Object.fromEntries(formData);
+
+  const fieldErrors = {
+    name: validateFilterName(newFilter.name),
+  };
+
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return {
+      fieldErrors,
+    };
   }
 
-  return { name, filterIds, sortId, tagModeId };
+  const filter = await fetch("/api/users/1/filters", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newFilter),
+  }).then((res) => res.json());
+
+  if (filter.error) {
+    return {
+      fieldErrors: {
+        name: filter.error,
+      },
+    };
+  }
+
+  return redirect(`/?uqlId=${filter.id}`);
 }
 
 function PaperComponent(props) {
@@ -146,17 +151,22 @@ function PaperComponent(props) {
 }
 
 export default function Questions() {
+  const actionData = useActionData();
   const { expanded, toggle } = useFilterStore();
   const { questions, tags, users } = useLoaderData();
+  const navigation = useNavigation();
+  const inputRef = useRef(null);
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
+  const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
 
-  const [name, setName] = useState("");
-  const [filterIds, setFilterIds] = useState([]);
-  const [sortId, setSortId] = useState(false);
-  const [tagModeId, setTagModeId] = useState(false);
+  useEffect(() => {
+    if (inputRef.current && open) {
+      inputRef.current.focus();
+    }
+  }, [open]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -164,6 +174,14 @@ export default function Questions() {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleToggleFilterId = (filterId) => {
+    if (filterIds.includes(filterId)) {
+      setFilterIds(filterIds.filter((id) => id !== filterId));
+    } else {
+      setFilterIds([...filterIds, filterId]);
+    }
   };
 
   return (
@@ -202,7 +220,7 @@ export default function Questions() {
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Card sx={{ mb: 2 }}>
-          <Form id="filter-form" method="post">
+          <Form method="post">
             <CardContent>
               <Box sx={{ display: "flex" }}>
                 <FormControl component="fieldset">
@@ -216,20 +234,9 @@ export default function Questions() {
                       <FormControlLabel
                         control={
                           <Checkbox
-                            name="filterId"
+                            checked={filterIds.includes(value)}
+                            onChange={() => handleToggleFilterId(value)}
                             value={value}
-                            onChange={() => {
-                              if (filterIds.includes(value)) {
-                                setFilterIds(
-                                  filterIds.filter(
-                                    (selectedFilter) => selectedFilter !== value
-                                  )
-                                );
-                              } else {
-                                setFilterIds([...filterIds, value]);
-                              }
-                              console.log(filterIds);
-                            }}
                           />
                         }
                         key={value}
@@ -238,11 +245,12 @@ export default function Questions() {
                     ))}
                   </FormGroup>
                 </FormControl>
-                <input type="hidden" name="selectedFilters" value={filterIds} />
+
+                <input name="filterIds" type="hidden" value={filterIds} />
 
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Sorted by</FormLabel>
-                  <RadioGroup>
+                  <RadioGroup defaultValue="Newest" name="sortId">
                     {[
                       ["Newest", "Newest"],
                       ["Recent activity", "RecentActivity"],
@@ -251,16 +259,10 @@ export default function Questions() {
                       ["Bounty ending soon", "BountyEndingSoon"],
                     ].map(([label, value]) => (
                       <FormControlLabel
-                        control={
-                          <Radio
-                            name="sortId"
-                            value={value}
-                            onChange={() => setSortId(value)}
-                            checked={sortId === value}
-                          />
-                        }
+                        control={<Radio />}
                         key={value}
                         label={label}
+                        value={value}
                       />
                     ))}
                   </RadioGroup>
@@ -268,22 +270,16 @@ export default function Questions() {
 
                 <FormControl component="fieldset">
                   <FormLabel component="legend">Tagged with</FormLabel>
-                  <RadioGroup>
+                  <RadioGroup defaultValue="Specified" name="tagModeId">
                     {[
                       ["My watched tags", "Watched"],
                       ["The following tags:", "Specified"],
                     ].map(([label, value]) => (
                       <FormControlLabel
-                        control={
-                          <Radio
-                            name="tagModeId"
-                            value={value}
-                            onChange={() => setTagModeId(value)}
-                            checked={tagModeId === value}
-                          />
-                        }
+                        control={<Radio />}
                         key={value}
                         label={label}
+                        value={value}
                       />
                     ))}
                   </RadioGroup>
@@ -292,22 +288,17 @@ export default function Questions() {
             </CardContent>
 
             <CardActions>
-              <Button
-                form="filter-form"
-                size="small"
-                variant="contained"
-                type="submit"
-              >
+              <Button form="filter-form" size="small" type="submit">
                 Apply filter
               </Button>
 
-              <Button onClick={handleClickOpen} size="small" variant="outlined">
+              <Button onClick={handleClickOpen} size="small">
                 Save custom filter
               </Button>
-
               <Dialog
-                fullWidth
                 disablePortal
+                keepMounted
+                fullWidth
                 maxWidth="sm"
                 onClose={handleClose}
                 open={open}
@@ -334,34 +325,24 @@ export default function Questions() {
 
                 <DialogContent>
                   <TextField
+                    error={!!actionData?.fieldErrors?.name}
                     fullWidth
-                    value={name}
-                    name="name"
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      console.log(name);
-                    }}
+                    helperText={actionData?.fieldErrors?.name}
+                    inputRef={inputRef}
                     label="Filter title"
                     margin="dense"
+                    name="name"
                     placeholder="Give your custom filter a title"
                   />
                 </DialogContent>
-
-                <DialogActions
-                  sx={{ justifyContent: "flex-start", p: 3, pt: 0 }}
-                >
-                  <Button
-                    variant="contained"
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
+                  <LoadingButton
+                    loading={navigation.state === "submitting"}
                     type="submit"
-                    form="filter-form"
-                    onClick={() => {
-                      handleClose;
-                      toggle();
-                    }}
                   >
                     Save filter
-                  </Button>
-                  <Button onClick={handleClose}>Cancel</Button>
+                  </LoadingButton>
                 </DialogActions>
               </Dialog>
 
