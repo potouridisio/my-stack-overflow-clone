@@ -172,7 +172,7 @@ export default function Question() {
           </Form>
         </CardContent>
 
-        <CardActions sx={{ justifyContent: "flex-end" }}>
+        <CardActions>
           <Button form="new-answer" size="small" type="submit">
             Post Your Answer
           </Button>

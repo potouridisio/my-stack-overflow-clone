@@ -160,7 +160,7 @@ export default function Ask() {
           </Stack>
         </CardContent>
 
-        <CardActions sx={{ justifyContent: "flex-end" }}>
+        <CardActions>
           <LoadingButton
             form="new-question"
             loading={navigation.state === "submitting"}

@@ -278,16 +278,11 @@ export default function Questions() {
             </CardContent>
 
             <CardActions>
-              <Button
-                form="filter-form"
-                size="small"
-                variant="contained"
-                type="submit"
-              >
+              <Button form="filter-form" size="small" type="submit">
                 Apply filter
               </Button>
 
-              <Button onClick={handleClickOpen} size="small" variant="outlined">
+              <Button onClick={handleClickOpen} size="small">
                 Save custom filter
               </Button>
               <Dialog
@@ -330,17 +325,14 @@ export default function Questions() {
                     placeholder="Give your custom filter a title"
                   />
                 </DialogContent>
-                <DialogActions
-                  sx={{ justifyContent: "flex-start", p: 3, pt: 0 }}
-                >
+                <DialogActions>
+                  <Button onClick={handleClose}>Cancel</Button>
                   <LoadingButton
                     loading={navigation.state === "submitting"}
                     type="submit"
-                    variant="contained"
                   >
                     Save filter
                   </LoadingButton>
-                  <Button onClick={handleClose}>Cancel</Button>
                 </DialogActions>
               </Dialog>
 
