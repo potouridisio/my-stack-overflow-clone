@@ -12,6 +12,8 @@ import {
 import { create } from "zustand";
 
 import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
@@ -81,6 +83,9 @@ export const handle = {
   sidebar: (data) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const toggle = useFilterStore((state) => state.toggle);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [searchParams] = useSearchParams();
+    const uqlId = searchParams.get("uqlId");
 
     return (
       <List>
@@ -91,8 +96,31 @@ export const handle = {
             {data.filters.length > 0 ? (
               <List>
                 {data.filters.map((filter) => (
-                  <ListItem disablePadding key={filter.id}>
-                    <ListItemButton>
+                  <ListItem
+                    disablePadding
+                    key={filter.id}
+                    secondaryAction={
+                      uqlId == filter.id ? (
+                        <>
+                          <IconButton aria-label="delete">
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                          <IconButton
+                            aria-label="edit"
+                            edge="end"
+                            onClick={toggle}
+                          >
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </>
+                      ) : null
+                    }
+                  >
+                    <ListItemButton
+                      component={RouterLink}
+                      selected={uqlId == filter.id}
+                      to={`?uqlId=${filter.id}`}
+                    >
                       <ListItemText primary={filter.name} />
                     </ListItemButton>
                   </ListItem>
