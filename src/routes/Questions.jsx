@@ -95,36 +95,40 @@ export const handle = {
             <CardHeader title="Custom Filters" />
             {data.filters.length > 0 ? (
               <List>
-                {data.filters.map((filter) => (
-                  <ListItem
-                    disablePadding
-                    key={filter.id}
-                    secondaryAction={
-                      uqlId == filter.id ? (
-                        <>
-                          <IconButton aria-label="delete">
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                          <IconButton
-                            aria-label="edit"
-                            edge="end"
-                            onClick={toggle}
-                          >
-                            <EditIcon fontSize="small" />
-                          </IconButton>
-                        </>
-                      ) : null
-                    }
-                  >
-                    <ListItemButton
-                      component={RouterLink}
-                      selected={uqlId == filter.id}
-                      to={`?uqlId=${filter.id}`}
+                {data.filters.map((filter) => {
+                  const isSelected = uqlId == filter.id;
+
+                  return (
+                    <ListItem
+                      disablePadding
+                      key={filter.id}
+                      secondaryAction={
+                        isSelected ? (
+                          <>
+                            <IconButton aria-label="delete">
+                              <DeleteIcon fontSize="small" />
+                            </IconButton>
+                            <IconButton
+                              aria-label="edit"
+                              edge="end"
+                              onClick={toggle}
+                            >
+                              <EditIcon fontSize="small" />
+                            </IconButton>
+                          </>
+                        ) : null
+                      }
                     >
-                      <ListItemText primary={filter.name} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+                      <ListItemButton
+                        component={RouterLink}
+                        selected={isSelected}
+                        to={`?uqlId=${filter.id}`}
+                      >
+                        <ListItemText primary={filter.name} />
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })}
               </List>
             ) : null}
             <Divider />
