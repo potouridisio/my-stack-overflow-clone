@@ -10,9 +10,6 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import { yellow } from "@mui/material/colors";
-
-yellow;
 
 export default function WatchedTags({ tags }) {
   const [isEditing, setIsEditing] = useState(false);
