@@ -85,11 +85,11 @@ export const handle = {
       </ListItem>
 
       <ListItem>
-        <IgnoredTags tags={data.tags} />
+        <WatchedTags tags={data.tags} />
       </ListItem>
 
       <ListItem>
-        <WatchedTags tags={data.tags} />
+        <IgnoredTags tags={data.tags} />
       </ListItem>
     </List>
   ),
@@ -133,7 +133,7 @@ export async function action({ request }) {
     };
   }
 
-  return redirect(`/?uqlId=${filter.id}`);
+  return redirect(`/?sort=${filter.sortId}&uqlId=${filter.id}`);
 }
 
 function PaperComponent(props) {
