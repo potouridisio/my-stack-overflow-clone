@@ -2,7 +2,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
@@ -34,11 +33,8 @@ export default function CustomFilters({ filters }) {
                 secondaryAction={
                   isSelected ? (
                     <>
-                      <IconButton aria-label="delete">
+                      <IconButton aria-label="delete" edge="end">
                         <DeleteIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton aria-label="edit" edge="end" onClick={toggle}>
-                        <EditIcon fontSize="small" />
                       </IconButton>
                     </>
                   ) : null
