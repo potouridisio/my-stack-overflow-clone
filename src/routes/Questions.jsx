@@ -44,6 +44,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import CustomFilters from "../components/CustomFilters";
+import WatchedTags from "../components/WatchedTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -80,6 +81,10 @@ export const handle = {
     <List>
       <ListItem>
         <CustomFilters filters={data.filters} />
+      </ListItem>
+
+      <ListItem>
+        <WatchedTags tags={data.tags} />
       </ListItem>
     </List>
   ),
