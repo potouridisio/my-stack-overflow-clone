@@ -12,8 +12,6 @@ import {
 import { create } from "zustand";
 
 import CloseIcon from "@mui/icons-material/Close";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
@@ -21,7 +19,6 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
@@ -29,7 +26,6 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
@@ -38,8 +34,6 @@ import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
@@ -49,6 +43,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
+import CustomFilters from "../components/CustomFilters";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -73,75 +68,21 @@ export async function loader({ request }) {
   };
 }
 
-const useFilterStore = create((set) => ({
+// eslint-disable-next-line react-refresh/only-export-components
+export const useFilterStore = create((set) => ({
   expanded: false,
   toggle: () => set((state) => ({ expanded: !state.expanded })),
 }));
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const handle = {
-  sidebar: (data) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const toggle = useFilterStore((state) => state.toggle);
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [searchParams] = useSearchParams();
-    const uqlId = searchParams.get("uqlId");
-
-    return (
-      <List>
-        <ListItem>
-          {/* TODO: extract to function */}
-          <Card sx={{ flexGrow: 1 }}>
-            <CardHeader title="Custom Filters" />
-            {data.filters.length > 0 ? (
-              <List>
-                {data.filters.map((filter) => {
-                  const isSelected = uqlId == filter.id;
-
-                  return (
-                    <ListItem
-                      disablePadding
-                      key={filter.id}
-                      secondaryAction={
-                        isSelected ? (
-                          <>
-                            <IconButton aria-label="delete">
-                              <DeleteIcon fontSize="small" />
-                            </IconButton>
-                            <IconButton
-                              aria-label="edit"
-                              edge="end"
-                              onClick={toggle}
-                            >
-                              <EditIcon fontSize="small" />
-                            </IconButton>
-                          </>
-                        ) : null
-                      }
-                    >
-                      <ListItemButton
-                        component={RouterLink}
-                        selected={isSelected}
-                        to={`?uqlId=${filter.id}`}
-                      >
-                        <ListItemText primary={filter.name} />
-                      </ListItemButton>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            ) : null}
-            <Divider />
-            <List>
-              <ListItemButton onClick={toggle}>
-                <ListItemText primary="Create a custom filter" />
-              </ListItemButton>
-            </List>
-          </Card>
-        </ListItem>
-      </List>
-    );
-  },
+  sidebar: (data) => (
+    <List>
+      <ListItem>
+        <CustomFilters filters={data.filters} />
+      </ListItem>
+    </List>
+  ),
 };
 
 function validateFilterName(name) {
