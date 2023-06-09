@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Form, redirect, useActionData, useLoaderData } from "react-router-dom";
+import {
+  Form,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "react-router-dom";
 
+import LoadingButton from "@mui/lab/LoadingButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -89,6 +95,7 @@ export async function loader() {
 export default function Ask() {
   const actionData = useActionData();
   const tags = useLoaderData();
+  const navigation = useNavigation();
   const [selectedTags, setSelectedTags] = useState([]);
 
   return (
@@ -154,9 +161,14 @@ export default function Ask() {
         </CardContent>
 
         <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Button form="new-question" size="small" type="submit">
+          <LoadingButton
+            form="new-question"
+            loading={navigation.state === "submitting"}
+            size="small"
+            type="submit"
+          >
             Post your question
-          </Button>
+          </LoadingButton>
         </CardActions>
       </Card>
     </Box>
