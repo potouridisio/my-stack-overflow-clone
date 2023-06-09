@@ -2,9 +2,10 @@
 import { Link, useSearchParams } from "react-router-dom";
 
 import DeleteIcon from "@mui/icons-material/Delete";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -52,12 +53,11 @@ export default function CustomFilters({ filters }) {
           })}
         </List>
       ) : null}
-      <Divider />
-      <List>
-        <ListItemButton onClick={toggle}>
-          <ListItemText primary="Create a custom filter" />
-        </ListItemButton>
-      </List>
+      <CardActions>
+        <Button onClick={toggle} size="small">
+          Create a custom filter
+        </Button>
+      </CardActions>
     </Card>
   );
 }
