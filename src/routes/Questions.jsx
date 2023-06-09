@@ -6,12 +6,14 @@ import {
   redirect,
   useActionData,
   useLoaderData,
+  useNavigation,
   useSearchParams,
 } from "react-router-dom";
 import { create } from "zustand";
 
 import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
@@ -169,6 +171,7 @@ export default function Questions() {
   const actionData = useActionData();
   const { expanded, toggle } = useFilterStore();
   const { questions, tags, users } = useLoaderData();
+  const navigation = useNavigation();
   const inputRef = useRef(null);
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
@@ -357,9 +360,13 @@ export default function Questions() {
                 <DialogActions
                   sx={{ justifyContent: "flex-start", p: 3, pt: 0 }}
                 >
-                  <Button type="submit" variant="contained">
+                  <LoadingButton
+                    loading={navigation.state === "submitting"}
+                    type="submit"
+                    variant="contained"
+                  >
                     Save filter
-                  </Button>
+                  </LoadingButton>
                   <Button onClick={handleClose}>Cancel</Button>
                 </DialogActions>
               </Dialog>
