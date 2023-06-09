@@ -3,6 +3,8 @@ import Draggable from "react-draggable";
 import {
   Form,
   Link as RouterLink,
+  redirect,
+  useActionData,
   useLoaderData,
   useSearchParams,
 } from "react-router-dom";
@@ -108,15 +110,45 @@ export const handle = {
   },
 };
 
+function validateFilterName(name) {
+  if (!name) {
+    return "Title is missing.";
+  }
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export async function action({ request }) {
   const formData = await request.formData();
 
   const newFilter = Object.fromEntries(formData);
 
-  console.log({ newFilter });
+  const fieldErrors = {
+    name: validateFilterName(newFilter.name),
+  };
 
-  return {};
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return {
+      fieldErrors,
+    };
+  }
+
+  const filter = await fetch("/api/users/1/filters", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newFilter),
+  }).then((res) => res.json());
+
+  if (filter.error) {
+    return {
+      fieldErrors: {
+        name: filter.error,
+      },
+    };
+  }
+
+  return redirect(`/?uqlId=${filter.id}`);
 }
 
 function PaperComponent(props) {
@@ -134,6 +166,7 @@ function PaperComponent(props) {
 }
 
 export default function Questions() {
+  const actionData = useActionData();
   const { expanded, toggle } = useFilterStore();
   const { questions, tags, users } = useLoaderData();
   const inputRef = useRef(null);
@@ -311,7 +344,9 @@ export default function Questions() {
 
                 <DialogContent>
                   <TextField
+                    error={!!actionData?.fieldErrors?.name}
                     fullWidth
+                    helperText={actionData?.fieldErrors?.name}
                     inputRef={inputRef}
                     label="Filter title"
                     margin="dense"
