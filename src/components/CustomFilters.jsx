@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -25,6 +25,8 @@ export default function CustomFilters({ filters }) {
 
   const [customFilters, setCustomFilters] = useState(filters);
   const [confirmDeletion, setConfirmDeletion] = useState(false);
+
+  const navigate = useNavigate();
 
   const modalStyle = {
     position: "absolute",
@@ -60,6 +62,12 @@ export default function CustomFilters({ filters }) {
               <ListItem
                 disablePadding
                 key={filter.id}
+                onClick={() =>
+                  navigate(`/?sort=${filter.sortId}
+                            &filters=${filter.filterIds}
+                            &tagWith=${filter.tagModeId}
+                            &uqlId=${filter.id}`)
+                }
                 secondaryAction={
                   isSelected ? (
                     <>
