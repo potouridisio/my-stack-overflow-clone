@@ -11,11 +11,13 @@ import {
 } from "react-router-dom";
 import { create } from "zustand";
 
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import ButtonGroup from "@mui/material/ButtonGroup";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -203,6 +205,17 @@ export default function Questions() {
           {questions.length} {isSearch ? "result" : "question"}
           {questions.length === 1 ? "" : "s"}
         </Typography>
+
+        <ButtonGroup variant="outlined" sx={{ mr: 4 }}>
+          <Button>Newest</Button>
+          <Button>Active</Button>
+          <Button>Bountied</Button>
+          <Button>Unanswered</Button>
+          <Button>
+            More
+            <ArrowDropDownIcon />
+          </Button>
+        </ButtonGroup>
 
         {!isSearch ? (
           <ToggleButton
