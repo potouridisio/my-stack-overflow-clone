@@ -7,6 +7,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigation,
+  useRevalidator,
   useSearchParams,
 } from "react-router-dom";
 import { create } from "zustand";
@@ -106,6 +107,7 @@ function validateFilterName(name) {
 // eslint-disable-next-line react-refresh/only-export-components
 export async function action({ request }) {
   const formData = await request.formData();
+  console.log(formData);
 
   const newFilter = Object.fromEntries(formData);
 
@@ -135,7 +137,11 @@ export async function action({ request }) {
     };
   }
 
-  return redirect(`/?sort=${filter.sortId}&uqlId=${filter.id}`);
+  console.log(filter);
+
+  return redirect(
+    `/?sort=${filter.sortId}&filters=${filter.filters}&tagWith=${filter.tagModeId}&uqlId=${filter.id}`
+  );
 }
 
 function PaperComponent(props) {
@@ -162,7 +168,26 @@ export default function Questions() {
   const q = searchParams.get("q");
   const isSearch = Boolean(q);
   const [filterIds, setFilterIds] = useState([]);
+  const [sortId, setSortId] = useState("");
+  const [tagModeId, setTagModeId] = useState("");
   const [open, setOpen] = useState(false);
+  //const revalidator = useRevalidator();
+
+  const filters = searchParams.get("filters");
+  const sort = searchParams.get("sort");
+  const tagWith = searchParams.get("tagWith");
+
+  useEffect(() => {
+    if (filters) {
+      setFilterIds(filters);
+    }
+    if (sort) {
+      setSortId(sort);
+    }
+    if (tagWith) {
+      setTagModeId(tagWith);
+    }
+  }, [filters, sort, tagWith]);
 
   useEffect(() => {
     if (inputRef.current && open) {
@@ -207,11 +232,11 @@ export default function Questions() {
         </Typography>
 
         <ButtonGroup variant="outlined" sx={{ mr: 4 }}>
-          <Button>Newest</Button>
-          <Button>Active</Button>
-          <Button>Bountied</Button>
-          <Button>Unanswered</Button>
-          <Button>
+          <Button sx={{ textTransform: "none" }}>Newest</Button>
+          <Button sx={{ textTransform: "none" }}>Active</Button>
+          <Button sx={{ textTransform: "none" }}>Bountied</Button>
+          <Button sx={{ textTransform: "none" }}>Unanswered</Button>
+          <Button sx={{ textTransform: "none" }}>
             More
             <ArrowDropDownIcon />
           </Button>
@@ -233,7 +258,7 @@ export default function Questions() {
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <Card sx={{ mb: 2 }}>
-          <Form method="post">
+          <Form id="filter-form" method="post">
             <CardContent>
               <Box sx={{ display: "flex" }}>
                 <FormControl component="fieldset">
@@ -273,9 +298,11 @@ export default function Questions() {
                     ].map(([label, value]) => (
                       <FormControlLabel
                         control={<Radio />}
+                        checked={sortId.includes(value)}
                         key={value}
                         label={label}
                         value={value}
+                        onChange={() => setSortId(value)}
                       />
                     ))}
                   </RadioGroup>
@@ -290,9 +317,11 @@ export default function Questions() {
                     ].map(([label, value]) => (
                       <FormControlLabel
                         control={<Radio />}
+                        checked={tagModeId.includes(value)}
                         key={value}
                         label={label}
                         value={value}
+                        onChange={() => setTagModeId(value)}
                       />
                     ))}
                   </RadioGroup>
@@ -353,6 +382,12 @@ export default function Questions() {
                   <LoadingButton
                     loading={navigation.state === "submitting"}
                     type="submit"
+                    form="filter-form"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleClose;
+                      toggle();
+                    }}
                   >
                     Save filter
                   </LoadingButton>
