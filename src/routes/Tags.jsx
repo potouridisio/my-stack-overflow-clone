@@ -1,4 +1,11 @@
-import { useLoaderData, useSearchParams } from "react-router-dom";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useSearchParams,
+} from "react-router-dom";
+import { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -6,6 +13,8 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import Grid from "@mui/material/Unstable_Grid2";
+import Input from "@mui/material/Input";
+import SearchIcon from "@mui/icons-material/Search";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Toolbar from "@mui/material/Toolbar";
@@ -29,10 +38,30 @@ export function loader({ request }) {
   return fetch(`/api/tags${sortBy ? `?sortBy=${sortBy}` : ""}`);
 }
 
+export async function action({ request }) {
+  const formData = await request.formData();
+  const filterValue = formData.get("tagFilter");
+  return filterValue;
+}
+
 export default function Tags() {
-  const tags = useLoaderData();
+  let tags = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab") || "popular";
+
+  const [inputTagFilter, setInputTagFilter] = useState("");
+  if (inputTagFilter) {
+    tags = tags.filter((tag) =>
+      tag.name.toLowerCase().includes(inputTagFilter.toLowerCase())
+    );
+  }
+
+  let filterValue = useActionData();
+  if (filterValue) {
+    tags = tags.filter((tag) =>
+      tag.name.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -44,7 +73,40 @@ export default function Tags() {
         </Typography>
       </Toolbar>
 
-      <Toolbar disableGutters sx={{ justifyContent: "flex-end" }}>
+      <Typography component="h2" sx={{ mb: 2 }}>
+        A tag is a keyword or label that categorizes your question with other,
+        similar questions. Using the right tags makes it easier for others to
+        find and answer your question.
+      </Typography>
+
+      <Link to={"synonyms"} style={{ textDecoration: "none" }}>
+        Show all tag synonyms
+      </Link>
+
+      <Toolbar disableGutters sx={{ justifyContent: "space-between", mt: 4 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            border: 1,
+            borderColor: "grey.500",
+            borderRadius: "5%",
+            p: 0.3,
+            pr: 8,
+          }}
+        >
+          <SearchIcon sx={{ mt: 0.5 }} />
+          <Form method="post">
+            <Input
+              autoFocus
+              disableUnderline={true}
+              onChange={(event) => setInputTagFilter(event.target.value)}
+              placeholder="Filter by tag name"
+              name="tagFilter"
+            />
+          </Form>
+        </Box>
+
         <ToggleButtonGroup
           color="primary"
           exclusive
