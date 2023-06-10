@@ -1,11 +1,16 @@
-import { useLoaderData } from "react-router-dom";
+import { Form, useActionData, useLoaderData } from "react-router-dom";
+import { useState } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Unstable_Grid2";
+import Input from "@mui/material/Input";
 import Link from "@mui/material/Link";
+import SearchIcon from "@mui/icons-material/Search";
 import Stack from "@mui/material/Stack";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
@@ -21,8 +26,28 @@ export async function loader() {
   return { tags: indexBy(tags, "id"), users };
 }
 
+export async function action({ request }) {
+  const formData = await request.formData();
+  const filterValue = formData.get("userFilter");
+  return filterValue;
+}
+
 export default function Users() {
-  const { tags, users } = useLoaderData();
+  let { tags, users } = useLoaderData();
+
+  const [inputUserFilter, setInputUserFilter] = useState("");
+  if (inputUserFilter) {
+    users = users.filter((user) =>
+      user.name.toLowerCase().includes(inputUserFilter.toLowerCase())
+    );
+  }
+
+  let filterValue = useActionData();
+  if (filterValue) {
+    users = users.filter((user) =>
+      user.name.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -32,6 +57,57 @@ export default function Users() {
         <Typography component="div" variant="h6">
           Users
         </Typography>
+      </Toolbar>
+
+      <Toolbar disableGutters sx={{ justifyContent: "space-between" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            border: 1,
+            borderColor: "grey.500",
+            borderRadius: "5%",
+            p: 0.3,
+            pr: 8,
+          }}
+        >
+          <SearchIcon sx={{ mt: 0.5 }} />
+          <Form method="post">
+            <Input
+              autoFocus
+              disableUnderline={true}
+              onChange={(event) => setInputUserFilter(event.target.value)}
+              placeholder="Filter by user"
+              name="userFilter"
+            />
+          </Form>
+        </Box>
+
+        <ToggleButtonGroup color="primary" exclusive size="small">
+          <ToggleButton value="reputation">Reputation</ToggleButton>
+          <ToggleButton value="new users">New users</ToggleButton>
+          <ToggleButton value="voters">Voters</ToggleButton>
+          <ToggleButton value="editors">Editors</ToggleButton>
+          <ToggleButton value="moderators">Moderators</ToggleButton>
+        </ToggleButtonGroup>
+      </Toolbar>
+
+      <Toolbar disableGutters sx={{ justifyContent: "flex-end" }}>
+        <Link href="?filter=week" sx={{ mr: 2 }}>
+          week
+        </Link>
+        <Link href="?filter=month" sx={{ mr: 2 }}>
+          month
+        </Link>
+        <Link href="?filter=quarter" sx={{ mr: 2 }}>
+          quarter
+        </Link>
+        <Link href="?filter=year" sx={{ mr: 2 }}>
+          year
+        </Link>
+        <Link href="?filter=all" sx={{ mr: 2 }}>
+          all
+        </Link>
       </Toolbar>
 
       <Grid container spacing={2}>
