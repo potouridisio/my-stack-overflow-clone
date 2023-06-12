@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
 import { Link, useSearchParams } from "react-router-dom";
 
-import DeleteIcon from "@mui/icons-material/Delete";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardHeader from "@mui/material/CardHeader";
-import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -28,19 +26,7 @@ export default function CustomFilters({ filters }) {
             const isSelected = uqlId == filter.id;
 
             return (
-              <ListItem
-                disablePadding
-                key={filter.id}
-                secondaryAction={
-                  isSelected ? (
-                    <>
-                      <IconButton aria-label="delete" edge="end">
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </>
-                  ) : null
-                }
-              >
+              <ListItem disablePadding key={filter.id}>
                 <ListItemButton
                   component={Link}
                   selected={isSelected}
