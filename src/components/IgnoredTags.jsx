@@ -6,19 +6,22 @@ import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
 import ClickAwayListener from "@mui/base/ClickAwayListener";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 
 import { create } from "zustand";
+import { CardActions } from "@mui/material";
 
-const useSelectedIgnoredTags = create((set) => ({
+/*const useSelectedIgnoredTags = create((set) => ({
   selectedIgnoredTags: [],
   setSelectedIgnoredTags: (selectedIgnoredTags) => set({ selectedIgnoredTags }),
-}));
+}));*/
 
 const useSelectedRadioButton = create((set) => ({
   selectedRadioButton: "",
@@ -27,46 +30,90 @@ const useSelectedRadioButton = create((set) => ({
 
 export default function IgnoredTags({ tags }) {
   const [isIgnoredTag, setIsIgnoredTag] = useState(false);
-  const { selectedIgnoredTags, setSelectedIgnoredTags } =
-    useSelectedIgnoredTags();
+  /*const { selectedIgnoredTags, setSelectedIgnoredTags } =
+    useSelectedIgnoredTags();*/
   const { selectedRadioButton, setSelectedRadioButton } =
     useSelectedRadioButton();
-  const ignoredTagsRef = useRef(null);
 
-  /*useEffect(() => {
-    function handleClickOutsideCard(event) {
-      if (
-        ignoredTagsRef.current &&
-        event.target.contains(ignoredTagsRef.current)
-      ) {
-        setIsIgnoredTag(false);
-      }
+  const [pendingTag, setPendingTag] = useState(null);
+
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  function handleAddTag() {
+    if (pendingTag && !selectedTags.includes(pendingTag)) {
+      setSelectedTags([...selectedTags, pendingTag]);
+      setPendingTag(null);
     }
+  }
 
-    window.addEventListener("mousedown", handleClickOutsideCard);
-
-    return () =>
-      window.removeEventListener("mousedown", handleClickOutsideCard);
-  });*/
+  function handleDeleteTag(tagId) {
+    setSelectedTags(
+      selectedTags.filter((selectedTag) => selectedTag !== tagId)
+    );
+  }
 
   return (
     <ClickAwayListener onClickAway={() => setIsIgnoredTag(false)}>
-      <Card sx={{ flexGrow: 1 }} ref={ignoredTagsRef}>
-        <CardHeader title="Ignored Tags" />
+      <Card sx={{ flexGrow: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            bgcolor: "#f8f9f9",
+            borderBottom: 1,
+            borderColor: "grey.300",
+          }}
+        >
+          <CardHeader title="Ignored Tags" />
+          {!isIgnoredTag && selectedTags.length > 0 ? (
+            <Button
+              sx={{ textTransform: "none" }}
+              onClick={() => setIsIgnoredTag(true)}
+            >
+              edit
+            </Button>
+          ) : (
+            ""
+          )}
+        </Box>
+
         <CardContent>
+          {selectedTags.length > 0 ? (
+            <Stack
+              direction="row"
+              fullWidth
+              spacing={1}
+              sx={{ mb: 1.5, flexGrow: 1 }}
+            >
+              {selectedTags.map((selectedTag) => (
+                <Chip
+                  key={selectedTag}
+                  label={tags[selectedTag].name}
+                  onDelete={
+                    isIgnoredTag ? () => handleDeleteTag(selectedTag) : ""
+                  }
+                />
+              ))}
+            </Stack>
+          ) : (
+            ""
+          )}
+
           {isIgnoredTag ? (
             <>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Autocomplete
                   sx={{ flexGrow: 1 }}
-                  multiple
                   options={Object.keys(tags)}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params} autoFocus />}
                   getOptionLabel={(option) => tags[option].name}
-                  onChange={(_event, value) => setSelectedIgnoredTags(value)}
+                  onChange={(_event, value) => setPendingTag(value)}
+                  value={pendingTag}
                 />
 
-                <Button variant="contained">Add</Button>
+                <Button variant="contained" onClick={handleAddTag}>
+                  Add
+                </Button>
               </Box>
 
               <RadioGroup
@@ -96,15 +143,23 @@ export default function IgnoredTags({ tags }) {
               </RadioGroup>
             </>
           ) : (
+            ""
+          )}
+        </CardContent>
+
+        {!isIgnoredTag && selectedTags.length === 0 ? (
+          <CardActions sx={{ display: "flex", justifyContent: "center" }}>
             <Button
               sx={{ textTransform: "none" }}
-              variant="outlined"
+              variant="contained"
               onClick={() => setIsIgnoredTag(true)}
             >
               Add an ignored tag
             </Button>
-          )}
-        </CardContent>
+          </CardActions>
+        ) : (
+          ""
+        )}
       </Card>
     </ClickAwayListener>
   );
