@@ -142,8 +142,6 @@ export async function action({ request }) {
     };
   }
 
-  console.log(filter);
-
   return redirect(
     `/?sort=${filter.sortId}&filters=${filter.filters}&tagWith=${filter.tagModeId}&uqlId=${filter.id}`
   );
@@ -183,8 +181,6 @@ export default function Questions() {
   const filters = searchParams.get("filters");
   const sort = searchParams.get("sort");
   const tagWith = searchParams.get("tagWith");
-
-  const tagIdRef = useRef(null);
 
   useEffect(() => {
     if (filters) {
@@ -467,7 +463,6 @@ export default function Questions() {
                 <Stack direction="row" spacing={1}>
                   {question.tagIds.map((tagId) => (
                     <Chip
-                      ref={tagIdRef}
                       key={tagId}
                       label={tags[tagId].name}
                       onClick={() => {}}
@@ -506,7 +501,15 @@ export default function Questions() {
                       </Box>
 
                       <CardContent>
-                        <Typography>{tags[1].description}</Typography>
+                        <Typography>
+                          {anchorEl
+                            ? tags[
+                                Object.values(tags).find(
+                                  (tag) => tag.name === anchorEl.textContent
+                                ).id
+                              ].description
+                            : ""}
+                        </Typography>
                         <RouterLink>View Tag</RouterLink>
                       </CardContent>
 
