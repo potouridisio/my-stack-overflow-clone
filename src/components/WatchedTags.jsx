@@ -15,25 +15,36 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import { create } from "zustand";
+
+export const useSelectedWatchedTagIds = create((set) => ({
+  selectedWatchedTagIds: [],
+  setSelectedWatchedTagIds: (selectedWatchedTagIds) =>
+    set({ selectedWatchedTagIds }),
+}));
+
 export default function WatchedTags({ tags }) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [pendingTag, setPendingTag] = useState(null);
 
-  const [selectedTags, setSelectedTags] = useState([]);
+  const { selectedWatchedTagIds, setSelectedWatchedTagIds } =
+    useSelectedWatchedTagIds();
+
+  //const [selectedTags, setSelectedTags] = useState([]);
 
   const inputRef = useRef(null);
 
   function handleAddTag() {
-    if (pendingTag && !selectedTags.includes(pendingTag)) {
-      setSelectedTags([...selectedTags, pendingTag]);
+    if (pendingTag && !selectedWatchedTagIds.includes(pendingTag)) {
+      setSelectedWatchedTagIds([...selectedWatchedTagIds, pendingTag]);
       setPendingTag(null);
     }
   }
 
   function handleDeleteTag(tagId) {
-    setSelectedTags(
-      selectedTags.filter((selectedTag) => selectedTag !== tagId)
+    setSelectedWatchedTagIds(
+      selectedWatchedTagIds.filter((selectedTag) => selectedTag !== tagId)
     );
   }
 
@@ -50,7 +61,7 @@ export default function WatchedTags({ tags }) {
           }}
         >
           <CardHeader title="Watched Tags" />
-          {!isEditing && selectedTags.length > 0 ? (
+          {!isEditing && selectedWatchedTagIds.length > 0 ? (
             <Button
               sx={{ textTransform: "none" }}
               onClick={() => setIsEditing(true)}
@@ -63,14 +74,14 @@ export default function WatchedTags({ tags }) {
         </Box>
 
         <CardContent>
-          {selectedTags.length > 0 ? (
+          {selectedWatchedTagIds.length > 0 ? (
             <Stack
               direction="row"
               fullWidth
               spacing={1}
               sx={{ mb: 1.5, flexGrow: 1 }}
             >
-              {selectedTags.map((selectedTag) => (
+              {selectedWatchedTagIds.map((selectedTag) => (
                 <Chip
                   key={selectedTag}
                   label={tags[selectedTag].name}
@@ -99,7 +110,7 @@ export default function WatchedTags({ tags }) {
                 Add
               </Button>
             </Box>
-          ) : selectedTags.length === 0 ? (
+          ) : selectedWatchedTagIds.length === 0 ? (
             <>
               <Typography color="text.secondary" variant="body2">
                 Watch tags to curate your list of questions.
@@ -110,10 +121,10 @@ export default function WatchedTags({ tags }) {
           )}
         </CardContent>
 
-        {!isEditing && selectedTags.length === 0 ? (
+        {!isEditing && selectedWatchedTagIds.length === 0 ? (
           <CardActions sx={{ display: "flex", justifyContent: "center" }}>
             <Button
-              sx={{ textTransform: "none" }}
+              sx={{ textTransform: "none", mb: 1 }}
               variant="contained"
               onClick={() => setIsEditing(true)}
               size="medium"
