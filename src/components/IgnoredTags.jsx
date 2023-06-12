@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
+import { create } from "zustand";
 
 // import VisibilityIcon from "@mui/icons-material/Visibility";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -12,15 +13,23 @@ import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+// import ClickAwayListener from "@mui/base/ClickAwayListener";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+// import Typography from "@mui/material/Typography";
+
+export const useSelectedTagIds = create((set) => ({
+  selectedTagIds: [],
+  setSelectedTagIds: (selectedTagIds) => set({ selectedTagIds }),
+}));
 
 export default function IgnoredTags({ tags }) {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingTagId, setPendingTagId] = useState(null);
-  const [selectedTagIds, setSelectedTagIds] = useState([]);
+  const { selectedTagIds, setSelectedTagIds } = useSelectedTagIds();
+  // const [open, setOpen] = useState(true);
 
   function handleChange(_event, value) {
     setPendingTagId(value);
@@ -34,14 +43,21 @@ export default function IgnoredTags({ tags }) {
   }
 
   return (
-    <Card sx={{ flexGrow: 1, height: "13rem" }}>
-      <CardHeader title="Ignored Tags" />
+    <Card sx={{ flexGrow: 1, height: "14rem" }}>
+      <CardHeader title="Ignored Tags">
+        {/*
+          <Button variant="text" sx={{ textTransform: "none" }}>
+            edit
+          </Button>
+        )} */}
+      </CardHeader>
+
       <CardContent>
         {isEditing ? (
           <>
             <>
               {selectedTagIds.length > 0 ? (
-                <Stack direction="row" spacing={1}>
+                <Stack direction="row" spacing={1} mb={1.5}>
                   {selectedTagIds.map((selectedTagId) => (
                     <Chip
                       key={selectedTagId}
@@ -58,52 +74,59 @@ export default function IgnoredTags({ tags }) {
                 </Stack>
               ) : null}
             </>
-            <Box sx={{ display: "flex" }}>
-              <Autocomplete
-                onChange={handleChange}
-                sx={{ flexGrow: 1 }}
-                options={Object.keys(tags).filter(
-                  (tagId) => !selectedTagIds.includes(tagId)
-                )}
-                getOptionLabel={(option) => tags[option].name}
-                value={pendingTagId}
-                renderInput={(params) => (
-                  <TextField {...params} autoFocus variant="outlined" />
-                )}
-              />
-              <Button
-                variant="contained"
-                sx={{
-                  textTransform: "none",
-                  bgcolor: "dodgerBlue",
-                  color: "white",
-                }}
-                onClick={handleAdd}
-              >
-                Add
-              </Button>
-            </Box>
+
+            {/* <ClickAwayListener onClickAway={() => setOpen(false)}>
+              {open && ( */}
             <>
-              {" "}
-              <FormControl>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="gray out"
-                  name="radio-buttons-group"
+              <Box sx={{ display: "flex" }}>
+                <Autocomplete
+                  onChange={handleChange}
+                  sx={{ flexGrow: 1 }}
+                  options={Object.keys(tags).filter(
+                    (tagId) => !selectedTagIds.includes(tagId)
+                  )}
+                  getOptionLabel={(option) => tags[option].name}
+                  value={pendingTagId}
+                  renderInput={(params) => (
+                    <TextField {...params} autoFocus variant="outlined" />
+                  )}
+                />
+                <Button
+                  variant="contained"
+                  sx={{
+                    textTransform: "none",
+                    bgcolor: "dodgerBlue",
+                    color: "white",
+                  }}
+                  onClick={handleAdd}
                 >
-                  <FormControlLabel
-                    value="hide out"
-                    control={<Radio />}
-                    label="Hide questions in your ignored tags"
-                  />
-                  <FormControlLabel
-                    value="gray out"
-                    control={<Radio />}
-                    label="Gray out questions in your ignored tags"
-                  />
-                </RadioGroup>
-              </FormControl>
+                  Add
+                </Button>
+              </Box>
+              <>
+                {" "}
+                <FormControl>
+                  <RadioGroup
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    defaultValue="gray out"
+                    name="radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="hide out"
+                      control={<Radio />}
+                      label="Hide questions in your ignored tags"
+                    />
+                    <FormControlLabel
+                      value="gray out"
+                      control={<Radio />}
+                      label="Gray out questions in your ignored tags"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </>
             </>
+            {/* )}
+            </ClickAwayListener> */}
           </>
         ) : (
           <>
