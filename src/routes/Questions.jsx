@@ -45,6 +45,7 @@ import Typography from "@mui/material/Typography";
 
 import CustomFilters from "../components/CustomFilters";
 import WatchedTags from "../components/WatchedTags";
+import IgnoredTags from "../components/IgnoredTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -85,6 +86,9 @@ export const handle = {
 
       <ListItem>
         <WatchedTags tags={data.tags} />
+      </ListItem>
+      <ListItem>
+        <IgnoredTags tags={data.tags} />
       </ListItem>
     </List>
   ),
