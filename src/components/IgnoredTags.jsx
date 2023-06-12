@@ -9,15 +9,29 @@ import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
+import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
-// import Typography from "@mui/material/Typography";
 
 export default function IgnoredTags({ tags }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [pendingTagId, setPendingTagId] = useState(null);
+  const [selectedTagIds, setSelectedTagIds] = useState([]);
+
+  function handleChange(_event, value) {
+    setPendingTagId(value);
+  }
+
+  function handleAdd() {
+    if (pendingTagId) {
+      setSelectedTagIds([...selectedTagIds, pendingTagId]);
+      setPendingTagId(null);
+    }
+  }
 
   return (
     <Card sx={{ flexGrow: 1, height: "13rem" }}>
@@ -25,11 +39,34 @@ export default function IgnoredTags({ tags }) {
       <CardContent>
         {isEditing ? (
           <>
+            <>
+              {selectedTagIds.length > 0 ? (
+                <Stack direction="row" spacing={1}>
+                  {selectedTagIds.map((selectedTagId) => (
+                    <Chip
+                      key={selectedTagId}
+                      label={tags[selectedTagId].name}
+                      onDelete={() =>
+                        setSelectedTagIds(
+                          selectedTagIds.filter(
+                            (tagId) => tagId !== selectedTagId
+                          )
+                        )
+                      }
+                    />
+                  ))}
+                </Stack>
+              ) : null}
+            </>
             <Box sx={{ display: "flex" }}>
               <Autocomplete
+                onChange={handleChange}
                 sx={{ flexGrow: 1 }}
-                options={Object.keys(tags)}
+                options={Object.keys(tags).filter(
+                  (tagId) => !selectedTagIds.includes(tagId)
+                )}
                 getOptionLabel={(option) => tags[option].name}
+                value={pendingTagId}
                 renderInput={(params) => (
                   <TextField {...params} autoFocus variant="outlined" />
                 )}
@@ -41,6 +78,7 @@ export default function IgnoredTags({ tags }) {
                   bgcolor: "dodgerBlue",
                   color: "white",
                 }}
+                onClick={handleAdd}
               >
                 Add
               </Button>
@@ -68,27 +106,28 @@ export default function IgnoredTags({ tags }) {
             </>
           </>
         ) : (
-          <></>
+          <>
+            <CardActions
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              {!isEditing && (
+                <Button
+                  variant="outlined"
+                  sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
+                  onClick={() => setIsEditing(true)}
+                >
+                  {" "}
+                  Add an ignored tag
+                </Button>
+              )}
+            </CardActions>
+          </>
         )}
       </CardContent>
-      <CardActions
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {!isEditing && (
-          <Button
-            variant="outlined"
-            sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
-            onClick={() => setIsEditing(true)}
-          >
-            {" "}
-            Add an ignored tag
-          </Button>
-        )}
-      </CardActions>
     </Card>
   );
 }
