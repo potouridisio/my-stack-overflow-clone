@@ -52,7 +52,9 @@ import Typography from "@mui/material/Typography";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import CustomFilters from "../components/CustomFilters";
-import WatchedTags from "../components/WatchedTags";
+import WatchedTags, {
+  useSelectedWatchedTagIds,
+} from "../components/WatchedTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 import IgnoredTags from "../components/IgnoredTags";
 
@@ -164,6 +166,8 @@ function PaperComponent(props) {
 export default function Questions() {
   const actionData = useActionData();
   const { expanded, toggle } = useFilterStore();
+  const { selectedWatchedTagIds, setSelectedWatchedTagIds } =
+    useSelectedWatchedTagIds();
   const { questions, tags, users } = useLoaderData();
   const navigation = useNavigation();
   const inputRef = useRef(null);
@@ -424,7 +428,16 @@ export default function Questions() {
         <Stack spacing={2}>
           {/* Question */}
           {questions.map((question) => (
-            <Card key={question.id}>
+            <Card
+              key={question.id}
+              sx={{
+                bgcolor: question.tagIds.some((tagId) =>
+                  selectedWatchedTagIds.includes(tagId.toString())
+                )
+                  ? "#fdf7e2"
+                  : "",
+              }}
+            >
               <CardContent>
                 <Stack
                   direction="row"
@@ -467,6 +480,13 @@ export default function Questions() {
                       label={tags[tagId].name}
                       onClick={() => {}}
                       onMouseEnter={handlePopoverOpen}
+                      icon={
+                        selectedWatchedTagIds.includes(tagId.toString()) ? (
+                          <VisibilityIcon />
+                        ) : (
+                          ""
+                        )
+                      }
                     />
                   ))}
 
