@@ -50,6 +50,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import CustomFilters from "../components/CustomFilters";
 import WatchedTags, {
@@ -563,22 +564,51 @@ export default function Questions() {
               justifyContent: "space-evenly",
             }}
           >
-            <Button
-              sx={{ textTransform: "none" }}
-              variant="outlined"
-              size="medium"
-              startIcon={<VisibilityIcon />}
-              onClick={() =>
-                setSelectedWatchedTagIds([
-                  ...selectedWatchedTagIds,
-                  Object.values(tags).find(
-                    (tag) => tag.name === anchorEl.textContent
-                  ).id,
-                ])
-              }
-            >
-              Watch a tag
-            </Button>
+            {selectedWatchedTagIds.some(
+              (tagId) =>
+                tagId ===
+                Object.values(tags).find(
+                  (tag) => tag.name === anchorEl.textContent
+                ).id
+            ) ? (
+              <Button
+                sx={{ textTransform: "none" }}
+                variant="outlined"
+                size="medium"
+                startIcon={<VisibilityOffIcon />}
+                onClick={() =>
+                  setSelectedWatchedTagIds(
+                    selectedWatchedTagIds.filter(
+                      (tagId) =>
+                        tagId !==
+                        Object.values(tags).find(
+                          (tag) => tag.name === anchorEl.textContent
+                        ).id
+                    )
+                  )
+                }
+              >
+                Unwatch tag
+              </Button>
+            ) : (
+              <Button
+                sx={{ textTransform: "none" }}
+                variant="outlined"
+                size="medium"
+                startIcon={<VisibilityIcon />}
+                onClick={() =>
+                  setSelectedWatchedTagIds([
+                    ...selectedWatchedTagIds,
+                    Object.values(tags).find(
+                      (tag) => tag.name === anchorEl.textContent
+                    ).id,
+                  ])
+                }
+              >
+                Watch a tag
+              </Button>
+            )}
+
             <Button
               sx={{ textTransform: "none" }}
               size="medium"
