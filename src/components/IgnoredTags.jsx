@@ -13,7 +13,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
 import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-// import ClickAwayListener from "@mui/base/ClickAwayListener";
+import ClickAwayListener from "@mui/base/ClickAwayListener";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
@@ -29,7 +29,7 @@ export default function IgnoredTags({ tags }) {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingTagId, setPendingTagId] = useState(null);
   const { selectedTagIds, setSelectedTagIds } = useSelectedTagIds();
-  // const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(true);
 
   function handleChange(_event, value) {
     setPendingTagId(value);
@@ -43,14 +43,24 @@ export default function IgnoredTags({ tags }) {
   }
 
   return (
-    <Card sx={{ flexGrow: 1, height: "14rem" }}>
-      <CardHeader title="Ignored Tags">
-        {/*
-          <Button variant="text" sx={{ textTransform: "none" }}>
-            edit
-          </Button>
-        )} */}
-      </CardHeader>
+    <Card sx={{ flexGrow: 1, height: "14rem", position: "relative" }}>
+      <CardHeader
+        sx={{ display: "flex" }}
+        title="Ignored Tags"
+        action={
+          !open && (
+            <Button
+              variant="text"
+              sx={{
+                textTransform: "none",
+              }}
+              onClick={() => setOpen(true)}
+            >
+              edit
+            </Button>
+          )
+        }
+      />
 
       <CardContent>
         {isEditing ? (
@@ -74,59 +84,58 @@ export default function IgnoredTags({ tags }) {
                 </Stack>
               ) : null}
             </>
-
-            {/* <ClickAwayListener onClickAway={() => setOpen(false)}>
-              {open && ( */}
-            <>
-              <Box sx={{ display: "flex" }}>
-                <Autocomplete
-                  onChange={handleChange}
-                  sx={{ flexGrow: 1 }}
-                  options={Object.keys(tags).filter(
-                    (tagId) => !selectedTagIds.includes(tagId)
-                  )}
-                  getOptionLabel={(option) => tags[option].name}
-                  value={pendingTagId}
-                  renderInput={(params) => (
-                    <TextField {...params} autoFocus variant="outlined" />
-                  )}
-                />
-                <Button
-                  variant="contained"
-                  sx={{
-                    textTransform: "none",
-                    bgcolor: "dodgerBlue",
-                    color: "white",
-                  }}
-                  onClick={handleAdd}
-                >
-                  Add
-                </Button>
-              </Box>
-              <>
-                {" "}
-                <FormControl>
-                  <RadioGroup
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="gray out"
-                    name="radio-buttons-group"
-                  >
-                    <FormControlLabel
-                      value="hide out"
-                      control={<Radio />}
-                      label="Hide questions in your ignored tags"
+            {open && (
+              <ClickAwayListener onClickAway={() => setOpen(false)}>
+                <Box>
+                  <Box sx={{ display: "flex" }}>
+                    <Autocomplete
+                      onChange={handleChange}
+                      sx={{ flexGrow: 1 }}
+                      options={Object.keys(tags).filter(
+                        (tagId) => !selectedTagIds.includes(tagId)
+                      )}
+                      getOptionLabel={(option) => tags[option].name}
+                      value={pendingTagId}
+                      renderInput={(params) => (
+                        <TextField {...params} autoFocus variant="outlined" />
+                      )}
                     />
-                    <FormControlLabel
-                      value="gray out"
-                      control={<Radio />}
-                      label="Gray out questions in your ignored tags"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </>
-            </>
-            {/* )}
-            </ClickAwayListener> */}
+                    <Button
+                      variant="contained"
+                      sx={{
+                        textTransform: "none",
+                        bgcolor: "dodgerBlue",
+                        color: "white",
+                      }}
+                      onClick={handleAdd}
+                    >
+                      Add
+                    </Button>
+                  </Box>
+                  <>
+                    {" "}
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        defaultValue="gray out"
+                        name="radio-buttons-group"
+                      >
+                        <FormControlLabel
+                          value="hide out"
+                          control={<Radio />}
+                          label="Hide questions in your ignored tags"
+                        />
+                        <FormControlLabel
+                          value="gray out"
+                          control={<Radio />}
+                          label="Gray out questions in your ignored tags"
+                        />
+                      </RadioGroup>
+                    </FormControl>
+                  </>
+                </Box>
+              </ClickAwayListener>
+            )}
           </>
         ) : (
           <>
