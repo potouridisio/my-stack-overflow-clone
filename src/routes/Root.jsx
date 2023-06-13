@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
@@ -91,7 +91,7 @@ export default function Root() {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton sx={{ p: 0 }}>
+          <IconButton component={Link} sx={{ p: 0 }} to="users/1/preferences">
             <Avatar>JD</Avatar>
           </IconButton>
         </Toolbar>

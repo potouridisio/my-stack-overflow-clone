@@ -6,6 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "./lib/theme";
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
+import Preferences from "./routes/Preferences";
 import Question, {
   action as questionAction,
   loader as questionLoader,
@@ -60,6 +61,10 @@ const router = createBrowserRouter([
             element: <Question />,
             loader: questionLoader,
             action: questionAction,
+          },
+          {
+            path: "users/:userId/preferences",
+            element: <Preferences />,
           },
         ],
       },
