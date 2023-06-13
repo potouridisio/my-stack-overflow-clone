@@ -2,7 +2,9 @@ import { Outlet, useNavigate } from "react-router-dom";
 
 import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
 import InputBase from "@mui/material/InputBase";
 import { styled, alpha } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
@@ -88,6 +90,10 @@ export default function Root() {
               placeholder="Search…"
             />
           </Search>
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton sx={{ p: 0 }}>
+            <Avatar>JD</Avatar>
+          </IconButton>
         </Toolbar>
       </AppBar>
 
