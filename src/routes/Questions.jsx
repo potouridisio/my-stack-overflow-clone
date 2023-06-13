@@ -13,6 +13,7 @@ import { create } from "zustand";
 
 import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -22,6 +23,7 @@ import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
+import { yellow } from "@mui/material/colors";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -44,7 +46,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import CustomFilters from "../components/CustomFilters";
-import WatchedTags from "../components/WatchedTags";
+import WatchedTags, { useWatchedTagsStore } from "../components/WatchedTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -156,6 +158,7 @@ export default function Questions() {
   const isSearch = Boolean(q);
   const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
+  const { watchedTagIds } = useWatchedTagsStore();
 
   useEffect(() => {
     if (inputRef.current && open) {
@@ -352,65 +355,79 @@ export default function Questions() {
 
       <Stack spacing={2}>
         {/* Question */}
-        {questions.map((question) => (
-          <Card key={question.id}>
-            <CardContent>
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ alignItems: "center", mb: 1.5 }}
-              >
-                <Typography color="text.secondary" sx={{ fontSize: 14 }}>
-                  {question.voteCount} vote
-                  {question.voteCount === 1 ? "" : "s"}
-                </Typography>
-                {question.answerCount > 0 ? (
-                  <Chip
-                    color="success"
-                    label={`${question.answerCount} answer${
-                      question.answerCount === 1 ? "" : "s"
-                    }`}
-                    variant="outlined"
-                  />
-                ) : (
+        {questions.map((question) => {
+          const isWatched = question.tagIds.some((tagId) =>
+            watchedTagIds.includes(tagId.toString())
+          );
+
+          return (
+            <Card
+              key={question.id}
+              sx={{ bgcolor: isWatched ? yellow[50] : undefined }}
+            >
+              <CardContent>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ alignItems: "center", mb: 1.5 }}
+                >
                   <Typography color="text.secondary" sx={{ fontSize: 14 }}>
-                    {question.answerCount} answer
-                    {question.answerCount === 1 ? "" : "s"}
+                    {question.voteCount} vote
+                    {question.voteCount === 1 ? "" : "s"}
                   </Typography>
-                )}
-              </Stack>
+                  {question.answerCount > 0 ? (
+                    <Chip
+                      color="success"
+                      label={`${question.answerCount} answer${
+                        question.answerCount === 1 ? "" : "s"
+                      }`}
+                      variant="outlined"
+                    />
+                  ) : (
+                    <Typography color="text.secondary" sx={{ fontSize: 14 }}>
+                      {question.answerCount} answer
+                      {question.answerCount === 1 ? "" : "s"}
+                    </Typography>
+                  )}
+                </Stack>
 
-              <Link
-                component={RouterLink}
-                sx={{ display: "block", mb: 1.5 }}
-                to={`/questions/${question.id}`}
-                variant="h5"
-              >
-                {question.title}
-              </Link>
+                <Link
+                  component={RouterLink}
+                  sx={{ display: "block", mb: 1.5 }}
+                  to={`/questions/${question.id}`}
+                  variant="h5"
+                >
+                  {question.title}
+                </Link>
 
-              <Stack direction="row" spacing={1}>
-                {question.tagIds.map((tagId) => (
-                  <Chip
-                    key={tagId}
-                    label={tags[tagId].name}
-                    onClick={() => {}}
-                  />
-                ))}
-              </Stack>
-            </CardContent>
+                <Stack direction="row" spacing={1}>
+                  {question.tagIds.map((tagId) => {
+                    const isWatched = watchedTagIds.includes(tagId.toString());
 
-            <CardActions sx={{ justifyContent: "flex-end" }}>
-              <Typography variant="body2">
-                <Link href="#" onClick={(event) => event.preventDefault()}>
-                  {users[question.userId].name}
-                </Link>{" "}
-                {users[question.userId].reputation} asked{" "}
-                {convertToRelativeDate(question.createdAt)}
-              </Typography>
-            </CardActions>
-          </Card>
-        ))}
+                    return (
+                      <Chip
+                        icon={isWatched ? <VisibilityIcon /> : undefined}
+                        key={tagId}
+                        label={tags[tagId].name}
+                        onClick={() => {}}
+                      />
+                    );
+                  })}
+                </Stack>
+              </CardContent>
+
+              <CardActions sx={{ justifyContent: "flex-end" }}>
+                <Typography variant="body2">
+                  <Link href="#" onClick={(event) => event.preventDefault()}>
+                    {users[question.userId].name}
+                  </Link>{" "}
+                  {users[question.userId].reputation} asked{" "}
+                  {convertToRelativeDate(question.createdAt)}
+                </Typography>
+              </CardActions>
+            </Card>
+          );
+        })}
       </Stack>
     </Box>
   );
