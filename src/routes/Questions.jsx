@@ -508,7 +508,6 @@ export default function Questions() {
           ))}
         </Stack>
       </Box>
-
       <Popover
         disablePortal
         open={Boolean(anchorEl)}
