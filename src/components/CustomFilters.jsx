@@ -22,7 +22,6 @@ export default function CustomFilters({ filters }) {
   const toggle = useFilterStore((state) => state.toggle);
   const [searchParams] = useSearchParams();
   const uqlId = searchParams.get("uqlId");
-
   const [customFilters, setCustomFilters] = useState(filters);
   const [confirmDeletion, setConfirmDeletion] = useState(false);
 
