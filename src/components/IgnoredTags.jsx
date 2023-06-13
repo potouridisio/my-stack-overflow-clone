@@ -18,37 +18,35 @@ import Typography from "@mui/material/Typography";
 import { create } from "zustand";
 import { CardActions } from "@mui/material";
 
-/*const useSelectedIgnoredTags = create((set) => ({
-  selectedIgnoredTags: [],
-  setSelectedIgnoredTags: (selectedIgnoredTags) => set({ selectedIgnoredTags }),
-}));*/
+export const useSelectedIgnoredTagIds = create((set) => ({
+  selectedIgnoredTagIds: [],
+  setSelectedIgnoredTagIds: (selectedIgnoredTagIds) =>
+    set({ selectedIgnoredTagIds }),
+}));
 
-const useSelectedRadioButton = create((set) => ({
+export const useSelectedRadioButton = create((set) => ({
   selectedRadioButton: "",
   setSelectedRadioButton: (selectedRadioButton) => set({ selectedRadioButton }),
 }));
 
 export default function IgnoredTags({ tags }) {
   const [isIgnoredTag, setIsIgnoredTag] = useState(false);
-  /*const { selectedIgnoredTags, setSelectedIgnoredTags } =
-    useSelectedIgnoredTags();*/
+  const { selectedIgnoredTagIds, setSelectedIgnoredTagIds } =
+    useSelectedIgnoredTagIds();
   const { selectedRadioButton, setSelectedRadioButton } =
     useSelectedRadioButton();
-
   const [pendingTag, setPendingTag] = useState(null);
 
-  const [selectedTags, setSelectedTags] = useState([]);
-
   function handleAddTag() {
-    if (pendingTag && !selectedTags.includes(pendingTag)) {
-      setSelectedTags([...selectedTags, pendingTag]);
+    if (pendingTag && !selectedIgnoredTagIds.includes(pendingTag)) {
+      setSelectedIgnoredTagIds([...selectedIgnoredTagIds, pendingTag]);
       setPendingTag(null);
     }
   }
 
   function handleDeleteTag(tagId) {
-    setSelectedTags(
-      selectedTags.filter((selectedTag) => selectedTag !== tagId)
+    setSelectedIgnoredTagIds(
+      selectedIgnoredTagIds.filter((selectedTag) => selectedTag !== tagId)
     );
   }
 
@@ -65,7 +63,7 @@ export default function IgnoredTags({ tags }) {
           }}
         >
           <CardHeader title="Ignored Tags" />
-          {!isIgnoredTag && selectedTags.length > 0 ? (
+          {!isIgnoredTag && selectedIgnoredTagIds.length > 0 ? (
             <Button
               sx={{ textTransform: "none" }}
               onClick={() => setIsIgnoredTag(true)}
@@ -78,14 +76,14 @@ export default function IgnoredTags({ tags }) {
         </Box>
 
         <CardContent>
-          {selectedTags.length > 0 ? (
+          {selectedIgnoredTagIds.length > 0 ? (
             <Stack
               direction="row"
               fullWidth
               spacing={1}
               sx={{ mb: 1.5, flexGrow: 1 }}
             >
-              {selectedTags.map((selectedTag) => (
+              {selectedIgnoredTagIds.map((selectedTag) => (
                 <Chip
                   key={selectedTag}
                   label={tags[selectedTag].name}
@@ -147,10 +145,10 @@ export default function IgnoredTags({ tags }) {
           )}
         </CardContent>
 
-        {!isIgnoredTag && selectedTags.length === 0 ? (
+        {!isIgnoredTag && selectedIgnoredTagIds.length === 0 ? (
           <CardActions sx={{ display: "flex", justifyContent: "center" }}>
             <Button
-              sx={{ textTransform: "none" }}
+              sx={{ textTransform: "none", mb: 1 }}
               variant="contained"
               onClick={() => setIsIgnoredTag(true)}
             >

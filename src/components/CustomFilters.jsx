@@ -52,7 +52,10 @@ export default function CustomFilters({ filters }) {
 
   return (
     <Card sx={{ flexGrow: 1 }}>
-      <CardHeader title="Custom Filters" />
+      <CardHeader
+        title="Custom Filters"
+        sx={{ bgcolor: "#f8f9f9", borderBottom: 1, borderColor: "grey.300" }}
+      />
 
       {customFilters.length > 0 ? (
         <List>
@@ -63,10 +66,11 @@ export default function CustomFilters({ filters }) {
                 disablePadding
                 key={filter.id}
                 onClick={() =>
-                  navigate(`/?sort=${filter.sortId}
-                            &filters=${filter.filterIds}
-                            &tagWith=${filter.tagModeId}
-                            &uqlId=${filter.id}`)
+                  navigate(
+                    decodeURIComponent(
+                      `/?sort=${filter.sortId}&filters=${filter.filterIdsCc}&tagWith=${filter.tagModeId}&uqlId=${filter.id}`
+                    )
+                  )
                 }
                 secondaryAction={
                   isSelected ? (

@@ -56,7 +56,9 @@ import WatchedTags, {
   useSelectedWatchedTagIds,
 } from "../components/WatchedTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
-import IgnoredTags from "../components/IgnoredTags";
+import IgnoredTags, {
+  useSelectedIgnoredTagIds,
+} from "../components/IgnoredTags";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ request }) {
@@ -114,7 +116,6 @@ function validateFilterName(name) {
 // eslint-disable-next-line react-refresh/only-export-components
 export async function action({ request }) {
   const formData = await request.formData();
-  console.log(formData);
 
   const newFilter = Object.fromEntries(formData);
 
@@ -135,6 +136,7 @@ export async function action({ request }) {
     },
     body: JSON.stringify(newFilter),
   }).then((res) => res.json());
+  //.then(window.location.reload());
 
   if (filter.error) {
     return {
@@ -168,6 +170,8 @@ export default function Questions() {
   const { expanded, toggle } = useFilterStore();
   const { selectedWatchedTagIds, setSelectedWatchedTagIds } =
     useSelectedWatchedTagIds();
+  const { selectedIgnoredTagIds, setSelectedIgnoredTagIds } =
+    useSelectedIgnoredTagIds();
   const { questions, tags, users } = useLoaderData();
   const navigation = useNavigation();
   const inputRef = useRef(null);
@@ -178,25 +182,24 @@ export default function Questions() {
   const [sortId, setSortId] = useState("");
   const [tagModeId, setTagModeId] = useState("");
   const [open, setOpen] = useState(false);
-  //const revalidator = useRevalidator();
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const filters = searchParams.get("filters");
-  const sort = searchParams.get("sort");
-  const tagWith = searchParams.get("tagWith");
+  const urlFilters = searchParams.get("filters");
+  const urlSort = searchParams.get("sort");
+  const urlTagWith = searchParams.get("tagWith");
 
   useEffect(() => {
-    if (filters) {
-      setFilterIds(filters);
+    if (urlFilters) {
+      setFilterIds(urlFilters);
     }
-    if (sort) {
-      setSortId(sort);
+    if (urlSort) {
+      setSortId(urlSort);
     }
-    if (tagWith) {
-      setTagModeId(tagWith);
+    if (urlTagWith) {
+      setTagModeId(urlTagWith);
     }
-  }, [filters, sort, tagWith]);
+  }, [urlFilters, urlSort, urlTagWith]);
 
   useEffect(() => {
     if (inputRef.current && open) {
@@ -489,72 +492,6 @@ export default function Questions() {
                       }
                     />
                   ))}
-
-                  <Popover
-                    disablePortal
-                    id="mouse-over-popover"
-                    sx={{
-                      pointerEvents: "none",
-                    }}
-                    open={Boolean(anchorEl)}
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "center",
-                    }}
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "center",
-                    }}
-                    onClose={handlePopoverClose}
-                    disableRestoreFocus
-                  >
-                    <Card>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <CardHeader title="15.7k watchers 21.9k questions"></CardHeader>
-                        <RssFeedIcon />
-                      </Box>
-
-                      <CardContent>
-                        <Typography>
-                          {anchorEl
-                            ? tags[
-                                Object.values(tags).find(
-                                  (tag) => tag.name === anchorEl.textContent
-                                ).id
-                              ].description
-                            : ""}
-                        </Typography>
-                        <RouterLink>View Tag</RouterLink>
-                      </CardContent>
-
-                      <CardActions
-                        sx={{ display: "flex", justifyContent: "space-evenly" }}
-                      >
-                        <Button
-                          sx={{ textTransform: "none" }}
-                          variant="outlined"
-                          size="medium"
-                          startIcon={<VisibilityIcon />}
-                        >
-                          Watch a tag
-                        </Button>
-                        <Button
-                          sx={{ textTransform: "none" }}
-                          size="medium"
-                          variant="outlined"
-                          startIcon={<DoDisturbIcon />}
-                        >
-                          Ignored tag
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Popover>
                 </Stack>
               </CardContent>
 
@@ -571,6 +508,97 @@ export default function Questions() {
           ))}
         </Stack>
       </Box>
+
+      <Popover
+        disablePortal
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Card
+          sx={{
+            fontSize: 14,
+            p: 1,
+            width: "50ch",
+            display: "flex",
+            flexDirection: "column",
+            gap: 0,
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <CardHeader title="15.7k watchers 21.9k questions"></CardHeader>
+            <RssFeedIcon />
+          </Box>
+
+          <CardContent>
+            <Typography>
+              {anchorEl
+                ? tags[
+                    Object.values(tags).find(
+                      (tag) => tag.name === anchorEl.textContent
+                    ).id
+                  ].description
+                : ""}
+            </Typography>
+            <RouterLink>View Tag</RouterLink>
+          </CardContent>
+
+          <CardActions
+            sx={{
+              fontSize: 22,
+              display: "flex",
+              justifyContent: "space-evenly",
+            }}
+          >
+            <Button
+              sx={{ textTransform: "none" }}
+              variant="outlined"
+              size="medium"
+              startIcon={<VisibilityIcon />}
+              onClick={() =>
+                setSelectedWatchedTagIds([
+                  ...selectedWatchedTagIds,
+                  Object.values(tags).find(
+                    (tag) => tag.name === anchorEl.textContent
+                  ).id,
+                ])
+              }
+            >
+              Watch a tag
+            </Button>
+            <Button
+              sx={{ textTransform: "none" }}
+              size="medium"
+              variant="outlined"
+              startIcon={<DoDisturbIcon />}
+              onClick={() =>
+                setSelectedIgnoredTagIds([
+                  ...selectedIgnoredTagIds,
+                  Object.values(tags).find(
+                    (tag) => tag.name === anchorEl.textContent
+                  ).id,
+                ])
+              }
+            >
+              Ignored tag
+            </Button>
+          </CardActions>
+        </Card>
+      </Popover>
     </>
   );
 }
