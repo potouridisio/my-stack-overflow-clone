@@ -1,3 +1,5 @@
+import { create } from "zustand";
+
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -9,7 +11,15 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const usePreferencesStore = create((set) => ({
+  colorMode: "light",
+  setColorMode: (colorMode) => set({ colorMode }),
+}));
+
 export default function Preferences() {
+  const { colorMode, setColorMode } = usePreferencesStore();
+
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       <Toolbar />
@@ -30,7 +40,11 @@ export default function Preferences() {
         <CardContent>
           <FormControl component="fieldset">
             <FormLabel component="legend">Theme</FormLabel>
-            <RadioGroup defaultValue="light" name="theme">
+            <RadioGroup
+              name="theme"
+              onChange={(_event, value) => setColorMode(value)}
+              value={colorMode}
+            >
               {[
                 ["Light", "light"],
                 ["Dark", "dark"],

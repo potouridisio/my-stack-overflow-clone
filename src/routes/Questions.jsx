@@ -23,7 +23,7 @@ import CardContent from "@mui/material/CardContent";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
-import { yellow } from "@mui/material/colors";
+import { grey, yellow } from "@mui/material/colors";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -363,7 +363,14 @@ export default function Questions() {
           return (
             <Card
               key={question.id}
-              sx={{ bgcolor: isWatched ? yellow[50] : undefined }}
+              sx={{
+                bgcolor: (theme) =>
+                  isWatched
+                    ? theme.palette.mode === "light"
+                      ? yellow[50]
+                      : grey[900]
+                    : undefined,
+              }}
             >
               <CardContent>
                 <Stack
