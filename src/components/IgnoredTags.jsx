@@ -74,7 +74,6 @@ export default function IgnoredTags({ tags }) {
             ""
           )}
         </Box>
-
         <CardContent>
           {selectedIgnoredTagIds.length > 0 ? (
             <Stack
