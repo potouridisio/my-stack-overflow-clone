@@ -390,6 +390,59 @@ app.put("/users/:userId/filters/:filterId", (req, res) => {
   );
 });
 
+// Get user preferences for a specific user
+app.get("/users/:userId/preferences", (req, res) => {
+  const userId = req.params.userId; // Extract the userId from the URL parameter
+
+  // Fetch the user preferences from the database
+  db.get(
+    "SELECT theme, hideLeftNavigation FROM user_preferences WHERE userId = ?",
+    [userId],
+    (err, row) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+      } else if (row) {
+        const preferences = {
+          theme: row.theme,
+          hideLeftNavigation: row.hideLeftNavigation === 1,
+        };
+        res.json(preferences);
+      } else {
+        res.status(404).send("User preferences not found");
+      }
+    }
+  );
+});
+
+// Update user preferences for a specific user
+app.put("/users/:userId/preferences", (req, res) => {
+  const userId = req.params.userId; // Extract the userId from the URL parameter
+  const { theme, hideLeftNavigation } = req.body; // Assuming theme and hideLeftNavigation are provided in the request body
+
+  const updatedAt = new Date().toISOString();
+
+  // Update the user preferences in the database
+  db.run(
+    "UPDATE user_preferences SET theme = ?, hideLeftNavigation = ?, updatedAt = ? WHERE userId = ?",
+    [theme, hideLeftNavigation, updatedAt, userId],
+    function (err) {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        // Check if any rows were affected
+        if (this.changes === 0) {
+          // No matching user preferences found
+          res.status(404).json({ error: "User preferences not found" });
+        } else {
+          res.sendStatus(204);
+        }
+      }
+    }
+  );
+});
+
 const PORT = 3000; // Choose the desired port for your server
 
 app.listen(PORT, () => {

@@ -81,6 +81,17 @@ db.serialize(() => {
     )`
   );
 
+  // Create the user_preferences table
+  db.run(`
+    CREATE TABLE IF NOT EXISTS user_preferences (
+      hideLeftNavigation BOOLEAN NOT NULL DEFAULT 0,
+      id INTEGER PRIMARY KEY,
+      theme INTEGER NOT NULL DEFAULT 0,
+      userId INTEGER NOT NULL,
+      FOREIGN KEY (userId) REFERENCES users(id)
+    );
+ `);
+
   db.run(
     `CREATE TABLE users_tags (
       id INTEGER PRIMARY KEY,
@@ -164,6 +175,11 @@ db.serialize(() => {
   users.forEach((user) => {
     insertUsers.run(user.id, user.location, user.name, user.reputation);
   });
+
+  db.run(`
+   INSERT INTO user_preferences (userId) 
+   SELECT id FROM users
+ `);
 
   usersTags.forEach((userTag) => {
     insertUsersTags.run(userTag.id, userTag.tagId, userTag.userId);
