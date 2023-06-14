@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLoaderData, useNavigate } from "react-router-dom";
 
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
@@ -10,7 +10,11 @@ import InputBase from "@mui/material/InputBase";
 import { styled, alpha } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { usePreferencesStore } from "./Preferences";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export function loader() {
+  return fetch("/api/users/1/preferences");
+}
 
 const Search = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
@@ -53,10 +57,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Root() {
+  const userPreferences = useLoaderData();
   const navigate = useNavigate();
-  const hideLeftNavigation = usePreferencesStore(
-    (state) => state.hideLeftNavigation
-  );
 
   const handleKeyDown = (event) => {
     if (event.keyCode === 13) {
@@ -72,7 +74,7 @@ export default function Root() {
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar>
-          {hideLeftNavigation ? (
+          {userPreferences.hideLeftNavigation ? (
             <IconButton
               color="inherit"
               edge="start"
@@ -112,7 +114,7 @@ export default function Root() {
         </Toolbar>
       </AppBar>
 
-      <Outlet />
+      <Outlet context={userPreferences} />
     </Box>
   );
 }
