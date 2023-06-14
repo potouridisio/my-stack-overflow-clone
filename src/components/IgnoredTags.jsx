@@ -116,8 +116,7 @@ export default function IgnoredTags({ tags }) {
               <RadioGroup
                 sx={{ mt: 2 }}
                 name="Ignored Tags Choices"
-                value={selectedRadioButton}
-                onChange={(e) => setSelectedRadioButton(e.target.value)}
+                defaultValue="Gray out questions in your ignored tags"
               >
                 <FormControlLabel
                   value="Hide questions in your ignored tags"
@@ -127,6 +126,7 @@ export default function IgnoredTags({ tags }) {
                     </Typography>
                   }
                   control={<Radio />}
+                  onChange={(e) => setSelectedRadioButton(e.target.value)}
                 />
                 <FormControlLabel
                   value="Gray out questions in your ignored tags"
@@ -136,6 +136,7 @@ export default function IgnoredTags({ tags }) {
                     </Typography>
                   }
                   control={<Radio />}
+                  onChange={(e) => setSelectedRadioButton(e.target.value)}
                 />
               </RadioGroup>
             </>
