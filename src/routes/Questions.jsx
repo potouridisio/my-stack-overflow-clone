@@ -163,7 +163,6 @@ export default function Questions() {
   const [open, setOpen] = useState(false);
   const { ignoredTagIds } = useIgnoredTagIds();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [hoveredTags, setHoveredTags] = useState([]);
 
   // useMemo(() => {
 
@@ -204,8 +203,6 @@ export default function Questions() {
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
-
-  const openPopover = Boolean(anchorEl);
 
   return (
     <>
@@ -448,26 +445,48 @@ export default function Questions() {
           ))}
         </Stack>
       </Box>
-      <Popover
-        id="mouse-over-popover"
-        sx={{
-          pointerEvents: "none",
-        }}
-        open={openPopover}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "center",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "center",
-        }}
-        onClose={handlePopoverClose}
-        disableRestoreFocus
-      >
-        <Typography sx={{ width: "25ch" }}>{tagDescr}</Typography>
-      </Popover>
+
+      {anchorEl && (
+        <Popover
+          id="mouse-over-popover"
+          sx={{
+            pointerEvents: "none",
+          }}
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          onClose={handlePopoverClose}
+          disableRestoreFocus
+          PaperProps={{ sx: { p: 2 } }}
+        >
+          <Typography sx={{ width: "25ch", mb: 1 }}>{tagDescr}</Typography>
+          <Box sx={{ display: "flex", gap: "1rem" }}>
+            <Button
+              variant="outlined"
+              sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
+              // onClick={() => console.log("watched tag")}
+            >
+              {" "}
+              Watch tag
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
+              // onClick={() => console.log("ignored tag")}
+            >
+              {" "}
+              Ignore tag
+            </Button>
+          </Box>
+        </Popover>
+      )}
     </>
   );
 }
