@@ -2,10 +2,7 @@ import { create } from "zustand";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import FormControl from "@mui/material/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import FormLabel from "@mui/material/FormLabel";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
@@ -45,12 +42,16 @@ export default function Preferences() {
       </Toolbar>
 
       <Card>
-        <CardContent>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Theme</FormLabel>
+        <List disablePadding>
+          <ListItem divider>
+            <ListItemText
+              id="theme-radio-buttons-group-label"
+              primary="Theme"
+            />
             <RadioGroup
-              name="theme"
+              aria-aria-labelledby="theme-radio-buttons-group-label"
               onChange={(_event, value) => setColorMode(value)}
+              row
               value={colorMode}
             >
               {[
@@ -65,22 +66,19 @@ export default function Preferences() {
                 />
               ))}
             </RadioGroup>
-          </FormControl>
-
-          <List>
-            <ListItem>
-              <ListItemText
-                primary="Hide left navigation"
-                secondary="When you flip this switch, the left navigation will no longer be pinned to the left of the page on Q&A sites."
-              />
-              <Switch
-                edge="end"
-                onChange={toggleLeftNavigation}
-                value={hideLeftNavigation}
-              />
-            </ListItem>
-          </List>
-        </CardContent>
+          </ListItem>
+          <ListItem>
+            <ListItemText
+              primary="Hide left navigation"
+              secondary="When you flip this switch, the left navigation will no longer be pinned to the left of the page on Q&A sites."
+            />
+            <Switch
+              edge="end"
+              onChange={toggleLeftNavigation}
+              value={hideLeftNavigation}
+            />
+          </ListItem>
+        </List>
       </Card>
     </Box>
   );
