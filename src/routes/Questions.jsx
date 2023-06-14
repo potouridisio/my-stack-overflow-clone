@@ -59,6 +59,7 @@ import WatchedTags, {
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 import IgnoredTags, {
   useSelectedIgnoredTagIds,
+  useSelectedRadioButton,
 } from "../components/IgnoredTags";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -118,6 +119,10 @@ function validateFilterName(name) {
 export async function action({ request }) {
   const formData = await request.formData();
 
+  const filters = formData.get("filterIds");
+  const sortBy = formData.get("sortId");
+  const taggedWith = formData.get("tagModeId");
+
   const newFilter = Object.fromEntries(formData);
 
   const fieldErrors = {
@@ -147,8 +152,12 @@ export async function action({ request }) {
     };
   }
 
+  //window.location.reload();
+
   return redirect(
-    `/?sort=${filter.sortId}&filters=${filter.filters}&tagWith=${filter.tagModeId}&uqlId=${filter.id}`
+    decodeURIComponent(
+      `/?sort=${sortBy}&filters=${filters}&tagWith=${taggedWith}&uqlId=${filter.id}`
+    )
   );
 }
 
@@ -173,6 +182,8 @@ export default function Questions() {
     useSelectedWatchedTagIds();
   const { selectedIgnoredTagIds, setSelectedIgnoredTagIds } =
     useSelectedIgnoredTagIds();
+  const { selectedRadioButton, setSelectedRadioButton } =
+    useSelectedRadioButton();
   const { questions, tags, users } = useLoaderData();
   const navigation = useNavigation();
   const inputRef = useRef(null);
@@ -411,6 +422,7 @@ export default function Questions() {
                       form="filter-form"
                       onClick={(e) => {
                         e.stopPropagation();
+                        window.location.reload();
                         handleClose;
                         toggle();
                       }}
@@ -440,7 +452,21 @@ export default function Questions() {
                 )
                   ? "#fdf7e2"
                   : "",
+                opacity:
+                  question.tagIds.some((tagId) =>
+                    selectedIgnoredTagIds.includes(tagId.toString())
+                  ) &&
+                  selectedRadioButton ===
+                    "Gray out questions in your ignored tags"
+                    ? 0.4
+                    : "",
               }}
+              hidden={
+                question.tagIds.some((tagId) =>
+                  selectedIgnoredTagIds.includes(tagId.toString())
+                ) &&
+                selectedRadioButton === "Hide questions in your ignored tags"
+              }
             >
               <CardContent>
                 <Stack
@@ -564,7 +590,24 @@ export default function Questions() {
               justifyContent: "space-evenly",
             }}
           >
-            {selectedWatchedTagIds.some(
+            <Button
+              sx={{ textTransform: "none" }}
+              variant="outlined"
+              size="medium"
+              startIcon={<VisibilityIcon />}
+              onClick={() =>
+                setSelectedWatchedTagIds([
+                  ...selectedWatchedTagIds,
+                  Object.values(tags).find(
+                    (tag) => tag.name === anchorEl.textContent
+                  ).id,
+                ])
+              }
+            >
+              Watch a tag
+            </Button>
+
+            {/*{selectedWatchedTagIds.some(
               (tagId) =>
                 tagId ===
                 Object.values(tags).find(
@@ -607,7 +650,7 @@ export default function Questions() {
               >
                 Watch a tag
               </Button>
-            )}
+              )}*/}
 
             <Button
               sx={{ textTransform: "none" }}
