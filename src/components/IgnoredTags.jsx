@@ -29,7 +29,7 @@ export default function IgnoredTags({ tags }) {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingTagId, setPendingTagId] = useState(null);
   const { ignoredTagIds, setIgnoredTagIds } = useIgnoredTagIds();
-  const [open, setOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true);
 
   function handleChange(_event, value) {
     setPendingTagId(value);
@@ -48,13 +48,13 @@ export default function IgnoredTags({ tags }) {
         sx={{ display: "flex" }}
         title="Ignored Tags"
         action={
-          !open && (
+          !isOpen && (
             <Button
               variant="text"
               sx={{
                 textTransform: "none",
               }}
-              onClick={() => setOpen(true)}
+              onClick={() => setIsOpen(true)}
             >
               edit
             </Button>
@@ -72,12 +72,15 @@ export default function IgnoredTags({ tags }) {
                     <Chip
                       key={ignoredTagId}
                       label={tags[ignoredTagId].name}
-                      onDelete={() =>
-                        setIgnoredTagIds(
-                          ignoredTagIds.filter(
-                            (tagId) => tagId !== ignoredTagId
-                          )
-                        )
+                      onDelete={
+                        isOpen
+                          ? () =>
+                              setIgnoredTagIds(
+                                ignoredTagIds.filter(
+                                  (tagId) => tagId !== ignoredTagId
+                                )
+                              )
+                          : null
                       }
                       onClick={() => {}}
                     />
@@ -85,8 +88,8 @@ export default function IgnoredTags({ tags }) {
                 </Stack>
               ) : null}
             </>
-            {open && (
-              <ClickAwayListener onClickAway={() => setOpen(false)}>
+            {isOpen && (
+              <ClickAwayListener onClickAway={() => setIsOpen(false)}>
                 <Box>
                   <Box sx={{ display: "flex" }}>
                     <Autocomplete
