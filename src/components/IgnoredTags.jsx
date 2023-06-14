@@ -20,15 +20,15 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 // import Typography from "@mui/material/Typography";
 
-export const useSelectedTagIds = create((set) => ({
-  selectedTagIds: [],
-  setSelectedTagIds: (selectedTagIds) => set({ selectedTagIds }),
+export const useIgnoredTagIds = create((set) => ({
+  ignoredTagIds: [],
+  setIgnoredTagIds: (ignoredTagIds) => set({ ignoredTagIds }),
 }));
 
 export default function IgnoredTags({ tags }) {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingTagId, setPendingTagId] = useState(null);
-  const { selectedTagIds, setSelectedTagIds } = useSelectedTagIds();
+  const { ignoredTagIds, setIgnoredTagIds } = useIgnoredTagIds();
   const [open, setOpen] = useState(true);
 
   function handleChange(_event, value) {
@@ -37,7 +37,7 @@ export default function IgnoredTags({ tags }) {
 
   function handleAdd() {
     if (pendingTagId) {
-      setSelectedTagIds([...selectedTagIds, pendingTagId]);
+      setIgnoredTagIds([...ignoredTagIds, pendingTagId]);
       setPendingTagId(null);
     }
   }
@@ -66,16 +66,16 @@ export default function IgnoredTags({ tags }) {
         {isEditing ? (
           <>
             <>
-              {selectedTagIds.length > 0 ? (
+              {ignoredTagIds.length > 0 ? (
                 <Stack direction="row" spacing={1} mb={1.5}>
-                  {selectedTagIds.map((selectedTagId) => (
+                  {ignoredTagIds.map((ignoredTagId) => (
                     <Chip
-                      key={selectedTagId}
-                      label={tags[selectedTagId].name}
+                      key={ignoredTagId}
+                      label={tags[ignoredTagId].name}
                       onDelete={() =>
-                        setSelectedTagIds(
-                          selectedTagIds.filter(
-                            (tagId) => tagId !== selectedTagId
+                        setIgnoredTagIds(
+                          ignoredTagIds.filter(
+                            (tagId) => tagId !== ignoredTagId
                           )
                         )
                       }
@@ -93,7 +93,7 @@ export default function IgnoredTags({ tags }) {
                       onChange={handleChange}
                       sx={{ flexGrow: 1 }}
                       options={Object.keys(tags).filter(
-                        (tagId) => !selectedTagIds.includes(tagId)
+                        (tagId) => !ignoredTagIds.includes(tagId)
                       )}
                       getOptionLabel={(option) => tags[option].name}
                       value={pendingTagId}

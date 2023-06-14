@@ -46,7 +46,7 @@ import Typography from "@mui/material/Typography";
 
 import CustomFilters from "../components/CustomFilters";
 import WatchedTags from "../components/WatchedTags";
-import IgnoredTags, { useSelectedTagIds } from "../components/IgnoredTags";
+import IgnoredTags, { useIgnoredTagIds } from "../components/IgnoredTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -161,13 +161,9 @@ export default function Questions() {
   const isSearch = Boolean(q);
   const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
-  const { selectedTagIds } = useSelectedTagIds();
+  // const { ignoredTagIds } = useIgnoredTagIds();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [hoveredTags, setHoveredTags] = useState(null);
-
-  const tagsDescription = useEffect(() => {
-    selectedTagIds;
-  }, [selectedTagIds]);
+  // const [hoveredTags, setHoveredTags] = useState(null);
 
   useEffect(() => {
     if (inputRef.current && open) {
@@ -461,7 +457,7 @@ export default function Questions() {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography>{tagsDescription}</Typography>
+        <Typography>Tag Description</Typography>
       </Popover>
     </>
   );
