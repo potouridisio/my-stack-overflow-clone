@@ -79,6 +79,7 @@ export default function IgnoredTags({ tags }) {
                           )
                         )
                       }
+                      onClick={() => {}}
                     />
                   ))}
                 </Stack>

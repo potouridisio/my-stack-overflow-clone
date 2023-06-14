@@ -35,6 +35,7 @@ import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Paper from "@mui/material/Paper";
+import Popover from "@mui/material/Popover";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
@@ -161,10 +162,10 @@ export default function Questions() {
   const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
   const { selectedTagIds } = useSelectedTagIds();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [hoveredTags, setHoveredTags] = useState(null);
 
-  console.log(selectedTagIds);
-
-  useEffect(() => {
+  const tagsDescription = useEffect(() => {
     selectedTagIds;
   }, [selectedTagIds]);
 
@@ -190,239 +191,278 @@ export default function Questions() {
     }
   };
 
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+    console.log(anchorEl);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const openPopover = Boolean(anchorEl);
+
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <Toolbar />
+    <>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
 
-      <Toolbar disableGutters>
-        <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
-          {isSearch ? "Search Results" : "All Questions"}
-        </Typography>
+        <Toolbar disableGutters>
+          <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
+            {isSearch ? "Search Results" : "All Questions"}
+          </Typography>
 
-        <Button component={RouterLink} to="/questions/ask" variant="contained">
-          Ask Question
-        </Button>
-      </Toolbar>
-
-      <Toolbar disableGutters>
-        <Typography component="div" sx={{ flexGrow: 1 }} variant="subtitle1">
-          {questions.length} {isSearch ? "result" : "question"}
-          {questions.length === 1 ? "" : "s"}
-        </Typography>
-
-        {!isSearch ? (
-          <ToggleButton
-            color="primary"
-            onChange={toggle}
-            selected={expanded}
-            size="small"
-            value="filter"
+          <Button
+            component={RouterLink}
+            to="/questions/ask"
+            variant="contained"
           >
-            <FilterListIcon fontSize="small" sx={{ mr: 0.5 }} />
-            Filter
-          </ToggleButton>
-        ) : null}
-      </Toolbar>
+            Ask Question
+          </Button>
+        </Toolbar>
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Card sx={{ mb: 2 }}>
-          <Form method="post">
-            <CardContent>
-              <Box sx={{ display: "flex" }}>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Filter by</FormLabel>
-                  <FormGroup>
-                    {[
-                      ["No answers", "NoAnswers"],
-                      ["No accepted answer", "NoAcceptedAnswer"],
-                      ["Has bounty", "Bounty"],
-                    ].map(([label, value]) => (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={filterIds.includes(value)}
-                            onChange={() => handleToggleFilterId(value)}
-                            value={value}
-                          />
-                        }
-                        key={value}
-                        label={label}
-                      />
-                    ))}
-                  </FormGroup>
-                </FormControl>
+        <Toolbar disableGutters>
+          <Typography component="div" sx={{ flexGrow: 1 }} variant="subtitle1">
+            {questions.length} {isSearch ? "result" : "question"}
+            {questions.length === 1 ? "" : "s"}
+          </Typography>
 
-                <input name="filterIds" type="hidden" value={filterIds} />
+          {!isSearch ? (
+            <ToggleButton
+              color="primary"
+              onChange={toggle}
+              selected={expanded}
+              size="small"
+              value="filter"
+            >
+              <FilterListIcon fontSize="small" sx={{ mr: 0.5 }} />
+              Filter
+            </ToggleButton>
+          ) : null}
+        </Toolbar>
 
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Sorted by</FormLabel>
-                  <RadioGroup defaultValue="Newest" name="sortId">
-                    {[
-                      ["Newest", "Newest"],
-                      ["Recent activity", "RecentActivity"],
-                      ["Highest score", "MostVotes"],
-                      ["Most frequent", "MostFrequent"],
-                      ["Bounty ending soon", "BountyEndingSoon"],
-                    ].map(([label, value]) => (
-                      <FormControlLabel
-                        control={<Radio />}
-                        key={value}
-                        label={label}
-                        value={value}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Card sx={{ mb: 2 }}>
+            <Form method="post">
+              <CardContent>
+                <Box sx={{ display: "flex" }}>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Filter by</FormLabel>
+                    <FormGroup>
+                      {[
+                        ["No answers", "NoAnswers"],
+                        ["No accepted answer", "NoAcceptedAnswer"],
+                        ["Has bounty", "Bounty"],
+                      ].map(([label, value]) => (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={filterIds.includes(value)}
+                              onChange={() => handleToggleFilterId(value)}
+                              value={value}
+                            />
+                          }
+                          key={value}
+                          label={label}
+                        />
+                      ))}
+                    </FormGroup>
+                  </FormControl>
 
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Tagged with</FormLabel>
-                  <RadioGroup defaultValue="Specified" name="tagModeId">
-                    {[
-                      ["My watched tags", "Watched"],
-                      ["The following tags:", "Specified"],
-                    ].map(([label, value]) => (
-                      <FormControlLabel
-                        control={<Radio />}
-                        key={value}
-                        label={label}
-                        value={value}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              </Box>
-            </CardContent>
+                  <input name="filterIds" type="hidden" value={filterIds} />
 
-            <CardActions>
-              <Button form="filter-form" size="small" type="submit">
-                Apply filter
-              </Button>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Sorted by</FormLabel>
+                    <RadioGroup defaultValue="Newest" name="sortId">
+                      {[
+                        ["Newest", "Newest"],
+                        ["Recent activity", "RecentActivity"],
+                        ["Highest score", "MostVotes"],
+                        ["Most frequent", "MostFrequent"],
+                        ["Bounty ending soon", "BountyEndingSoon"],
+                      ].map(([label, value]) => (
+                        <FormControlLabel
+                          control={<Radio />}
+                          key={value}
+                          label={label}
+                          value={value}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
 
-              <Button onClick={handleClickOpen} size="small">
-                Save custom filter
-              </Button>
-              <Dialog
-                disablePortal
-                keepMounted
-                fullWidth
-                maxWidth="sm"
-                onClose={handleClose}
-                open={open}
-                PaperComponent={PaperComponent}
-              >
-                <DialogTitle
-                  id="draggable-dialog-title"
-                  style={{ cursor: "move" }}
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Tagged with</FormLabel>
+                    <RadioGroup defaultValue="Specified" name="tagModeId">
+                      {[
+                        ["My watched tags", "Watched"],
+                        ["The following tags:", "Specified"],
+                      ].map(([label, value]) => (
+                        <FormControlLabel
+                          control={<Radio />}
+                          key={value}
+                          label={label}
+                          value={value}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
+              </CardContent>
+
+              <CardActions>
+                <Button form="filter-form" size="small" type="submit">
+                  Apply filter
+                </Button>
+
+                <Button onClick={handleClickOpen} size="small">
+                  Save custom filter
+                </Button>
+                <Dialog
+                  disablePortal
+                  keepMounted
+                  fullWidth
+                  maxWidth="sm"
+                  onClose={handleClose}
+                  open={open}
+                  PaperComponent={PaperComponent}
                 >
-                  Create a custom filter
-                  <IconButton
-                    aria-label="close"
-                    onClick={handleClose}
-                    sx={{
-                      color: (theme) => theme.palette.grey[500],
-                      position: "absolute",
-                      right: 8,
-                      top: 8,
-                    }}
+                  <DialogTitle
+                    id="draggable-dialog-title"
+                    style={{ cursor: "move" }}
                   >
-                    <CloseIcon />
-                  </IconButton>
-                </DialogTitle>
+                    Create a custom filter
+                    <IconButton
+                      aria-label="close"
+                      onClick={handleClose}
+                      sx={{
+                        color: (theme) => theme.palette.grey[500],
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </DialogTitle>
 
-                <DialogContent>
-                  <TextField
-                    error={!!actionData?.fieldErrors?.name}
-                    fullWidth
-                    helperText={actionData?.fieldErrors?.name}
-                    inputRef={inputRef}
-                    label="Filter title"
-                    margin="dense"
-                    name="name"
-                    placeholder="Give your custom filter a title"
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>Cancel</Button>
-                  <LoadingButton
-                    loading={navigation.state === "submitting"}
-                    type="submit"
-                  >
-                    Save filter
-                  </LoadingButton>
-                </DialogActions>
-              </Dialog>
+                  <DialogContent>
+                    <TextField
+                      error={!!actionData?.fieldErrors?.name}
+                      fullWidth
+                      helperText={actionData?.fieldErrors?.name}
+                      inputRef={inputRef}
+                      label="Filter title"
+                      margin="dense"
+                      name="name"
+                      placeholder="Give your custom filter a title"
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <LoadingButton
+                      loading={navigation.state === "submitting"}
+                      type="submit"
+                    >
+                      Save filter
+                    </LoadingButton>
+                  </DialogActions>
+                </Dialog>
 
-              <Box sx={{ flexGrow: 1 }} />
-              <Button onClick={toggle} size="small">
-                Cancel
-              </Button>
-            </CardActions>
-          </Form>
-        </Card>
-      </Collapse>
-
-      <Stack spacing={2}>
-        {/* Question */}
-        {questions.map((question) => (
-          <Card key={question.id}>
-            <CardContent>
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{ alignItems: "center", mb: 1.5 }}
-              >
-                <Typography color="text.secondary" sx={{ fontSize: 14 }}>
-                  {question.voteCount} vote
-                  {question.voteCount === 1 ? "" : "s"}
-                </Typography>
-                {question.answerCount > 0 ? (
-                  <Chip
-                    color="success"
-                    label={`${question.answerCount} answer${
-                      question.answerCount === 1 ? "" : "s"
-                    }`}
-                    variant="outlined"
-                  />
-                ) : (
-                  <Typography color="text.secondary" sx={{ fontSize: 14 }}>
-                    {question.answerCount} answer
-                    {question.answerCount === 1 ? "" : "s"}
-                  </Typography>
-                )}
-              </Stack>
-
-              <Link
-                component={RouterLink}
-                sx={{ display: "block", mb: 1.5 }}
-                to={`/questions/${question.id}`}
-                variant="h5"
-              >
-                {question.title}
-              </Link>
-
-              <Stack direction="row" spacing={1}>
-                {question.tagIds.map((tagId) => (
-                  <Chip
-                    key={tagId}
-                    label={tags[tagId].name}
-                    onClick={() => {}}
-                  />
-                ))}
-              </Stack>
-            </CardContent>
-
-            <CardActions sx={{ justifyContent: "flex-end" }}>
-              <Typography variant="body2">
-                <Link href="#" onClick={(event) => event.preventDefault()}>
-                  {users[question.userId].name}
-                </Link>{" "}
-                {users[question.userId].reputation} asked{" "}
-                {convertToRelativeDate(question.createdAt)}
-              </Typography>
-            </CardActions>
+                <Box sx={{ flexGrow: 1 }} />
+                <Button onClick={toggle} size="small">
+                  Cancel
+                </Button>
+              </CardActions>
+            </Form>
           </Card>
-        ))}
-      </Stack>
-    </Box>
+        </Collapse>
+
+        <Stack spacing={2}>
+          {/* Question */}
+          {questions.map((question) => (
+            <Card key={question.id}>
+              <CardContent>
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ alignItems: "center", mb: 1.5 }}
+                >
+                  <Typography color="text.secondary" sx={{ fontSize: 14 }}>
+                    {question.voteCount} vote
+                    {question.voteCount === 1 ? "" : "s"}
+                  </Typography>
+                  {question.answerCount > 0 ? (
+                    <Chip
+                      color="success"
+                      label={`${question.answerCount} answer${
+                        question.answerCount === 1 ? "" : "s"
+                      }`}
+                      variant="outlined"
+                    />
+                  ) : (
+                    <Typography color="text.secondary" sx={{ fontSize: 14 }}>
+                      {question.answerCount} answer
+                      {question.answerCount === 1 ? "" : "s"}
+                    </Typography>
+                  )}
+                </Stack>
+
+                <Link
+                  component={RouterLink}
+                  sx={{ display: "block", mb: 1.5 }}
+                  to={`/questions/${question.id}`}
+                  variant="h5"
+                >
+                  {question.title}
+                </Link>
+
+                <Stack direction="row" spacing={1}>
+                  {question.tagIds.map((tagId) => (
+                    <Chip
+                      key={tagId}
+                      label={tags[tagId].name}
+                      onClick={() => {}}
+                      onMouseEnter={handlePopoverOpen}
+                      onMouseLeave={handlePopoverClose}
+                    />
+                  ))}
+                </Stack>
+              </CardContent>
+
+              <CardActions sx={{ justifyContent: "flex-end" }}>
+                <Typography variant="body2">
+                  <Link href="#" onClick={(event) => event.preventDefault()}>
+                    {users[question.userId].name}
+                  </Link>{" "}
+                  {users[question.userId].reputation} asked{" "}
+                  {convertToRelativeDate(question.createdAt)}
+                </Typography>
+              </CardActions>
+            </Card>
+          ))}
+        </Stack>
+      </Box>
+      <Popover
+        id="mouse-over-popover"
+        sx={{
+          pointerEvents: "none",
+        }}
+        open={openPopover}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography>{tagsDescription}</Typography>
+      </Popover>
+    </>
   );
 }
