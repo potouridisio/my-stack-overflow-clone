@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import Draggable from "react-draggable";
 import {
   Form,
@@ -161,9 +161,19 @@ export default function Questions() {
   const isSearch = Boolean(q);
   const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
-  // const { ignoredTagIds } = useIgnoredTagIds();
+  const { ignoredTagIds } = useIgnoredTagIds();
   const [anchorEl, setAnchorEl] = useState(null);
-  // const [hoveredTags, setHoveredTags] = useState(null);
+  const [hoveredTags, setHoveredTags] = useState([]);
+
+  // useMemo(() => {
+
+  // }, [ignoredTagIds]
+
+  const tagsAr = Object.values(tags).map((tag) => tag);
+
+  const tagDescr =
+    tags[tagsAr.find((tag) => tag.name === anchorEl?.textContent)?.id]
+      ?.description;
 
   useEffect(() => {
     if (inputRef.current && open) {
@@ -189,7 +199,6 @@ export default function Questions() {
 
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
-    console.log(anchorEl);
   };
 
   const handlePopoverClose = () => {
@@ -457,7 +466,7 @@ export default function Questions() {
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography>Tag Description</Typography>
+        <Typography sx={{ width: "25ch" }}>{tagDescr}</Typography>
       </Popover>
     </>
   );
