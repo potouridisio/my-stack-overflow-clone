@@ -420,12 +420,10 @@ app.put("/users/:userId/preferences", (req, res) => {
   const userId = req.params.userId; // Extract the userId from the URL parameter
   const { theme, hideLeftNavigation } = req.body; // Assuming theme and hideLeftNavigation are provided in the request body
 
-  const updatedAt = new Date().toISOString();
-
   // Update the user preferences in the database
   db.run(
-    "UPDATE user_preferences SET theme = ?, hideLeftNavigation = ?, updatedAt = ? WHERE userId = ?",
-    [theme, hideLeftNavigation, updatedAt, userId],
+    "UPDATE user_preferences SET theme = ?, hideLeftNavigation = ? WHERE userId = ?",
+    [theme, hideLeftNavigation, userId],
     function (err) {
       if (err) {
         console.error(err);
