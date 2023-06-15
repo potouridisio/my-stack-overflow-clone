@@ -1,12 +1,24 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useLoaderData, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
-import SearchIcon from "@mui/icons-material/Search";
 import AppBar from "@mui/material/AppBar";
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
+import CloseIcon from "@mui/icons-material/Close";
+import IconButton from "@mui/material/IconButton";
 import InputBase from "@mui/material/InputBase";
+import MenuIcon from "@mui/icons-material/Menu";
 import { styled, alpha } from "@mui/material/styles";
+import Popover from "@mui/material/Popover";
+import SearchIcon from "@mui/icons-material/Search";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+
+import PageLinks from "../components/PageLinks";
+
+export function loader() {
+  return fetch("/api/users/1/preferences");
+}
 
 const Search = styled("div")(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
@@ -49,12 +61,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Root() {
+  const userPreferences = useLoaderData();
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleKeyDown = (event) => {
     if (event.keyCode === 13) {
       navigate(`search?q=${event.target.value}`);
     }
+  };
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
   };
 
   return (
@@ -65,6 +87,49 @@ export default function Root() {
         sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Toolbar>
+          {userPreferences.hideLeftNavigation && !Boolean(anchorEl) ? (
+            <>
+              <IconButton
+                color="inherit"
+                edge="start"
+                size="large"
+                sx={{ mr: 2 }}
+                onClick={handlePopoverOpen}
+              >
+                <MenuIcon />
+              </IconButton>
+            </>
+          ) : userPreferences.hideLeftNavigation && Boolean(anchorEl) ? (
+            <>
+              <IconButton
+                color="inherit"
+                edge="start"
+                size="large"
+                sx={{ mr: 2 }}
+                onClick={handlePopoverClose}
+              >
+                <CloseIcon />
+              </IconButton>
+              <Popover
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                onClose={handlePopoverClose}
+              >
+                <PageLinks onClick={handlePopoverClose} />
+              </Popover>
+            </>
+          ) : (
+            ""
+          )}
+
           <Typography
             component="div"
             noWrap
@@ -88,10 +153,14 @@ export default function Root() {
               placeholder="Search…"
             />
           </Search>
+          <Box sx={{ flexGrow: 1 }} />
+          <IconButton component={Link} sx={{ p: 0 }} to="users/1/preferences">
+            <Avatar>JD</Avatar>
+          </IconButton>
         </Toolbar>
       </AppBar>
 
-      <Outlet />
+      <Outlet context={userPreferences} />
     </Box>
   );
 }
