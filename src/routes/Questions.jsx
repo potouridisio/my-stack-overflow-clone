@@ -46,7 +46,10 @@ import Typography from "@mui/material/Typography";
 
 import CustomFilters from "../components/CustomFilters";
 import WatchedTags from "../components/WatchedTags";
-import IgnoredTags, { useIgnoredTagIds } from "../components/IgnoredTags";
+import IgnoredTags, {
+  useIgnoredTagIds,
+  useSelectedTagId,
+} from "../components/IgnoredTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -161,7 +164,9 @@ export default function Questions() {
   const isSearch = Boolean(q);
   const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
-  const { ignoredTagIds } = useIgnoredTagIds();
+  const ignoredTagIds = useIgnoredTagIds((state) => state.ignoredTagIds);
+  const selectedTagId = useSelectedTagId((state) => state.selectedTagId);
+
   const [anchorEl, setAnchorEl] = useState(null);
 
   // useMemo(() => {
@@ -222,7 +227,35 @@ export default function Questions() {
             Ask Question
           </Button>
         </Toolbar>
-
+        {selectedTagId ? (
+          <Box>
+            <Card>
+              <CardContent>
+                <Typography sx={{ mb: 1.5 }}>
+                  {tags[selectedTagId]?.description}
+                </Typography>
+                <CardActions>
+                  <Button
+                    variant="outlined"
+                    sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
+                    // onClick={() => console.log("watched tag")}
+                  >
+                    {" "}
+                    Watch tag
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
+                    // onClick={() => console.log("ignored tag")}
+                  >
+                    {" "}
+                    Ignore tag
+                  </Button>
+                </CardActions>
+              </CardContent>
+            </Card>
+          </Box>
+        ) : null}
         <Toolbar disableGutters>
           <Typography component="div" sx={{ flexGrow: 1 }} variant="subtitle1">
             {questions.length} {isSearch ? "result" : "question"}

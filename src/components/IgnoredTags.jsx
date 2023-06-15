@@ -25,11 +25,17 @@ export const useIgnoredTagIds = create((set) => ({
   setIgnoredTagIds: (ignoredTagIds) => set({ ignoredTagIds }),
 }));
 
+export const useSelectedTagId = create((set) => ({
+  selectedTagId: null,
+  setSelectedTagId: (selectedTagId) => set({ selectedTagId }),
+}));
+
 export default function IgnoredTags({ tags }) {
   const [isEditing, setIsEditing] = useState(false);
   const [pendingTagId, setPendingTagId] = useState(null);
   const { ignoredTagIds, setIgnoredTagIds } = useIgnoredTagIds();
   const [isOpen, setIsOpen] = useState(true);
+  const { setSelectedTagId } = useSelectedTagId();
 
   function handleChange(_event, value) {
     setPendingTagId(value);
@@ -82,7 +88,9 @@ export default function IgnoredTags({ tags }) {
                               )
                           : null
                       }
-                      onClick={() => {}}
+                      onClick={() => {
+                        setSelectedTagId(ignoredTagId);
+                      }}
                     />
                   ))}
                 </Stack>
