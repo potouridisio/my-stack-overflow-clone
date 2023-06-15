@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 import PublicIcon from "@mui/icons-material/Public";
 import Box from "@mui/material/Box";
@@ -11,6 +11,8 @@ import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import Toolbar from "@mui/material/Toolbar";
 
+import { usePreferencesStore } from "./Preferences";
+
 const drawerWidth = 240;
 
 export default function LeftSidebar() {
@@ -18,12 +20,14 @@ export default function LeftSidebar() {
   const isRootPath = /^\/$/.test(pathname);
   const isQuestionsPath = /^\/questions\/.*$/.test(pathname);
   const isSearchPath = /^\/search(\/.*)?$/.test(pathname);
-  const userPreferences = useOutletContext();
+  const hideLeftNavigation = usePreferencesStore(
+    (state) => state.hideLeftNavigation
+  );
 
   return (
     <>
       {/* Sidebar */}
-      {userPreferences.hideLeftNavigation ? null : (
+      {hideLeftNavigation ? null : (
         <Drawer
           sx={{
             [`& .MuiDrawer-paper`]: {
@@ -76,7 +80,7 @@ export default function LeftSidebar() {
       )}
 
       {/* Main */}
-      <Outlet context={userPreferences} />
+      <Outlet />
     </>
   );
 }

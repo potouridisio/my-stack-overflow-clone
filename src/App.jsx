@@ -8,7 +8,7 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import LeftSidebar from "./routes/LeftSidebar";
-import Preferences, { action as preferencesAction } from "./routes/Preferences";
+import Preferences, { usePreferencesStore } from "./routes/Preferences";
 import Question, {
   action as questionAction,
   loader as questionLoader,
@@ -18,11 +18,10 @@ import Questions, {
   handle as questionsHandle,
   loader as questionsLoader,
 } from "./routes/Questions";
-import Root, { loader as rootLoader } from "./routes/Root";
+import Root from "./routes/Root";
 import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
 import Users, { loader as usersLoader } from "./routes/Users";
-import { create } from "zustand";
 
 const router = createBrowserRouter([
   {
@@ -68,7 +67,6 @@ const router = createBrowserRouter([
           {
             path: "users/:userId/preferences",
             element: <Preferences />,
-            action: preferencesAction,
           },
         ],
       },
@@ -84,23 +82,16 @@ const router = createBrowserRouter([
         ],
       },
     ],
-    loader: rootLoader,
   },
 ]);
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useColorModeStore = create((set) => ({
-  mode: "light",
-  setMode: (mode) => set({ mode }),
-}));
-
 export default function App() {
-  const mode = useColorModeStore((state) => state.mode);
+  const colorMode = usePreferencesStore((state) => state.colorMode);
 
   const theme = useMemo(() => {
     let theme = createTheme({
       palette: {
-        mode,
+        mode: colorMode,
       },
     });
 
@@ -172,7 +163,7 @@ export default function App() {
     });
 
     return theme;
-  }, [mode]);
+  }, [colorMode]);
 
   return (
     <ThemeProvider theme={theme}>
