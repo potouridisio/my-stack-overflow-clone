@@ -14,6 +14,7 @@ import RadioGroup from "@mui/material/RadioGroup";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { grey, yellow } from "@mui/material/colors";
 
 import { create } from "zustand";
 import { CardActions } from "@mui/material";
@@ -57,9 +58,12 @@ export default function IgnoredTags({ tags }) {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            bgcolor: "#f8f9f9",
+            //bgcolor: "#f8f9f9",
+            bgcolor: (theme) =>
+              theme.palette.mode === "light" ? "#f8f9f9" : grey[900],
             borderBottom: 1,
-            borderColor: "grey.300",
+            borderColor: (theme) =>
+              theme.palette.mode === "light" ? "grey.300" : grey[900],
           }}
         >
           <CardHeader title="Ignored Tags" />

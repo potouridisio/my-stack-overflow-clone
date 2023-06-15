@@ -13,9 +13,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Modal from "@mui/material/Modal";
+import { grey, yellow } from "@mui/material/colors";
 
 import { useFilterStore } from "../routes/Questions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Typography } from "@mui/material";
 
 export default function CustomFilters({ filters }) {
@@ -53,7 +54,13 @@ export default function CustomFilters({ filters }) {
     <Card sx={{ flexGrow: 1 }}>
       <CardHeader
         title="Custom Filters"
-        sx={{ bgcolor: "#f8f9f9", borderBottom: 1, borderColor: "grey.300" }}
+        sx={{
+          borderBottom: 1,
+          bgcolor: (theme) =>
+            theme.palette.mode === "light" ? "#f8f9f9" : grey[900],
+          borderColor: (theme) =>
+            theme.palette.mode === "light" ? "grey.300" : grey[900],
+        }}
       />
 
       {customFilters.length > 0 ? (
@@ -67,7 +74,7 @@ export default function CustomFilters({ filters }) {
                 onClick={() =>
                   navigate(
                     decodeURIComponent(
-                      `/?sort=${filter.sortId}&filters=${filter.filterIdsCc}&tagWith=${filter.tagModeId}&uqlId=${filter.id}`
+                      `/?sort=${filter.sortId}&filters=${filter.filterIds}&tagWith=${filter.tagModeId}&uqlId=${filter.id}`
                     )
                   )
                 }

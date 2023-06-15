@@ -14,6 +14,7 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { grey, yellow } from "@mui/material/colors";
 
 import { create } from "zustand";
 
@@ -30,8 +31,6 @@ export default function WatchedTags({ tags }) {
 
   const { selectedWatchedTagIds, setSelectedWatchedTagIds } =
     useSelectedWatchedTagIds();
-
-  //const [selectedTags, setSelectedTags] = useState([]);
 
   const inputRef = useRef(null);
 
@@ -55,9 +54,12 @@ export default function WatchedTags({ tags }) {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            bgcolor: "#f8f9f9",
+            bgcolor: (theme) =>
+              theme.palette.mode === "light" ? "#f8f9f9" : grey[900],
             borderBottom: 1,
-            borderColor: "grey.300",
+            borderColor: (theme) =>
+              theme.palette.mode === "light" ? "grey.300" : grey[900],
+            borderBottom: 1,
           }}
         >
           <CardHeader title="Watched Tags" />
