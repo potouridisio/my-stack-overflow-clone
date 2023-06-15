@@ -49,7 +49,7 @@ export default function Preferences() {
               primary="Theme"
             />
             <RadioGroup
-              aria-aria-labelledby="theme-radio-buttons-group-label"
+              aria-labelledby="theme-radio-buttons-group-label"
               onChange={(_event, value) => setColorMode(value)}
               row
               value={colorMode}
