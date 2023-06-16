@@ -22,7 +22,9 @@ import Questions, {
 import Root, { loader as rootLoader } from "./routes/Root";
 import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
+import User from "./routes/User";
 import Users, { loader as usersLoader } from "./routes/Users";
+import Settings from "./routes/Settings";
 
 const router = createBrowserRouter([
   {
@@ -66,9 +68,20 @@ const router = createBrowserRouter([
             action: questionAction,
           },
           {
-            path: "users/:userId/preferences",
-            element: <Preferences />,
-            action: preferencesAction,
+            path: "users/:userId",
+            element: <User />,
+            children: [
+              {
+                element: <Settings />,
+                children: [
+                  {
+                    path: "preferences",
+                    element: <Preferences />,
+                    action: preferencesAction,
+                  },
+                ],
+              },
+            ],
           },
         ],
       },
