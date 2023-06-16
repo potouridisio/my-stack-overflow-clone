@@ -37,6 +37,8 @@ export default function CustomFilters({ filters }) {
     bgcolor: "background.paper",
     boxShadow: 24,
     p: 4,
+    border: (theme) => (theme.palette.mode === "dark" ? 1 : ""),
+    borderColor: (theme) => (theme.palette.mode === "dark" ? "white" : ""),
   };
 
   function handleDeleteCustomFilter(filterId) {
