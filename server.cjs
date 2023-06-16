@@ -264,6 +264,50 @@ app.get("/users", (req, res) => {
   }
 });
 
+// Endpoint to retrieve a specific user by ID
+app.get("/users/:userId", (req, res) => {
+  const userId = req.params.userId; // Extract the userId from the URL parameter
+
+  // Fetch the user from the database
+  db.get("SELECT * FROM users WHERE id = ?", [userId], (err, row) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+    } else if (row) {
+      res.json(row);
+    } else {
+      res.status(404).send("User not found");
+    }
+  });
+});
+
+// Update a specific user by ID
+app.put("/users/:userId", (req, res) => {
+  const userId = req.params.userId; // Extract the userId from the URL parameter
+  const { name, location } = req.body; // Assuming the fields to be updated are provided in the request body
+
+  // Update the user in the database
+  db.run(
+    "UPDATE users SET name = ?, location = ? WHERE id = ?",
+    [name, location, userId],
+    function (err) {
+      if (err) {
+        console.error(err);
+        res.status(500).json({ error: "Internal server error" });
+      } else {
+        // Check if any rows were affected
+        if (this.changes === 0) {
+          // No matching user found
+          res.status(404).json({ error: "User not found" });
+        } else {
+          // User successfully updated
+          res.sendStatus(204);
+        }
+      }
+    }
+  );
+});
+
 // Get all filters for a user
 app.get("/users/:userId/filters", (req, res) => {
   const userId = req.params.userId; // Extract the userId from the URL parameter
