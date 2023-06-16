@@ -15,7 +15,7 @@ import { create } from "zustand";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import CloseIcon from "@mui/icons-material/Close";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import LoadingButton from "@mui/lab/LoadingButton";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
@@ -26,6 +26,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
 import Collapse from "@mui/material/Collapse";
+import { grey, yellow } from "@mui/material/colors";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -142,7 +143,6 @@ export async function action({ request }) {
     },
     body: JSON.stringify(newFilter),
   }).then((res) => res.json());
-  //.then(window.location.reload());
 
   if (filter.error) {
     return {
@@ -151,8 +151,6 @@ export async function action({ request }) {
       },
     };
   }
-
-  //window.location.reload();
 
   return redirect(
     decodeURIComponent(
@@ -242,6 +240,20 @@ export default function Questions() {
       setFilterIds([...filterIds, filterId]);
     }
   };
+
+  let clickedTag = anchorEl
+    ? Object.values(tags)
+        .find((tag) => tag.name === anchorEl.textContent)
+        .id.toString()
+    : "";
+
+  let isAlreadyWatched = selectedWatchedTagIds.some(
+    (tagId) => tagId === clickedTag
+  );
+
+  let isAlreadyIgnored = selectedIgnoredTagIds.some(
+    (tagId) => tagId === clickedTag
+  );
 
   return (
     <>
@@ -416,7 +428,8 @@ export default function Questions() {
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <LoadingButton
+
+                    <Button
                       loading={navigation.state === "submitting"}
                       type="submit"
                       form="filter-form"
@@ -428,7 +441,7 @@ export default function Questions() {
                       }}
                     >
                       Save filter
-                    </LoadingButton>
+                    </Button>
                   </DialogActions>
                 </Dialog>
 
@@ -447,11 +460,14 @@ export default function Questions() {
             <Card
               key={question.id}
               sx={{
-                bgcolor: question.tagIds.some((tagId) =>
-                  selectedWatchedTagIds.includes(tagId.toString())
-                )
-                  ? "#fdf7e2"
-                  : "",
+                bgcolor: (theme) =>
+                  question.tagIds.some((tagId) =>
+                    selectedWatchedTagIds.includes(tagId.toString())
+                  )
+                    ? theme.palette.mode === "light"
+                      ? yellow[50]
+                      : grey[900]
+                    : "",
                 opacity:
                   question.tagIds.some((tagId) =>
                     selectedIgnoredTagIds.includes(tagId.toString())
@@ -521,7 +537,6 @@ export default function Questions() {
                   ))}
                 </Stack>
               </CardContent>
-
               <CardActions sx={{ justifyContent: "flex-end" }}>
                 <Typography variant="body2">
                   <Link href="#" onClick={(event) => event.preventDefault()}>
@@ -535,6 +550,7 @@ export default function Questions() {
           ))}
         </Stack>
       </Box>
+
       <Popover
         disablePortal
         open={Boolean(anchorEl)}
@@ -572,13 +588,7 @@ export default function Questions() {
 
           <CardContent>
             <Typography>
-              {anchorEl
-                ? tags[
-                    Object.values(tags).find(
-                      (tag) => tag.name === anchorEl.textContent
-                    ).id
-                  ].description
-                : ""}
+              {anchorEl ? tags[clickedTag].description : ""}
             </Typography>
             <RouterLink>View Tag</RouterLink>
           </CardContent>
@@ -594,79 +604,44 @@ export default function Questions() {
               sx={{ textTransform: "none" }}
               variant="outlined"
               size="medium"
-              startIcon={<VisibilityIcon />}
-              onClick={() =>
-                setSelectedWatchedTagIds([
-                  ...selectedWatchedTagIds,
-                  Object.values(tags).find(
-                    (tag) => tag.name === anchorEl.textContent
-                  ).id,
-                ])
+              startIcon={
+                isAlreadyWatched ? <VisibilityOffIcon /> : <VisibilityIcon />
               }
-            >
-              Watch a tag
-            </Button>
-
-            {/*{selectedWatchedTagIds.some(
-              (tagId) =>
-                tagId ===
-                Object.values(tags).find(
-                  (tag) => tag.name === anchorEl.textContent
-                ).id
-            ) ? (
-              <Button
-                sx={{ textTransform: "none" }}
-                variant="outlined"
-                size="medium"
-                startIcon={<VisibilityOffIcon />}
-                onClick={() =>
-                  setSelectedWatchedTagIds(
-                    selectedWatchedTagIds.filter(
-                      (tagId) =>
-                        tagId !==
-                        Object.values(tags).find(
-                          (tag) => tag.name === anchorEl.textContent
-                        ).id
+              onClick={() => {
+                isAlreadyWatched
+                  ? setSelectedWatchedTagIds(
+                      selectedWatchedTagIds.filter(
+                        (tagId) => tagId !== clickedTag
+                      )
                     )
-                  )
-                }
-              >
-                Unwatch tag
-              </Button>
-            ) : (
-              <Button
-                sx={{ textTransform: "none" }}
-                variant="outlined"
-                size="medium"
-                startIcon={<VisibilityIcon />}
-                onClick={() =>
-                  setSelectedWatchedTagIds([
-                    ...selectedWatchedTagIds,
-                    Object.values(tags).find(
-                      (tag) => tag.name === anchorEl.textContent
-                    ).id,
-                  ])
-                }
-              >
-                Watch a tag
-              </Button>
-              )}*/}
+                  : setSelectedWatchedTagIds([
+                      ...selectedWatchedTagIds,
+                      clickedTag,
+                    ]);
+              }}
+            >
+              {isAlreadyWatched ? "Unwatch tag" : "Watch tag"}
+            </Button>
 
             <Button
               sx={{ textTransform: "none" }}
-              size="medium"
               variant="outlined"
+              size="medium"
               startIcon={<DoDisturbIcon />}
-              onClick={() =>
-                setSelectedIgnoredTagIds([
-                  ...selectedIgnoredTagIds,
-                  Object.values(tags).find(
-                    (tag) => tag.name === anchorEl.textContent
-                  ).id,
-                ])
-              }
+              onClick={() => {
+                isAlreadyIgnored
+                  ? setSelectedIgnoredTagIds(
+                      selectedIgnoredTagIds.filter(
+                        (tagId) => tagId !== clickedTag
+                      )
+                    )
+                  : setSelectedIgnoredTagIds([
+                      ...selectedIgnoredTagIds,
+                      clickedTag,
+                    ]);
+              }}
             >
-              Ignored tag
+              {isAlreadyIgnored ? "Unignore tag" : "Ignore tag"}
             </Button>
           </CardActions>
         </Card>
