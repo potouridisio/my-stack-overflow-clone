@@ -34,6 +34,7 @@ import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import NotInterestedIcon from "@mui/icons-material/NotInterested";
 import Paper from "@mui/material/Paper";
 import Popover from "@mui/material/Popover";
 import Radio from "@mui/material/Radio";
@@ -43,6 +44,7 @@ import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import CustomFilters from "../components/CustomFilters";
 import WatchedTags from "../components/WatchedTags";
@@ -169,9 +171,7 @@ export default function Questions() {
 
   const [anchorEl, setAnchorEl] = useState(null);
 
-  // useMemo(() => {
-
-  // }, [ignoredTagIds]
+  useMemo(() => {}, []);
 
   const tagsAr = Object.values(tags).map((tag) => tag);
 
@@ -211,6 +211,7 @@ export default function Questions() {
 
   return (
     <>
+      {" "}
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
 
@@ -238,6 +239,7 @@ export default function Questions() {
                   <Button
                     variant="outlined"
                     sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
+                    startIcon={<VisibilityIcon />}
                     // onClick={() => console.log("watched tag")}
                   >
                     {" "}
@@ -246,6 +248,7 @@ export default function Questions() {
                   <Button
                     variant="outlined"
                     sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
+                    startIcon={<NotInterestedIcon />}
                     // onClick={() => console.log("ignored tag")}
                   >
                     {" "}
@@ -478,7 +481,6 @@ export default function Questions() {
           ))}
         </Stack>
       </Box>
-
       {anchorEl && (
         <Popover
           id="mouse-over-popover"
@@ -486,6 +488,7 @@ export default function Questions() {
             pointerEvents: "none",
           }}
           open={Boolean(anchorEl)}
+          disablePortal
           anchorEl={anchorEl}
           anchorOrigin={{
             vertical: "bottom",
@@ -497,27 +500,43 @@ export default function Questions() {
           }}
           onClose={handlePopoverClose}
           disableRestoreFocus
-          PaperProps={{ sx: { p: 2 } }}
+
+          // PaperProps={{
+          //   onMouseEnter: handlePopoverOpen,
+          //   onMouseLeave: handlePopoverClose,
+          //   pointerEvents: "auto",
+          // }}
         >
-          <Typography sx={{ width: "25ch", mb: 1 }}>{tagDescr}</Typography>
-          <Box sx={{ display: "flex", gap: "1rem" }}>
-            <Button
-              variant="outlined"
-              sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
-              // onClick={() => console.log("watched tag")}
-            >
-              {" "}
-              Watch tag
-            </Button>
-            <Button
-              variant="outlined"
-              sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
-              // onClick={() => console.log("ignored tag")}
-            >
-              {" "}
-              Ignore tag
-            </Button>
-          </Box>
+          <Card>
+            <CardContent>
+              <Typography sx={{ width: "25ch", mb: 1 }}>{tagDescr}</Typography>
+              <CardActions>
+                <Box sx={{ display: "flex", gap: "1rem" }}>
+                  <Button
+                    variant="outlined"
+                    sx={{
+                      textTransform: "none",
+                      bgcolor: "#c5e0e0",
+                    }}
+                    startIcon={<VisibilityIcon />}
+                    // onClick={() => console.log("watched tag")}
+                  >
+                    {" "}
+                    Watch tag
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    sx={{ textTransform: "none", bgcolor: "#c5e0e0" }}
+                    startIcon={<NotInterestedIcon />}
+                    // onClick={() => console.log("ignored tag")}
+                  >
+                    {" "}
+                    Ignore tag
+                  </Button>
+                </Box>
+              </CardActions>
+            </CardContent>
+          </Card>
         </Popover>
       )}
     </>
