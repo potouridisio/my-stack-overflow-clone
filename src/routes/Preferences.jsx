@@ -1,7 +1,14 @@
 import { useState } from "react";
-import { Form, useOutletContext, useSubmit } from "react-router-dom";
+import {
+  Form,
+  useNavigation,
+  useOutletContext,
+  useSubmit,
+} from "react-router-dom";
 
+import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Card from "@mui/material/Card";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import List from "@mui/material/List";
@@ -34,6 +41,11 @@ export async function action({ request }) {
 }
 
 export default function Preferences() {
+  const navigation = useNavigation();
+  const isReloading =
+    navigation.state === "loading" &&
+    navigation.formData != null &&
+    navigation.formAction === navigation.location.pathname;
   const userPreferences = useOutletContext();
   const [theme, setTheme] = useState(
     userPreferences.theme === 0 ? "light" : "dark"
@@ -44,66 +56,78 @@ export default function Preferences() {
   const submit = useSubmit();
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <Toolbar />
+    <>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
 
-      <Toolbar disableGutters sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Typography component="div" variant="h6">
-          Preferences
-        </Typography>
-      </Toolbar>
+        <Toolbar
+          disableGutters
+          sx={{ borderBottom: 1, borderColor: "divider" }}
+        >
+          <Typography component="div" variant="h6">
+            Preferences
+          </Typography>
+        </Toolbar>
 
-      <Toolbar disableGutters>
-        <Typography component="div" variant="subtitle1">
-          Interface
-        </Typography>
-      </Toolbar>
+        <Toolbar disableGutters>
+          <Typography component="div" variant="subtitle1">
+            Interface
+          </Typography>
+        </Toolbar>
 
-      <Card>
-        <Form method="post" onChange={(event) => submit(event.currentTarget)}>
-          <List disablePadding>
-            <ListItem divider>
-              <ListItemText
-                id="theme-radio-buttons-group-label"
-                primary="Theme"
-              />
-              <RadioGroup
-                aria-labelledby="theme-radio-buttons-group-label"
-                name="theme"
-                onChange={(event) => setTheme(event.target.value)}
-                row
-                value={theme}
-              >
-                {[
-                  ["Light", "light"],
-                  ["Dark", "dark"],
-                ].map(([label, value]) => (
-                  <FormControlLabel
-                    control={<Radio />}
-                    key={value}
-                    label={label}
-                    value={value}
-                  />
-                ))}
-              </RadioGroup>
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="Hide left navigation"
-                secondary="When you flip this switch, the left navigation will no longer be pinned to the left of the page on Q&A sites."
-              />
-              <Switch
-                checked={hideLeftNavigation}
-                edge="end"
-                name="hideLeftNavigation"
-                onChange={(event) =>
-                  setHideLeftNavigation(event.target.checked)
-                }
-              />
-            </ListItem>
-          </List>
-        </Form>
-      </Card>
-    </Box>
+        <Card>
+          <Form method="post" onChange={(event) => submit(event.currentTarget)}>
+            <List disablePadding>
+              <ListItem divider>
+                <ListItemText
+                  id="theme-radio-buttons-group-label"
+                  primary="Theme"
+                />
+                <RadioGroup
+                  aria-labelledby="theme-radio-buttons-group-label"
+                  name="theme"
+                  onChange={(event) => setTheme(event.target.value)}
+                  row
+                  value={theme}
+                >
+                  {[
+                    ["Light", "light"],
+                    ["Dark", "dark"],
+                  ].map(([label, value]) => (
+                    <FormControlLabel
+                      control={<Radio />}
+                      key={value}
+                      label={label}
+                      value={value}
+                    />
+                  ))}
+                </RadioGroup>
+              </ListItem>
+              <ListItem>
+                <ListItemText
+                  primary="Hide left navigation"
+                  secondary="When you flip this switch, the left navigation will no longer be pinned to the left of the page on Q&A sites."
+                />
+                <Switch
+                  checked={hideLeftNavigation}
+                  edge="end"
+                  name="hideLeftNavigation"
+                  onChange={(event) =>
+                    setHideLeftNavigation(event.target.checked)
+                  }
+                />
+              </ListItem>
+            </List>
+          </Form>
+        </Card>
+      </Box>
+
+      <Backdrop
+        open={navigation.state === "submitting" || isReloading}
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>
   );
 }
