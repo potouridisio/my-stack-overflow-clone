@@ -5,7 +5,7 @@ import {
   useLoaderData,
   useSearchParams,
 } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -62,6 +62,10 @@ export default function Tags() {
       tag.name.toLowerCase().includes(filterValue.toLowerCase())
     );
   }
+
+  useEffect(() => {
+    document.title = "Tags - Stack Overflow Clone";
+  }, []);
 
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

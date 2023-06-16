@@ -217,6 +217,10 @@ export default function Questions() {
     }
   }, [open]);
 
+  useEffect(() => {
+    document.title = "Custom filtered posts - Stack Overflow Clone";
+  }, []);
+
   const handleClickOpen = () => {
     setOpen(true);
   };

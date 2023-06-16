@@ -1,5 +1,5 @@
 import { Form, useActionData, useLoaderData } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -49,6 +49,10 @@ export default function Users() {
     );
   }
 
+  useEffect(() => {
+    document.title = "Users - Stack Overflow Clone";
+  }, []);
+
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
       <Toolbar />
@@ -84,11 +88,21 @@ export default function Users() {
         </Box>
 
         <ToggleButtonGroup color="primary" exclusive size="small">
-          <ToggleButton value="reputation">Reputation</ToggleButton>
-          <ToggleButton value="new users">New users</ToggleButton>
-          <ToggleButton value="voters">Voters</ToggleButton>
-          <ToggleButton value="editors">Editors</ToggleButton>
-          <ToggleButton value="moderators">Moderators</ToggleButton>
+          <ToggleButton sx={{ textTransform: "none" }} value="reputation">
+            Reputation
+          </ToggleButton>
+          <ToggleButton sx={{ textTransform: "none" }} value="new users">
+            New users
+          </ToggleButton>
+          <ToggleButton sx={{ textTransform: "none" }} value="voters">
+            Voters
+          </ToggleButton>
+          <ToggleButton sx={{ textTransform: "none" }} value="editors">
+            Editors
+          </ToggleButton>
+          <ToggleButton sx={{ textTransform: "none" }} value="moderators">
+            Moderators
+          </ToggleButton>
         </ToggleButtonGroup>
       </Toolbar>
 

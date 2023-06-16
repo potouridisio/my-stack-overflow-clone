@@ -54,6 +54,10 @@ export default function Preferences() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userPreferences]);
 
+  useEffect(() => {
+    document.title = "User John Doe - Stack Overflow Clone";
+  }, []);
+
   const handleChange = (event) => {
     const target = event.target;
     const name = target.name;
