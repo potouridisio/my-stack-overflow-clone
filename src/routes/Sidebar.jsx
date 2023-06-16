@@ -37,6 +37,7 @@ export default function Sidebar() {
         variant="permanent"
       >
         <Toolbar />
+
         <Box sx={{ overflow: "auto" }}>{sidebar}</Box>
       </Drawer>
     </>
