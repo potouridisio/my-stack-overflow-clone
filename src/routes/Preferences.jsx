@@ -57,7 +57,9 @@ export default function Preferences() {
 
   return (
     <>
-      <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
+
         <Toolbar
           disableGutters
           sx={{ borderBottom: 1, borderColor: "divider" }}
