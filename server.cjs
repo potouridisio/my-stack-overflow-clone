@@ -485,6 +485,52 @@ app.put("/users/:userId/preferences", (req, res) => {
   );
 });
 
+// Endpoint to fetch watched tags for a user
+app.get("/users/:userId/watchedTags", (req, res) => {
+  const userId = req.params.userId;
+
+  db.all(
+    `SELECT tagId FROM watched_tags WHERE userId = ?`,
+    [userId],
+    (err, rows) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Internal Server Error" });
+      }
+
+      const watchedTags = rows.map((row) => row.tagId);
+      res.json(watchedTags);
+    }
+  );
+});
+
+// Endpoint to update watched tags for a user
+app.put("/users/:userId/watchedTags", (req, res) => {
+  const userId = req.params.userId;
+  const watchedTags = req.body;
+
+  // Remove existing watched tags for the user
+  db.run(`DELETE FROM watched_tags WHERE userId = ?`, [userId], (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    // Insert new watched tags for the user
+    const insertWatchedTags = db.prepare(
+      `INSERT INTO watched_tags (tagId, userId) VALUES (?, ?)`
+    );
+
+    watchedTags.forEach((tagId) => {
+      insertWatchedTags.run(tagId, userId);
+    });
+
+    insertWatchedTags.finalize();
+
+    res.json({ message: "Watched tags updated successfully" });
+  });
+});
+
 const PORT = 3000; // Choose the desired port for your server
 
 app.listen(PORT, () => {

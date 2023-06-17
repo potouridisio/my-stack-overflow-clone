@@ -102,6 +102,16 @@ db.serialize(() => {
     )`
   );
 
+  db.run(
+    `CREATE TABLE watched_tags (
+      id INTEGER PRIMARY KEY,
+      tagId INTEGER,
+      userId INTEGER,
+      FOREIGN KEY (tagId) REFERENCES tags(id),
+      FOREIGN KEY (userId) REFERENCES users(id)
+    )`
+  );
+
   const insertAnswers = db.prepare(
     `INSERT INTO answers (body, createdAt, id, questionId, updatedAt, userId) VALUES (?, ?, ?, ?, ?, ?)`
   );
