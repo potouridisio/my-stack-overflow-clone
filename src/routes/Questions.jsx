@@ -54,7 +54,7 @@ export async function loader({ request }) {
   const url = new URL(request.url);
   const searchTerm = url.searchParams.get("q");
 
-  const [questions, tags, users, filters] = await Promise.all([
+  const [questions, tagsResponse, users, filters] = await Promise.all([
     fetch(`/api/questions${searchTerm ? `?q=${searchTerm}` : ""}`).then((res) =>
       res.json()
     ),
@@ -65,7 +65,7 @@ export async function loader({ request }) {
 
   return {
     questions,
-    tags: indexBy(tags, "id"),
+    tags: indexBy(tagsResponse.tags, "id"),
     users: indexBy(users, "id"),
     filters,
   };

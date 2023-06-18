@@ -30,7 +30,7 @@ export function loader({ request }) {
 }
 
 export default function Tags() {
-  const tags = useLoaderData();
+  const tagsResponse = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab") || "popular";
 
@@ -59,7 +59,7 @@ export default function Tags() {
       </Toolbar>
 
       <Grid container spacing={2}>
-        {tags.map((tag) => (
+        {tagsResponse.tags.map((tag) => (
           <Grid key={tag.id} xs={3}>
             <Card>
               <CardContent>

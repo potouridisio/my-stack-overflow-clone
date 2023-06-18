@@ -289,6 +289,319 @@ const tags = [
     name: "typescript",
     occurrenceCount: 0,
   },
+  // New tags (with occurrenceCount set to 0)
+  {
+    createdAt: null,
+    description:
+      "A versatile programming language commonly used for data analysis and machine learning.",
+    id: 11,
+    name: "python3",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A declarative language used for querying and manipulating data in databases.",
+    id: 12,
+    name: "sql",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A lightweight markup language used for creating structured documents and web content.",
+    id: 13,
+    name: "markdown",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A version control system used for tracking changes in source code.",
+    id: 14,
+    name: "git",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A popular web framework for building scalable and maintainable applications.",
+    id: 15,
+    name: "react",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A framework for building cross-platform mobile applications using JavaScript.",
+    id: 16,
+    name: "react-native",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A widely-used framework for building dynamic web applications.",
+    id: 17,
+    name: "angular",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A powerful and flexible programming language often used for data analysis and scientific computing.",
+    id: 18,
+    name: "r",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description: "A popular JavaScript library for building user interfaces.",
+    id: 19,
+    name: "jquery",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A lightweight framework for building fast and efficient web applications.",
+    id: 20,
+    name: "vue",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A scripting language commonly used for server-side web development.",
+    id: 21,
+    name: "node.js",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description: "A powerful and scalable database management system.",
+    id: 22,
+    name: "mongodb",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A relational database management system known for its performance and reliability.",
+    id: 23,
+    name: "mysql",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A flexible and scalable framework for building web applications.",
+    id: 24,
+    name: "django",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A lightweight and efficient web server for serving static files.",
+    id: 25,
+    name: "nginx",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A scripting language commonly used for task automation and system administration.",
+    id: 26,
+    name: "bash",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A widely-used open-source operating system based on the Linux kernel.",
+    id: 27,
+    name: "ubuntu",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A powerful and expressive language for building scalable and concurrent applications.",
+    id: 28,
+    name: "go",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description: "A lightweight and efficient framework for building web APIs.",
+    id: 29,
+    name: "express",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A popular CSS framework for building responsive and mobile-first websites.",
+    id: 30,
+    name: "bootstrap",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A powerful and flexible language for building scalable and concurrent applications.",
+    id: 31,
+    name: "elixir",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A lightweight and modular front-end framework for building web interfaces.",
+    id: 32,
+    name: "tailwindcss",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description: "A popular framework for building serverless applications.",
+    id: 33,
+    name: "aws-lambda",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A flexible and scalable framework for building web applications.",
+    id: 34,
+    name: "laravel",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A powerful and flexible framework for building web applications.",
+    id: 35,
+    name: "spring",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A popular library for handling and manipulating dates and times.",
+    id: 36,
+    name: "moment.js",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A widely-used cloud computing platform for building, deploying, and managing applications.",
+    id: 37,
+    name: "aws",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A powerful and scalable relational database management system.",
+    id: 38,
+    name: "postgresql",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description: "A popular front-end framework for building user interfaces.",
+    id: 39,
+    name: "vue.js",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description: "A flexible and powerful library for data visualization.",
+    id: 40,
+    name: "d3.js",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description: "A widely-used framework for building RESTful APIs.",
+    id: 41,
+    name: "flask",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A popular content management system for building websites and web applications.",
+    id: 42,
+    name: "wordpress",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description: "A powerful and scalable NoSQL database management system.",
+    id: 43,
+    name: "cassandra",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A flexible and efficient framework for building scalable web applications.",
+    id: 44,
+    name: "flask",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A popular framework for building interactive web applications.",
+    id: 45,
+    name: "ember.js",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A powerful and flexible framework for building web applications.",
+    id: 46,
+    name: "django",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A modern and efficient front-end framework for building user interfaces.",
+    id: 47,
+    name: "svelte",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A lightweight framework for building fast and efficient web applications.",
+    id: 48,
+    name: "next.js",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A powerful and flexible framework for building web applications.",
+    id: 49,
+    name: "laravel",
+    occurrenceCount: 0,
+  },
+  {
+    createdAt: null,
+    description:
+      "A markup language used for creating structured documents on the web.",
+    id: 50,
+    name: "xml",
+    occurrenceCount: 0,
+  },
 ];
 
 const users = [

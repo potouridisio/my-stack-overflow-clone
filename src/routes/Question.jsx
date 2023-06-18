@@ -61,7 +61,7 @@ export async function action({ params, request }) {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ params }) {
-  const [question, tags, users, answers] = await Promise.all([
+  const [question, tagsResponse, users, answers] = await Promise.all([
     fetch(`/api/questions/${params.questionId}`).then((res) => res.json()),
     fetch("/api/tags").then((res) => res.json()),
     fetch("/api/users").then((res) => res.json()),
@@ -72,7 +72,7 @@ export async function loader({ params }) {
 
   return {
     question,
-    tags: indexBy(tags, "id"),
+    tags: indexBy(tagsResponse.tags, "id"),
     users: indexBy(users, "id"),
     answers,
   };

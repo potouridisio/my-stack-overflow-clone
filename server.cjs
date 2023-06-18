@@ -186,10 +186,11 @@ app.post("/questions", (req, res) => {
   );
 });
 
-// Endpoint to retrieve all tags and sort them based on sortBy query parameter
 app.get("/tags", (req, res) => {
   const sortBy = req.query.sortBy || "popularity";
-  const searchText = req.query.q; // Get the value of the 'q' search parameter
+  const searchText = req.query.q;
+  const pageSize = 10;
+  const page = parseInt(req.query.page || 1);
 
   let orderBy;
   switch (sortBy) {
@@ -214,12 +215,28 @@ app.get("/tags", (req, res) => {
 
   query += ` ORDER BY ${orderBy}`;
 
+  // Calculate the offset based on the page and page size
+  const offset = (page - 1) * pageSize;
+  query += ` LIMIT ${pageSize} OFFSET ${offset}`;
+
   db.all(query, params, (err, rows) => {
     if (err) {
       console.error(err);
       res.status(500).send("Internal Server Error");
     } else {
-      res.json(rows);
+      // Calculate the total number of pages based on the result count
+      const totalCount = rows.length;
+      const totalPages = Math.ceil(totalCount / pageSize);
+
+      // Construct the response object with current page information
+      const response = {
+        currentPage: page,
+        totalPages,
+        pageSize,
+        tags: rows,
+      };
+
+      res.json(response);
     }
   });
 });

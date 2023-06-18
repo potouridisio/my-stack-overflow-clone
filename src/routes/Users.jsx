@@ -13,12 +13,12 @@ import { indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader() {
-  const [tags, users] = await Promise.all([
+  const [tagsResponse, users] = await Promise.all([
     fetch("/api/tags").then((res) => res.json()),
     fetch("/api/users").then((res) => res.json()),
   ]);
 
-  return { tags: indexBy(tags, "id"), users };
+  return { tags: indexBy(tagsResponse.tags, "id"), users };
 }
 
 export default function Users() {

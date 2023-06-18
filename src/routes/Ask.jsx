@@ -87,9 +87,9 @@ export async function action({ request }) {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader() {
-  const tags = await fetch("/api/tags").then((res) => res.json());
+  const tagsResponse = await fetch("/api/tags").then((res) => res.json());
 
-  return indexBy(tags, "id");
+  return indexBy(tagsResponse.tags, "id");
 }
 
 export default function Ask() {
