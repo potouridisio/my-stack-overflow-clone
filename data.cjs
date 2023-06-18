@@ -289,7 +289,7 @@ const tags = [
     name: "typescript",
     occurrenceCount: 0,
   },
-  // New tags (with occurrenceCount set to 0)
+  // New tags (without duplicates)
   {
     createdAt: null,
     description:
@@ -549,25 +549,9 @@ const tags = [
   {
     createdAt: null,
     description:
-      "A flexible and efficient framework for building scalable web applications.",
-    id: 44,
-    name: "flask",
-    occurrenceCount: 0,
-  },
-  {
-    createdAt: null,
-    description:
       "A popular framework for building interactive web applications.",
     id: 45,
     name: "ember.js",
-    occurrenceCount: 0,
-  },
-  {
-    createdAt: null,
-    description:
-      "A powerful and flexible framework for building web applications.",
-    id: 46,
-    name: "django",
     occurrenceCount: 0,
   },
   {
@@ -584,14 +568,6 @@ const tags = [
       "A lightweight framework for building fast and efficient web applications.",
     id: 48,
     name: "next.js",
-    occurrenceCount: 0,
-  },
-  {
-    createdAt: null,
-    description:
-      "A powerful and flexible framework for building web applications.",
-    id: 49,
-    name: "laravel",
     occurrenceCount: 0,
   },
   {
