@@ -205,38 +205,42 @@ app.get("/tags", (req, res) => {
       orderBy = "occurrenceCount DESC";
   }
 
+  let countQuery = "SELECT COUNT(*) AS totalCount FROM tags";
   let query = "SELECT * FROM tags";
   const params = [];
 
   if (searchText) {
+    countQuery += " WHERE name LIKE ?";
     query += " WHERE name LIKE ?";
     params.push(`%${searchText}%`);
   }
 
-  query += ` ORDER BY ${orderBy}`;
-
-  // Calculate the offset based on the page and page size
-  const offset = (page - 1) * pageSize;
-  query += ` LIMIT ${pageSize} OFFSET ${offset}`;
-
-  db.all(query, params, (err, rows) => {
+  db.get(countQuery, params, (err, result) => {
     if (err) {
       console.error(err);
       res.status(500).send("Internal Server Error");
     } else {
-      // Calculate the total number of pages based on the result count
-      const totalCount = rows.length;
+      const totalCount = result.totalCount;
       const totalPages = Math.ceil(totalCount / pageSize);
 
-      // Construct the response object with current page information
-      const response = {
-        currentPage: page,
-        totalPages,
-        pageSize,
-        tags: rows,
-      };
+      let offset = (page - 1) * pageSize;
+      query += ` ORDER BY ${orderBy} LIMIT ${pageSize} OFFSET ${offset}`;
 
-      res.json(response);
+      db.all(query, params, (err, rows) => {
+        if (err) {
+          console.error(err);
+          res.status(500).send("Internal Server Error");
+        } else {
+          const response = {
+            currentPage: page,
+            totalPages,
+            pageSize,
+            totalCount,
+            tags: rows,
+          };
+          res.json(response);
+        }
+      });
     }
   });
 });
