@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import {
   Form,
   useNavigation,
@@ -57,6 +58,10 @@ export default function Preferences() {
 
   return (
     <>
+      <Helmet>
+        <title>Preferences for John Doe - Stack Overflow Clone</title>
+      </Helmet>
+
       <Box sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar
           disableGutters

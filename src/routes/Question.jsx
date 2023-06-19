@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import {
   Form,
   Link as RouterLink,
@@ -83,101 +84,114 @@ export default function Question() {
   const { question, tags, users, answers } = useLoaderData();
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <Toolbar />
+    <>
+      <Helmet>
+        <title>{`${question.title} - Stack Overflow Clone`}</title>
+      </Helmet>
 
-      <Toolbar disableGutters>
-        <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
-          {question.title}
-        </Typography>
-        <Button component={RouterLink} to="/questions/ask" variant="contained">
-          Ask Question
-        </Button>
-      </Toolbar>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
 
-      {/* Question */}
-      <Card>
-        <CardContent>
-          <Typography color="text.secondary" sx={{ mb: 1.5 }}>
-            {question.body}
+        <Toolbar disableGutters>
+          <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
+            {question.title}
           </Typography>
-
-          <Stack direction="row" spacing={1}>
-            {question.tagIds.map((tagId) => (
-              <Chip key={tagId} label={tags[tagId].name} onClick={() => {}} />
-            ))}
-          </Stack>
-        </CardContent>
-
-        <CardActions sx={{ justifyContent: "flex-end" }}>
-          <Typography variant="body2">
-            asked {convertToRelativeDate(question.createdAt)}{" "}
-            <Link href="#" onClick={(event) => event.preventDefault()}>
-              {users[question.userId].name}
-            </Link>{" "}
-            {users[question.userId].reputation}
-          </Typography>
-        </CardActions>
-      </Card>
-
-      {answers.length > 0 ? (
-        <>
-          <Toolbar disableGutters>
-            <Typography component="div" variant="h6">
-              {answers.length} Answer{answers.length === 1 ? "" : "s"}
-            </Typography>
-          </Toolbar>
-
-          <Stack spacing={2}>
-            {answers.map((answer) => (
-              <Card key={answer.id}>
-                <CardContent>
-                  <Typography color="text.secondary" sx={{ mb: 1.5 }}>
-                    {answer.body}
-                  </Typography>
-                </CardContent>
-
-                <CardActions sx={{ justifyContent: "flex-end" }}>
-                  <Typography variant="body2">
-                    answered {convertToRelativeDate(answer.createdAt)}{" "}
-                    <Link href="#" onClick={(event) => event.preventDefault()}>
-                      {users[answer.userId].name}
-                    </Link>{" "}
-                    {users[answer.userId].reputation}
-                  </Typography>
-                </CardActions>
-              </Card>
-            ))}
-          </Stack>
-        </>
-      ) : null}
-
-      <Toolbar disableGutters>
-        <Typography component="div" variant="h6">
-          Your Answer
-        </Typography>
-      </Toolbar>
-
-      <Card>
-        <CardContent>
-          <Form id="new-answer" method="post">
-            <TextField
-              error={!!actionData?.fieldErrors?.body}
-              fullWidth
-              helperText={actionData?.fieldErrors?.body}
-              multiline
-              name="body"
-              rows={4}
-            />
-          </Form>
-        </CardContent>
-
-        <CardActions>
-          <Button form="new-answer" size="small" type="submit">
-            Post Your Answer
+          <Button
+            component={RouterLink}
+            to="/questions/ask"
+            variant="contained"
+          >
+            Ask Question
           </Button>
-        </CardActions>
-      </Card>
-    </Box>
+        </Toolbar>
+
+        {/* Question */}
+        <Card>
+          <CardContent>
+            <Typography color="text.secondary" sx={{ mb: 1.5 }}>
+              {question.body}
+            </Typography>
+
+            <Stack direction="row" spacing={1}>
+              {question.tagIds.map((tagId) => (
+                <Chip key={tagId} label={tags[tagId].name} onClick={() => {}} />
+              ))}
+            </Stack>
+          </CardContent>
+
+          <CardActions sx={{ justifyContent: "flex-end" }}>
+            <Typography variant="body2">
+              asked {convertToRelativeDate(question.createdAt)}{" "}
+              <Link href="#" onClick={(event) => event.preventDefault()}>
+                {users[question.userId].name}
+              </Link>{" "}
+              {users[question.userId].reputation}
+            </Typography>
+          </CardActions>
+        </Card>
+
+        {answers.length > 0 ? (
+          <>
+            <Toolbar disableGutters>
+              <Typography component="div" variant="h6">
+                {answers.length} Answer{answers.length === 1 ? "" : "s"}
+              </Typography>
+            </Toolbar>
+
+            <Stack spacing={2}>
+              {answers.map((answer) => (
+                <Card key={answer.id}>
+                  <CardContent>
+                    <Typography color="text.secondary" sx={{ mb: 1.5 }}>
+                      {answer.body}
+                    </Typography>
+                  </CardContent>
+
+                  <CardActions sx={{ justifyContent: "flex-end" }}>
+                    <Typography variant="body2">
+                      answered {convertToRelativeDate(answer.createdAt)}{" "}
+                      <Link
+                        href="#"
+                        onClick={(event) => event.preventDefault()}
+                      >
+                        {users[answer.userId].name}
+                      </Link>{" "}
+                      {users[answer.userId].reputation}
+                    </Typography>
+                  </CardActions>
+                </Card>
+              ))}
+            </Stack>
+          </>
+        ) : null}
+
+        <Toolbar disableGutters>
+          <Typography component="div" variant="h6">
+            Your Answer
+          </Typography>
+        </Toolbar>
+
+        <Card>
+          <CardContent>
+            <Form id="new-answer" method="post">
+              <TextField
+                error={!!actionData?.fieldErrors?.body}
+                fullWidth
+                helperText={actionData?.fieldErrors?.body}
+                multiline
+                name="body"
+                rows={4}
+              />
+            </Form>
+          </CardContent>
+
+          <CardActions>
+            <Button form="new-answer" size="small" type="submit">
+              Post Your Answer
+            </Button>
+          </CardActions>
+        </Card>
+      </Box>
+    </>
   );
 }

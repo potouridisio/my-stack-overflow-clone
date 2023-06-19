@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useLoaderData } from "react-router-dom";
 
 import Box from "@mui/material/Box";
@@ -25,53 +26,59 @@ export default function Users() {
   const { tags, users } = useLoaderData();
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <Toolbar />
+    <>
+      <Helmet>
+        <title>Users - Stack Overflow Clone</title>
+      </Helmet>
 
-      <Toolbar disableGutters>
-        <Typography component="div" variant="h6">
-          Users
-        </Typography>
-      </Toolbar>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
 
-      <Grid container spacing={2}>
-        {users.map((user) => (
-          <Grid key={user.id} xs={3}>
-            <Card>
-              <CardContent>
-                <Typography
-                  component={Link}
-                  href="#"
-                  onClick={(event) => event.preventDefault()}
-                  variant="h5"
-                >
-                  {user.name}
-                </Typography>
+        <Toolbar disableGutters>
+          <Typography component="div" variant="h6">
+            Users
+          </Typography>
+        </Toolbar>
 
-                <Typography color="text.secondary" sx={{ mb: 1.5 }}>
-                  {user.location}
-                </Typography>
+        <Grid container spacing={2}>
+          {users.map((user) => (
+            <Grid key={user.id} xs={3}>
+              <Card>
+                <CardContent>
+                  <Typography
+                    component={Link}
+                    href="#"
+                    onClick={(event) => event.preventDefault()}
+                    variant="h5"
+                  >
+                    {user.name}
+                  </Typography>
 
-                <Typography sx={{ mb: 1.5 }} variant="body2">
-                  {user.reputation}
-                </Typography>
+                  <Typography color="text.secondary" sx={{ mb: 1.5 }}>
+                    {user.location}
+                  </Typography>
 
-                <Stack direction="row" divider={<>,&nbsp;</>}>
-                  {user.tagIds.map((tagId) => (
-                    <Link
-                      href="#"
-                      key={tagId}
-                      onClick={(event) => event.preventDefault()}
-                    >
-                      {tags[tagId].name}
-                    </Link>
-                  ))}
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+                  <Typography sx={{ mb: 1.5 }} variant="body2">
+                    {user.reputation}
+                  </Typography>
+
+                  <Stack direction="row" divider={<>,&nbsp;</>}>
+                    {user.tagIds.map((tagId) => (
+                      <Link
+                        href="#"
+                        key={tagId}
+                        onClick={(event) => event.preventDefault()}
+                      >
+                        {tags[tagId].name}
+                      </Link>
+                    ))}
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </>
   );
 }

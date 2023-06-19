@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Helmet } from "react-helmet";
 import {
   Form,
   redirect,
@@ -99,78 +100,84 @@ export default function Ask() {
   const [selectedTags, setSelectedTags] = useState([]);
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <Toolbar />
+    <>
+      <Helmet>
+        <title>Ask a question - Stack Overflow Clone</title>
+      </Helmet>
 
-      <Card>
-        <Toolbar>
-          <Typography component="div" variant="h6">
-            Ask a public question
-          </Typography>
-        </Toolbar>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
 
-        <CardContent>
-          <Stack component={Form} id="new-question" method="post" spacing={2}>
-            <TextField
-              autoFocus
-              error={!!actionData?.fieldErrors?.title}
-              helperText={
-                actionData?.fieldErrors?.title ||
-                "Be specific and imagine you're asking a question to another person"
-              }
-              label="Title"
-              name="title"
-              placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
-            />
+        <Card>
+          <Toolbar>
+            <Typography component="div" variant="h6">
+              Ask a public question
+            </Typography>
+          </Toolbar>
 
-            <TextField
-              error={!!actionData?.fieldErrors?.body}
-              helperText={
-                actionData?.fieldErrors?.body ||
-                "Include all the information someone would need to answer your question"
-              }
-              label="Body"
-              multiline
-              name="body"
-              rows={4}
-            />
+          <CardContent>
+            <Stack component={Form} id="new-question" method="post" spacing={2}>
+              <TextField
+                autoFocus
+                error={!!actionData?.fieldErrors?.title}
+                helperText={
+                  actionData?.fieldErrors?.title ||
+                  "Be specific and imagine you're asking a question to another person"
+                }
+                label="Title"
+                name="title"
+                placeholder="e.g. Is there an R function for finding the index of an element in a vector?"
+              />
 
-            <Autocomplete
-              multiple
-              onChange={(_event, value) => setSelectedTags(value)}
-              options={Object.keys(tags)}
-              getOptionLabel={(option) => tags[option].name}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  error={!!actionData?.fieldErrors?.tags}
-                  helperText={
-                    actionData?.fieldErrors?.tags ||
-                    "Add up to 5 tags to describe what your question is about"
-                  }
-                  label="Tags"
-                  placeholder="e.g. (database ruby .net)"
-                  variant="outlined"
-                />
-              )}
-              value={selectedTags}
-            />
+              <TextField
+                error={!!actionData?.fieldErrors?.body}
+                helperText={
+                  actionData?.fieldErrors?.body ||
+                  "Include all the information someone would need to answer your question"
+                }
+                label="Body"
+                multiline
+                name="body"
+                rows={4}
+              />
 
-            <input name="tags" type="hidden" value={selectedTags.join()} />
-          </Stack>
-        </CardContent>
+              <Autocomplete
+                multiple
+                onChange={(_event, value) => setSelectedTags(value)}
+                options={Object.keys(tags)}
+                getOptionLabel={(option) => tags[option].name}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    error={!!actionData?.fieldErrors?.tags}
+                    helperText={
+                      actionData?.fieldErrors?.tags ||
+                      "Add up to 5 tags to describe what your question is about"
+                    }
+                    label="Tags"
+                    placeholder="e.g. (database ruby .net)"
+                    variant="outlined"
+                  />
+                )}
+                value={selectedTags}
+              />
 
-        <CardActions>
-          <LoadingButton
-            form="new-question"
-            loading={navigation.state === "submitting"}
-            size="small"
-            type="submit"
-          >
-            Post your question
-          </LoadingButton>
-        </CardActions>
-      </Card>
-    </Box>
+              <input name="tags" type="hidden" value={selectedTags.join()} />
+            </Stack>
+          </CardContent>
+
+          <CardActions>
+            <LoadingButton
+              form="new-question"
+              loading={navigation.state === "submitting"}
+              size="small"
+              type="submit"
+            >
+              Post your question
+            </LoadingButton>
+          </CardActions>
+        </Card>
+      </Box>
+    </>
   );
 }

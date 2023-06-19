@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 
 import Box from "@mui/material/Box";
@@ -35,50 +36,58 @@ export default function Tags() {
   const tab = searchParams.get("tab") || "popular";
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <Toolbar />
+    <>
+      <Helmet>
+        <title>Tags - Stack Overflow Clone</title>
+      </Helmet>
 
-      <Toolbar disableGutters>
-        <Typography component="div" variant="h6">
-          Tags
-        </Typography>
-      </Toolbar>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
 
-      <Toolbar disableGutters sx={{ justifyContent: "flex-end" }}>
-        <ToggleButtonGroup
-          color="primary"
-          exclusive
-          onChange={(_event, value) => value && setSearchParams({ tab: value })}
-          size="small"
-          value={tab}
-        >
-          <ToggleButton value="popular">Popular</ToggleButton>
-          <ToggleButton value="name">Name</ToggleButton>
-          <ToggleButton value="new">New</ToggleButton>
-        </ToggleButtonGroup>
-      </Toolbar>
+        <Toolbar disableGutters>
+          <Typography component="div" variant="h6">
+            Tags
+          </Typography>
+        </Toolbar>
 
-      <Grid container spacing={2}>
-        {tagsResponse.tags.map((tag) => (
-          <Grid key={tag.id} xs={3}>
-            <Card>
-              <CardContent>
-                <Chip label={tag.name} onClick={() => {}} sx={{ mb: 1.5 }} />
-                <Typography color="text.secondary">
-                  {tag.description}
-                </Typography>
-              </CardContent>
+        <Toolbar disableGutters sx={{ justifyContent: "flex-end" }}>
+          <ToggleButtonGroup
+            color="primary"
+            exclusive
+            onChange={(_event, value) =>
+              value && setSearchParams({ tab: value })
+            }
+            size="small"
+            value={tab}
+          >
+            <ToggleButton value="popular">Popular</ToggleButton>
+            <ToggleButton value="name">Name</ToggleButton>
+            <ToggleButton value="new">New</ToggleButton>
+          </ToggleButtonGroup>
+        </Toolbar>
 
-              <CardActions sx={{ justifyContent: "flex-end" }}>
-                <Typography variant="body2">
-                  {tag.occurrenceCount} question
-                  {tag.occurrenceCount === 1 ? "" : "s"}
-                </Typography>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+        <Grid container spacing={2}>
+          {tagsResponse.tags.map((tag) => (
+            <Grid key={tag.id} xs={3}>
+              <Card>
+                <CardContent>
+                  <Chip label={tag.name} onClick={() => {}} sx={{ mb: 1.5 }} />
+                  <Typography color="text.secondary">
+                    {tag.description}
+                  </Typography>
+                </CardContent>
+
+                <CardActions sx={{ justifyContent: "flex-end" }}>
+                  <Typography variant="body2">
+                    {tag.occurrenceCount} question
+                    {tag.occurrenceCount === 1 ? "" : "s"}
+                  </Typography>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
+    </>
   );
 }

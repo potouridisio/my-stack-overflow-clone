@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import Draggable from "react-draggable";
 import {
   Form,
@@ -183,259 +184,273 @@ export default function Questions() {
   };
 
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-      <Toolbar />
+    <>
+      <Helmet>
+        <title>{`${
+          isSearch ? `Posts containing '${q}'` : "Recently Active Questions"
+        } - Stack Overflow Clone`}</title>
+      </Helmet>
 
-      <Toolbar disableGutters>
-        <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
-          {isSearch ? "Search Results" : "All Questions"}
-        </Typography>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        <Toolbar />
 
-        <Button component={RouterLink} to="/questions/ask" variant="contained">
-          Ask Question
-        </Button>
-      </Toolbar>
+        <Toolbar disableGutters>
+          <Typography component="div" sx={{ flexGrow: 1 }} variant="h6">
+            {isSearch ? "Search Results" : "All Questions"}
+          </Typography>
 
-      <Toolbar disableGutters>
-        <Typography component="div" sx={{ flexGrow: 1 }} variant="subtitle1">
-          {questions.length} {isSearch ? "result" : "question"}
-          {questions.length === 1 ? "" : "s"}
-        </Typography>
-
-        {!isSearch ? (
-          <ToggleButton
-            color="primary"
-            onChange={toggle}
-            selected={expanded}
-            size="small"
-            value="filter"
+          <Button
+            component={RouterLink}
+            to="/questions/ask"
+            variant="contained"
           >
-            <FilterListIcon fontSize="small" sx={{ mr: 0.5 }} />
-            Filter
-          </ToggleButton>
-        ) : null}
-      </Toolbar>
+            Ask Question
+          </Button>
+        </Toolbar>
 
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Card sx={{ mb: 2 }}>
-          <Form method="post">
-            <CardContent>
-              <Box sx={{ display: "flex" }}>
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Filter by</FormLabel>
-                  <FormGroup>
-                    {[
-                      ["No answers", "NoAnswers"],
-                      ["No accepted answer", "NoAcceptedAnswer"],
-                      ["Has bounty", "Bounty"],
-                    ].map(([label, value]) => (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={filterIds.includes(value)}
-                            onChange={() => handleToggleFilterId(value)}
-                            value={value}
-                          />
-                        }
-                        key={value}
-                        label={label}
-                      />
-                    ))}
-                  </FormGroup>
-                </FormControl>
+        <Toolbar disableGutters>
+          <Typography component="div" sx={{ flexGrow: 1 }} variant="subtitle1">
+            {questions.length} {isSearch ? "result" : "question"}
+            {questions.length === 1 ? "" : "s"}
+          </Typography>
 
-                <input name="filterIds" type="hidden" value={filterIds} />
-
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Sorted by</FormLabel>
-                  <RadioGroup defaultValue="Newest" name="sortId">
-                    {[
-                      ["Newest", "Newest"],
-                      ["Recent activity", "RecentActivity"],
-                      ["Highest score", "MostVotes"],
-                      ["Most frequent", "MostFrequent"],
-                      ["Bounty ending soon", "BountyEndingSoon"],
-                    ].map(([label, value]) => (
-                      <FormControlLabel
-                        control={<Radio />}
-                        key={value}
-                        label={label}
-                        value={value}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">Tagged with</FormLabel>
-                  <RadioGroup defaultValue="Specified" name="tagModeId">
-                    {[
-                      ["My watched tags", "Watched"],
-                      ["The following tags:", "Specified"],
-                    ].map(([label, value]) => (
-                      <FormControlLabel
-                        control={<Radio />}
-                        key={value}
-                        label={label}
-                        value={value}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              </Box>
-            </CardContent>
-
-            <CardActions>
-              <Button form="filter-form" size="small" type="submit">
-                Apply filter
-              </Button>
-
-              <Button onClick={handleClickOpen} size="small">
-                Save custom filter
-              </Button>
-              <Dialog
-                disablePortal
-                keepMounted
-                fullWidth
-                maxWidth="sm"
-                onClose={handleClose}
-                open={open}
-                PaperComponent={PaperComponent}
-              >
-                <DialogTitle
-                  id="draggable-dialog-title"
-                  style={{ cursor: "move" }}
-                >
-                  Create a custom filter
-                  <IconButton
-                    aria-label="close"
-                    onClick={handleClose}
-                    sx={{
-                      color: (theme) => theme.palette.grey[500],
-                      position: "absolute",
-                      right: 8,
-                      top: 8,
-                    }}
-                  >
-                    <CloseIcon />
-                  </IconButton>
-                </DialogTitle>
-
-                <DialogContent>
-                  <TextField
-                    error={!!actionData?.fieldErrors?.name}
-                    fullWidth
-                    helperText={actionData?.fieldErrors?.name}
-                    inputRef={inputRef}
-                    label="Filter title"
-                    margin="dense"
-                    name="name"
-                    placeholder="Give your custom filter a title"
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>Cancel</Button>
-                  <LoadingButton
-                    loading={navigation.state === "submitting"}
-                    type="submit"
-                  >
-                    Save filter
-                  </LoadingButton>
-                </DialogActions>
-              </Dialog>
-
-              <Box sx={{ flexGrow: 1 }} />
-              <Button onClick={toggle} size="small">
-                Cancel
-              </Button>
-            </CardActions>
-          </Form>
-        </Card>
-      </Collapse>
-
-      <Stack spacing={2}>
-        {/* Question */}
-        {questions.map((question) => {
-          const isWatched = question.tagIds.some((tagId) =>
-            watchedTagIds.includes(tagId.toString())
-          );
-
-          return (
-            <Card
-              key={question.id}
-              sx={{
-                bgcolor: (theme) =>
-                  isWatched
-                    ? theme.palette.mode === "light"
-                      ? yellow[50]
-                      : grey[900]
-                    : undefined,
-              }}
+          {!isSearch ? (
+            <ToggleButton
+              color="primary"
+              onChange={toggle}
+              selected={expanded}
+              size="small"
+              value="filter"
             >
+              <FilterListIcon fontSize="small" sx={{ mr: 0.5 }} />
+              Filter
+            </ToggleButton>
+          ) : null}
+        </Toolbar>
+
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Card sx={{ mb: 2 }}>
+            <Form method="post">
               <CardContent>
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{ alignItems: "center", mb: 1.5 }}
-                >
-                  <Typography color="text.secondary" sx={{ fontSize: 14 }}>
-                    {question.voteCount} vote
-                    {question.voteCount === 1 ? "" : "s"}
-                  </Typography>
-                  {question.answerCount > 0 ? (
-                    <Chip
-                      color="success"
-                      label={`${question.answerCount} answer${
-                        question.answerCount === 1 ? "" : "s"
-                      }`}
-                      variant="outlined"
-                    />
-                  ) : (
-                    <Typography color="text.secondary" sx={{ fontSize: 14 }}>
-                      {question.answerCount} answer
-                      {question.answerCount === 1 ? "" : "s"}
-                    </Typography>
-                  )}
-                </Stack>
+                <Box sx={{ display: "flex" }}>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Filter by</FormLabel>
+                    <FormGroup>
+                      {[
+                        ["No answers", "NoAnswers"],
+                        ["No accepted answer", "NoAcceptedAnswer"],
+                        ["Has bounty", "Bounty"],
+                      ].map(([label, value]) => (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={filterIds.includes(value)}
+                              onChange={() => handleToggleFilterId(value)}
+                              value={value}
+                            />
+                          }
+                          key={value}
+                          label={label}
+                        />
+                      ))}
+                    </FormGroup>
+                  </FormControl>
 
-                <Link
-                  component={RouterLink}
-                  sx={{ display: "block", mb: 1.5 }}
-                  to={`/questions/${question.id}`}
-                  variant="h5"
-                >
-                  {question.title}
-                </Link>
+                  <input name="filterIds" type="hidden" value={filterIds} />
 
-                <Stack direction="row" spacing={1}>
-                  {question.tagIds.map((tagId) => {
-                    const isWatched = watchedTagIds.includes(tagId.toString());
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Sorted by</FormLabel>
+                    <RadioGroup defaultValue="Newest" name="sortId">
+                      {[
+                        ["Newest", "Newest"],
+                        ["Recent activity", "RecentActivity"],
+                        ["Highest score", "MostVotes"],
+                        ["Most frequent", "MostFrequent"],
+                        ["Bounty ending soon", "BountyEndingSoon"],
+                      ].map(([label, value]) => (
+                        <FormControlLabel
+                          control={<Radio />}
+                          key={value}
+                          label={label}
+                          value={value}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
 
-                    return (
-                      <Chip
-                        icon={isWatched ? <VisibilityIcon /> : undefined}
-                        key={tagId}
-                        label={tags[tagId].name}
-                        onClick={() => {}}
-                      />
-                    );
-                  })}
-                </Stack>
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">Tagged with</FormLabel>
+                    <RadioGroup defaultValue="Specified" name="tagModeId">
+                      {[
+                        ["My watched tags", "Watched"],
+                        ["The following tags:", "Specified"],
+                      ].map(([label, value]) => (
+                        <FormControlLabel
+                          control={<Radio />}
+                          key={value}
+                          label={label}
+                          value={value}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
               </CardContent>
 
-              <CardActions sx={{ justifyContent: "flex-end" }}>
-                <Typography variant="body2">
-                  <Link href="#" onClick={(event) => event.preventDefault()}>
-                    {users[question.userId].name}
-                  </Link>{" "}
-                  {users[question.userId].reputation} asked{" "}
-                  {convertToRelativeDate(question.createdAt)}
-                </Typography>
+              <CardActions>
+                <Button form="filter-form" size="small" type="submit">
+                  Apply filter
+                </Button>
+
+                <Button onClick={handleClickOpen} size="small">
+                  Save custom filter
+                </Button>
+                <Dialog
+                  disablePortal
+                  keepMounted
+                  fullWidth
+                  maxWidth="sm"
+                  onClose={handleClose}
+                  open={open}
+                  PaperComponent={PaperComponent}
+                >
+                  <DialogTitle
+                    id="draggable-dialog-title"
+                    style={{ cursor: "move" }}
+                  >
+                    Create a custom filter
+                    <IconButton
+                      aria-label="close"
+                      onClick={handleClose}
+                      sx={{
+                        color: (theme) => theme.palette.grey[500],
+                        position: "absolute",
+                        right: 8,
+                        top: 8,
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </DialogTitle>
+
+                  <DialogContent>
+                    <TextField
+                      error={!!actionData?.fieldErrors?.name}
+                      fullWidth
+                      helperText={actionData?.fieldErrors?.name}
+                      inputRef={inputRef}
+                      label="Filter title"
+                      margin="dense"
+                      name="name"
+                      placeholder="Give your custom filter a title"
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <LoadingButton
+                      loading={navigation.state === "submitting"}
+                      type="submit"
+                    >
+                      Save filter
+                    </LoadingButton>
+                  </DialogActions>
+                </Dialog>
+
+                <Box sx={{ flexGrow: 1 }} />
+                <Button onClick={toggle} size="small">
+                  Cancel
+                </Button>
               </CardActions>
-            </Card>
-          );
-        })}
-      </Stack>
-    </Box>
+            </Form>
+          </Card>
+        </Collapse>
+
+        <Stack spacing={2}>
+          {/* Question */}
+          {questions.map((question) => {
+            const isWatched = question.tagIds.some((tagId) =>
+              watchedTagIds.includes(tagId.toString())
+            );
+
+            return (
+              <Card
+                key={question.id}
+                sx={{
+                  bgcolor: (theme) =>
+                    isWatched
+                      ? theme.palette.mode === "light"
+                        ? yellow[50]
+                        : grey[900]
+                      : undefined,
+                }}
+              >
+                <CardContent>
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    sx={{ alignItems: "center", mb: 1.5 }}
+                  >
+                    <Typography color="text.secondary" sx={{ fontSize: 14 }}>
+                      {question.voteCount} vote
+                      {question.voteCount === 1 ? "" : "s"}
+                    </Typography>
+                    {question.answerCount > 0 ? (
+                      <Chip
+                        color="success"
+                        label={`${question.answerCount} answer${
+                          question.answerCount === 1 ? "" : "s"
+                        }`}
+                        variant="outlined"
+                      />
+                    ) : (
+                      <Typography color="text.secondary" sx={{ fontSize: 14 }}>
+                        {question.answerCount} answer
+                        {question.answerCount === 1 ? "" : "s"}
+                      </Typography>
+                    )}
+                  </Stack>
+
+                  <Link
+                    component={RouterLink}
+                    sx={{ display: "block", mb: 1.5 }}
+                    to={`/questions/${question.id}`}
+                    variant="h5"
+                  >
+                    {question.title}
+                  </Link>
+
+                  <Stack direction="row" spacing={1}>
+                    {question.tagIds.map((tagId) => {
+                      const isWatched = watchedTagIds.includes(
+                        tagId.toString()
+                      );
+
+                      return (
+                        <Chip
+                          icon={isWatched ? <VisibilityIcon /> : undefined}
+                          key={tagId}
+                          label={tags[tagId].name}
+                          onClick={() => {}}
+                        />
+                      );
+                    })}
+                  </Stack>
+                </CardContent>
+
+                <CardActions sx={{ justifyContent: "flex-end" }}>
+                  <Typography variant="body2">
+                    <Link href="#" onClick={(event) => event.preventDefault()}>
+                      {users[question.userId].name}
+                    </Link>{" "}
+                    {users[question.userId].reputation} asked{" "}
+                    {convertToRelativeDate(question.createdAt)}
+                  </Typography>
+                </CardActions>
+              </Card>
+            );
+          })}
+        </Stack>
+      </Box>
+    </>
   );
 }
