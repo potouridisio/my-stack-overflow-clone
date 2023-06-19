@@ -36,6 +36,7 @@ export default function LeftSidebar() {
           variant="permanent"
         >
           <Toolbar />
+
           <Box sx={{ overflow: "auto" }}>
             <List subheader={<ListSubheader>Public</ListSubheader>}>
               <ListItem disablePadding>
