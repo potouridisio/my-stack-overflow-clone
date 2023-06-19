@@ -1,11 +1,14 @@
 import { Helmet } from "react-helmet";
 import { useLoaderData, useSearchParams } from "react-router-dom";
 
+import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Toolbar from "@mui/material/Toolbar";
@@ -50,7 +53,19 @@ export default function Tags() {
           </Typography>
         </Toolbar>
 
-        <Toolbar disableGutters sx={{ justifyContent: "flex-end" }}>
+        <Toolbar disableGutters>
+          <TextField
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            name="query"
+            placeholder="Filter by tag name"
+          />
+          <Box sx={{ flexGrow: 1 }} />
           <ToggleButtonGroup
             color="primary"
             exclusive
