@@ -100,6 +100,7 @@ export default function Preferences() {
                   ))}
                 </RadioGroup>
               </ListItem>
+
               <ListItem>
                 <ListItemText
                   primary="Hide left navigation"
