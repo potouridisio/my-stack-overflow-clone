@@ -9,8 +9,9 @@ import {
 
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
 import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -63,22 +64,15 @@ export default function Preferences() {
       </Helmet>
 
       <Box sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar
-          disableGutters
-          sx={{ borderBottom: 1, borderColor: "divider" }}
-        >
+        <Toolbar disableGutters>
           <Typography component="div" variant="h6">
             Preferences
           </Typography>
         </Toolbar>
 
-        <Toolbar disableGutters>
-          <Typography component="div" variant="subtitle1">
-            Interface
-          </Typography>
-        </Toolbar>
-
         <Card>
+          <CardHeader title="Interface" />
+
           <Form method="post" onChange={(event) => submit(event.currentTarget)}>
             <List disablePadding>
               <ListItem divider>
