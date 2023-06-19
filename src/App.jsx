@@ -1,24 +1,37 @@
+import { useMemo } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
+import { blue } from "@mui/material/colors";
 import CssBaseline from "@mui/material/CssBaseline";
+import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
-import theme from "./lib/theme";
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
+import EditUser from "./routes/EditUser";
+import EditEmailSettings from "./routes/EditEmailSettings";
+import Flair from "./routes/Flair";
+import HideCommunities from "./routes/HideCommunities";
 import LeftSidebar from "./routes/LeftSidebar";
+import Preferences, { action as preferencesAction } from "./routes/Preferences";
 import Question, {
   action as questionAction,
   loader as questionLoader,
 } from "./routes/Question";
 import Questions, {
-  action as applyFiltersAction,
+  action as questionsAction,
   handle as questionsHandle,
   loader as questionsLoader,
 } from "./routes/Questions";
-import Root from "./routes/Root";
+import Root, { loader as rootLoader } from "./routes/Root";
+import Settings from "./routes/Settings";
 import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
+import TagWatching, {
+  loader as watchingTagsLoader,
+} from "./routes/TagWatching";
 import Users, { loader as usersLoader } from "./routes/Users";
+import User from "./routes/User";
+import { create } from "zustand";
 
 const router = createBrowserRouter([
   {
@@ -36,7 +49,7 @@ const router = createBrowserRouter([
                 element: <Questions />,
                 loader: questionsLoader,
                 handle: questionsHandle,
-                action: applyFiltersAction,
+                action: questionsAction,
               },
               {
                 path: "search",
@@ -45,6 +58,7 @@ const router = createBrowserRouter([
               },
             ],
           },
+
           {
             path: "tags",
             element: <Tags />,
@@ -61,6 +75,43 @@ const router = createBrowserRouter([
             loader: questionLoader,
             action: questionAction,
           },
+          {
+            //path: "users/:userId/preferences",
+            element: <User />,
+
+            children: [
+              {
+                path: "users/:userId",
+                element: <Settings />,
+                children: [
+                  {
+                    path: "email/settings",
+                    element: <EditEmailSettings />,
+                  },
+                  {
+                    path: "tag-notifications",
+                    element: <TagWatching />,
+                    loader: watchingTagsLoader,
+                  },
+
+                  {
+                    path: "preferences",
+                    element: <Preferences />,
+                    action: preferencesAction,
+                  },
+
+                  {
+                    path: ":userName/flair",
+                    element: <Flair />,
+                  },
+                  {
+                    path: "hidecommunities",
+                    element: <HideCommunities />,
+                  },
+                ],
+              },
+            ],
+          },
         ],
       },
       {
@@ -75,10 +126,96 @@ const router = createBrowserRouter([
         ],
       },
     ],
+    loader: rootLoader,
   },
 ]);
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const useColorModeStore = create((set) => ({
+  mode: "light",
+  setMode: (mode) => set({ mode }),
+}));
+
 export default function App() {
+  const mode = useColorModeStore((state) => state.mode);
+
+  const theme = useMemo(() => {
+    let theme = createTheme({
+      palette: {
+        mode,
+      },
+    });
+
+    theme = createTheme(theme, {
+      components: {
+        MuiAutocomplete: {
+          defaultProps: {
+            ChipProps: {
+              size: "small",
+            },
+            size: "small",
+          },
+        },
+        MuiButton: {
+          defaultProps: {
+            disableElevation: true,
+          },
+        },
+        MuiCard: {
+          defaultProps: {
+            variant: "outlined",
+          },
+        },
+        MuiCardHeader: {
+          defaultProps: {
+            titleTypographyProps: {
+              variant: "subtitle1",
+            },
+          },
+        },
+        MuiCheckbox: {
+          defaultProps: {
+            size: "small",
+          },
+        },
+        MuiChip: {
+          defaultProps: {
+            size: "small",
+          },
+          styleOverrides: {
+            root: {
+              borderRadius: theme.shape.borderRadius,
+            },
+          },
+        },
+        MuiLink: {
+          defaultProps: {
+            underline: "none",
+          },
+          styleOverrides: {
+            root: {
+              "&:hover": {
+                color: theme.palette.mode === "dark" ? blue[400] : blue[800],
+              },
+            },
+          },
+        },
+        MuiRadio: {
+          defaultProps: {
+            size: "small",
+          },
+        },
+        MuiTextField: {
+          defaultProps: {
+            size: "small",
+          },
+        },
+      },
+    });
+
+    return theme;
+  }, [mode]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
