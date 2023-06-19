@@ -47,7 +47,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
 import CustomFilters from "../components/CustomFilters";
-import WatchedTags, { useWatchedTagsStore } from "../components/WatchedTags";
+import WatchedTags from "../components/WatchedTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -55,20 +55,23 @@ export async function loader({ request }) {
   const url = new URL(request.url);
   const searchTerm = url.searchParams.get("q");
 
-  const [questions, tagsResponse, users, filters] = await Promise.all([
-    fetch(`/api/questions${searchTerm ? `?q=${searchTerm}` : ""}`).then((res) =>
-      res.json()
-    ),
-    fetch("/api/tags").then((res) => res.json()),
-    fetch("/api/users").then((res) => res.json()),
-    fetch("/api/users/1/filters").then((res) => res.json()),
-  ]);
+  const [questions, tagsResponse, users, filters, watchedTags] =
+    await Promise.all([
+      fetch(`/api/questions${searchTerm ? `?q=${searchTerm}` : ""}`).then(
+        (res) => res.json()
+      ),
+      fetch("/api/tags").then((res) => res.json()),
+      fetch("/api/users").then((res) => res.json()),
+      fetch("/api/users/1/filters").then((res) => res.json()),
+      fetch("/api/users/1/watchedTags").then((res) => res.json()),
+    ]);
 
   return {
     questions,
     tags: indexBy(tagsResponse.tags, "id"),
     users: indexBy(users, "id"),
     filters,
+    watchedTags,
   };
 }
 
@@ -87,7 +90,7 @@ export const handle = {
       </ListItem>
 
       <ListItem>
-        <WatchedTags tags={data.tags} />
+        <WatchedTags tags={data.tags} watchedTags={data.watchedTags} />
       </ListItem>
     </List>
   ),
@@ -151,7 +154,7 @@ function PaperComponent(props) {
 export default function Questions() {
   const actionData = useActionData();
   const { expanded, toggle } = useFilterStore();
-  const { questions, tags, users } = useLoaderData();
+  const { questions, tags, users, watchedTags } = useLoaderData();
   const navigation = useNavigation();
   const inputRef = useRef(null);
   const [searchParams] = useSearchParams();
@@ -159,7 +162,6 @@ export default function Questions() {
   const isSearch = Boolean(q);
   const [filterIds, setFilterIds] = useState([]);
   const [open, setOpen] = useState(false);
-  const { watchedTagIds } = useWatchedTagsStore();
 
   useEffect(() => {
     if (inputRef.current && open) {
@@ -369,7 +371,7 @@ export default function Questions() {
           {/* Question */}
           {questions.map((question) => {
             const isWatched = question.tagIds.some((tagId) =>
-              watchedTagIds.includes(tagId.toString())
+              watchedTags.includes(tagId)
             );
 
             return (
@@ -421,9 +423,7 @@ export default function Questions() {
 
                   <Stack direction="row" spacing={1}>
                     {question.tagIds.map((tagId) => {
-                      const isWatched = watchedTagIds.includes(
-                        tagId.toString()
-                      );
+                      const isWatched = watchedTags.includes(tagId);
 
                       return (
                         <Chip

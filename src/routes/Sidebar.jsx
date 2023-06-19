@@ -9,6 +9,9 @@ const drawerWidth = 320;
 
 export default function Sidebar() {
   const matches = useMatches();
+
+  console.log({ matches });
+
   const sidebar = matches
     // first get rid of any matches that don't have handle and sidebar
     .filter((match) => Boolean(match.handle?.sidebar))

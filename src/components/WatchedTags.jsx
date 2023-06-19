@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { create } from "zustand";
+import { useSubmit } from "react-router-dom";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -15,28 +15,22 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Unstable_Grid2";
 
-// eslint-disable-next-line react-refresh/only-export-components
-export const useWatchedTagsStore = create((set) => ({
-  unwatch: (tagId) =>
-    set((state) => ({
-      watchedTagIds: state.watchedTagIds.filter((id) => id !== tagId),
-    })),
-  watch: (tagId) =>
-    set((state) => ({
-      watchedTagIds: [...state.watchedTagIds, tagId],
-    })),
-  watchedTagIds: [],
-}));
-
-export default function WatchedTags({ tags }) {
+export default function WatchedTags({ tags, watchedTags }) {
+  const isWatching = watchedTags.length > 0;
   const [isEditing, setIsEditing] = useState(false);
   const [pendingTagId, setPendingTagId] = useState(null);
-  const { unwatch, watch, watchedTagIds } = useWatchedTagsStore();
-  const isWatching = watchedTagIds.length > 0;
+  const submit = useSubmit();
 
   const handleAdd = () => {
     if (pendingTagId) {
-      watch(pendingTagId);
+      const formData = new FormData();
+
+      const newWatchedTags = [...watchedTags, pendingTagId];
+
+      formData.append("watchedTags", newWatchedTags.join(" "));
+
+      submit(formData, { action: "/save-watched-tags", method: "post" });
+
       setPendingTagId(null);
     }
   };
@@ -57,12 +51,12 @@ export default function WatchedTags({ tags }) {
         <CardContent sx={{ "&:last-child": { pb: 2 } }}>
           {isWatching ? (
             <Grid container spacing={1}>
-              {watchedTagIds.map((tagId) => (
+              {watchedTags.map((tagId) => (
                 <Grid key={tagId} xs="auto">
                   <Chip
                     label={tags[tagId].name}
                     onClick={() => {}}
-                    onDelete={isEditing ? () => unwatch(tagId) : null}
+                    onDelete={isEditing ? () => {} : null}
                   />
                 </Grid>
               ))}
@@ -70,7 +64,7 @@ export default function WatchedTags({ tags }) {
           ) : null}
           {isEditing ? (
             <Autocomplete
-              getOptionDisabled={(option) => watchedTagIds.includes(option)}
+              getOptionDisabled={(option) => watchedTags.includes(option)}
               getOptionLabel={(option) => tags[option].name}
               onChange={(_event, value) => setPendingTagId(value)}
               options={Object.keys(tags)}

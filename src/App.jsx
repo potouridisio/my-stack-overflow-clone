@@ -21,6 +21,10 @@ import Questions, {
   loader as questionsLoader,
 } from "./routes/Questions";
 import Root, { loader as rootLoader } from "./routes/Root";
+import {
+  action as saveWatchedTagsAction,
+  loader as saveWatchedTagsLoader,
+} from "./routes/SaveWatchedTags";
 import Settings from "./routes/Settings";
 import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
@@ -103,6 +107,11 @@ const router = createBrowserRouter([
       },
     ],
     loader: rootLoader,
+  },
+  {
+    path: "/save-watched-tags",
+    action: saveWatchedTagsAction,
+    loader: saveWatchedTagsLoader,
   },
 ]);
 
