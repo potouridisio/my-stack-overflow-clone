@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { create } from "zustand";
 
-import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
@@ -91,14 +89,14 @@ export default function WatchedTags({ tags }) {
         </CardContent>
         <CardActions>
           {isEditing ? (
-            <Button onClick={handleAdd} size="small" startIcon={<AddIcon />}>
+            <Button onClick={handleAdd} size="small">
               Add
             </Button>
           ) : (
             <Button
               onClick={handleEdit}
               size="small"
-              startIcon={isWatching ? <EditIcon /> : <VisibilityIcon />}
+              startIcon={isWatching ? undefined : <VisibilityIcon />}
             >
               {isWatching ? "Edit" : "Watch a tag"}
             </Button>
