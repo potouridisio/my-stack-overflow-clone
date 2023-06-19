@@ -19,10 +19,7 @@ export default function EditUser() {
       </Helmet>
 
       <Box sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar
-          disableGutters
-          sx={{ borderBottom: 1, borderColor: "divider" }}
-        >
+        <Toolbar disableGutters>
           <Typography component="div" variant="h6">
             Edit your profile
           </Typography>
