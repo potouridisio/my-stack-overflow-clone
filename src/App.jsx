@@ -8,7 +8,7 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
-import EditUser from "./routes/EditUser";
+import EditUser, { action as editUserAction } from "./routes/EditUser";
 import LeftSidebar from "./routes/LeftSidebar";
 import Preferences, { action as preferencesAction } from "./routes/Preferences";
 import Question, {
@@ -24,7 +24,7 @@ import Root, { loader as rootLoader } from "./routes/Root";
 import Settings from "./routes/Settings";
 import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
-import User from "./routes/User";
+import User, { loader as userLoader } from "./routes/User";
 import Users, { loader as usersLoader } from "./routes/Users";
 
 const router = createBrowserRouter([
@@ -71,6 +71,7 @@ const router = createBrowserRouter([
           {
             path: "users/:userId",
             element: <User />,
+            loader: userLoader,
             children: [
               {
                 element: <Settings />,
@@ -83,6 +84,7 @@ const router = createBrowserRouter([
                   {
                     path: "edit",
                     element: <EditUser />,
+                    action: editUserAction,
                   },
                 ],
               },

@@ -18,7 +18,6 @@ export async function loader({ params }) {
 
 export default function User() {
   const user = useLoaderData();
-  console.log(user);
 
   return (
     <Box component="main" sx={{ flexGrow: 1 }}>
