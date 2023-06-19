@@ -1,14 +1,17 @@
 import { Helmet } from "react-helmet";
 import { useLoaderData } from "react-router-dom";
 
+import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Unstable_Grid2";
+import InputAdornment from "@mui/material/InputAdornment";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
+import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Unstable_Grid2";
 
 import { indexBy } from "../lib/utils";
 
@@ -38,6 +41,20 @@ export default function Users() {
           <Typography component="div" variant="h6">
             Users
           </Typography>
+        </Toolbar>
+
+        <Toolbar disableGutters>
+          <TextField
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
+            name="query"
+            placeholder="Filter by user"
+          />
         </Toolbar>
 
         <Grid container spacing={2}>
