@@ -8,6 +8,7 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
+import EditUser from "./routes/EditUser";
 import LeftSidebar from "./routes/LeftSidebar";
 import Preferences, { action as preferencesAction } from "./routes/Preferences";
 import Question, {
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
                     path: "preferences",
                     element: <Preferences />,
                     action: preferencesAction,
+                  },
+                  {
+                    path: "edit",
+                    element: <EditUser />,
                   },
                 ],
               },

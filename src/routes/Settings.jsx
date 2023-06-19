@@ -1,6 +1,7 @@
 import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
 
 import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -29,6 +30,18 @@ export default function Settings() {
         variant="permanent"
       >
         <Box sx={{ overflow: "auto" }}>
+          <List subheader={<ListSubheader>Personal information</ListSubheader>}>
+            <ListItem disablePadding>
+              <ListItemButton
+                component={Link}
+                selected={pathname === "/users/1/edit"}
+                to="/users/1/edit"
+              >
+                <ListItemText primary="Edit profile" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+          <Divider />
           <List subheader={<ListSubheader>Site settings</ListSubheader>}>
             <ListItem disablePadding>
               <ListItemButton

@@ -117,7 +117,7 @@ export default function Root() {
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton component={Link} sx={{ p: 0 }} to="users/1/preferences">
+          <IconButton component={Link} sx={{ p: 0 }} to="users/1/edit">
             <Avatar>JD</Avatar>
           </IconButton>
         </Toolbar>
