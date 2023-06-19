@@ -8,6 +8,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
 import InputAdornment from "@mui/material/InputAdornment";
+import Pagination from "@mui/material/Pagination";
 import TextField from "@mui/material/TextField";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -19,6 +20,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 export function loader({ request }) {
   const url = new URL(request.url);
   const tab = url.searchParams.get("tab");
+  const page = url.searchParams.get("page") || 1;
 
   let sortBy = "";
 
@@ -30,13 +32,31 @@ export function loader({ request }) {
     sortBy = "latest";
   }
 
-  return fetch(`/api/tags${sortBy ? `?sortBy=${sortBy}` : ""}`);
+  return fetch(`/api/tags?page=${page}${sortBy ? `&sortBy=${sortBy}` : ""}`);
 }
 
 export default function Tags() {
   const tagsResponse = useLoaderData();
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab") || "popular";
+
+  const handleChangeTab = (_event, value) => {
+    if (value) {
+      const newSearchParams = new URLSearchParams(searchParams);
+
+      newSearchParams.set("tab", value);
+
+      setSearchParams(newSearchParams);
+    }
+  };
+
+  const handleChangePage = (_event, page) => {
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    newSearchParams.set("page", page);
+
+    setSearchParams(newSearchParams);
+  };
 
   return (
     <>
@@ -69,9 +89,7 @@ export default function Tags() {
           <ToggleButtonGroup
             color="primary"
             exclusive
-            onChange={(_event, value) =>
-              value && setSearchParams({ tab: value })
-            }
+            onChange={handleChangeTab}
             size="small"
             value={tab}
           >
@@ -102,6 +120,16 @@ export default function Tags() {
             </Grid>
           ))}
         </Grid>
+
+        <Toolbar sx={{ justifyContent: "flex-end" }}>
+          <Pagination
+            count={tagsResponse.totalPages}
+            onChange={handleChangePage}
+            page={tagsResponse.currentPage}
+            shape="rounded"
+            variant="outlined"
+          />
+        </Toolbar>
       </Box>
     </>
   );
