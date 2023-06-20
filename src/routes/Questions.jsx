@@ -300,7 +300,7 @@ export default function Questions() {
               </CardContent>
 
               <CardActions>
-                <Button form="filter-form" size="small" type="submit">
+                <Button size="small" type="submit">
                   Apply filter
                 </Button>
 
