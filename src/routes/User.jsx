@@ -77,16 +77,19 @@ export default function User() {
               }}
             >
               <Button sx={{ border: 1, color: "black" }}>
-                <EditIcon sx={{ fontSize: 20 }} />
-                <Link to={""} style={{ textDecoration: "none" }}>
-                  {" "}
+                <EditIcon sx={{ fontSize: 20, mr: 1 }} />
+                <Link to={"users/1/edit"} style={{ textDecoration: "none" }}>
                   Edit profile
                 </Link>
               </Button>
               <Button sx={{ border: 1, color: "black" }}>
-                <InsertCommentIcon sx={{ fontSize: 20, color: "blue" }} />
-                <Link to={""} style={{ textDecoration: "none" }}>
-                  {" "}
+                <InsertCommentIcon
+                  sx={{ fontSize: 20, color: "blue", mr: 1 }}
+                />
+                <Link
+                  to={"https://stackexchange.com/"}
+                  style={{ textDecoration: "none" }}
+                >
                   Network profile
                 </Link>
               </Button>
