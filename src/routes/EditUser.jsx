@@ -63,13 +63,16 @@ export async function action({ params, request }) {
     return errors;
   }
 
-  // await fetch(`/users/${params.userId}`, {
-  //   method: "PUT",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  //   body: JSON.stringify({ ...user, name: name, location: location }),
-  // });
+  await fetch(`/api/users/${params.userId}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: name,
+      location: location,
+    }),
+  });
 
   return {};
 }
