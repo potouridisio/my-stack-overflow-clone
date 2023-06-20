@@ -57,6 +57,7 @@ export default function WatchedTags({ tags, watchedTags }) {
     <ClickAwayListener onClickAway={handleClickAway}>
       <Card sx={{ flexGrow: 1 }}>
         <CardHeader title="Watched Tags" />
+
         <CardContent sx={{ "&:last-child": { pb: 2 } }}>
           {isWatching ? (
             <Grid container spacing={1}>
@@ -90,6 +91,7 @@ export default function WatchedTags({ tags, watchedTags }) {
             </Typography>
           ) : null}
         </CardContent>
+
         <CardActions>
           {isEditing ? (
             <Button onClick={handleAdd} size="small">
