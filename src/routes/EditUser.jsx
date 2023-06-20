@@ -1,4 +1,12 @@
-import { Form, useNavigation, redirect, useActionData } from "react-router-dom";
+import { useState } from "react";
+
+import {
+  Form,
+  useNavigation,
+  redirect,
+  useActionData,
+  useLoaderData,
+} from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import Box from "@mui/material/Box";
@@ -21,8 +29,17 @@ function validateUserName(name) {
   }
 }
 
+// export async function loader({ params }) {
+//   const user = await fetch(`/api/users/${params.userId}`)
+//     .then((res) => res.json())
+//     .then((data) => console.log(data));
+
+//   return user;
+// }
+
 export async function action({ params, request }) {
   const formData = await request.formData();
+  console.log({ params });
 
   // const userData = {
   //   name: formData.get("name"),
@@ -32,6 +49,12 @@ export async function action({ params, request }) {
   const name = formData.get("name");
   const location = formData.get("location");
 
+  // const user = await fetch(`/users/${params.userId}`)
+  //   .then((res) => res.json())
+  //   .then((data) => console.log(data));
+
+  // // console.log(user);
+
   const errors = {
     name: validateUserName(name),
   };
@@ -40,20 +63,23 @@ export async function action({ params, request }) {
     return errors;
   }
 
-  await fetch(`api/users/${params.userId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ name: name, location: location }),
-  });
+  // await fetch(`/users/${params.userId}`, {
+  //   method: "PUT",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({ ...user, name: name, location: location }),
+  // });
 
-  return redirect(`/users/${params.userId}/edit`);
+  return {};
 }
 
 export default function EditUser() {
   const navigation = useNavigation();
   const errors = useActionData();
+
+  // const [currentName, setCurrentName] = useState("");
+  // const [currentLocation, setCurrentLocation] = useState("");
 
   return (
     <>
@@ -77,20 +103,28 @@ export default function EditUser() {
                 autoFocus
                 label="Name"
                 name="name"
-                // value=""
+                // onChange={(event) => setCurrentName(event.target.value)}
+                // value={currentName}
               />
 
-              <TextField label="Location" name="location" />
+              <TextField
+                label="Location"
+                name="location"
+                // onChange={(event) => setCurrentLocation(event.target.value)}
+                // value={currentLocation}
+              />
             </Stack>
 
-            {errors ? (
-              <Typography color="error" sx={{ mt: 2 }} variant="body2">
-                Oops! There was a problem updating your profile:
+            {errors?.name ? (
+              <Box>
+                <Typography color="error" sx={{ mt: 2 }} variant="body2">
+                  Oops! There was a problem updating your profile:
+                </Typography>
                 <Typography color="error" sx={{ mt: 2 }} variant="body2">
                   {" "}
                   {errors.name}
                 </Typography>
-              </Typography>
+              </Box>
             ) : null}
           </CardContent>
 
