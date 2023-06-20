@@ -309,8 +309,8 @@ export default function Questions() {
                 </Button>
                 <Dialog
                   disablePortal
-                  keepMounted
                   fullWidth
+                  keepMounted
                   maxWidth="sm"
                   onClose={handleClose}
                   open={open}
