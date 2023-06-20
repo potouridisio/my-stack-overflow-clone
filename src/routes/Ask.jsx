@@ -99,6 +99,8 @@ export default function Ask() {
   const navigation = useNavigation();
   const [selectedTags, setSelectedTags] = useState([]);
 
+  console.log(actionData);
+
   return (
     <>
       <Helmet>
