@@ -24,15 +24,24 @@ export default function WatchedTags({ tags, watchedTags }) {
   const handleAdd = () => {
     if (pendingTagId) {
       const formData = new FormData();
-
       const newWatchedTags = [...watchedTags, pendingTagId];
 
       formData.append("watchedTags", newWatchedTags.join(" "));
 
       submit(formData, { action: "/save-watched-tags", method: "post" });
-
       setPendingTagId(null);
     }
+  };
+
+  const handleDelete = (tagId) => {
+    return () => {
+      const formData = new FormData();
+      const newWatchedTags = watchedTags.filter((id) => id !== tagId);
+
+      formData.append("watchedTags", newWatchedTags.join(" "));
+
+      submit(formData, { action: "/save-watched-tags", method: "post" });
+    };
   };
 
   const handleEdit = () => {
@@ -56,7 +65,7 @@ export default function WatchedTags({ tags, watchedTags }) {
                   <Chip
                     label={tags[tagId].name}
                     onClick={() => {}}
-                    onDelete={isEditing ? () => {} : null}
+                    onDelete={isEditing ? handleDelete(tagId) : null}
                   />
                 </Grid>
               ))}
