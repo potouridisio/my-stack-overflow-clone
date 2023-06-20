@@ -105,7 +105,6 @@ export default function EditUser() {
           </CardContent>
 
           <CardActions>
-            {/* <Button size="small"></Button> */}
             <LoadingButton
               form="edit-user"
               loading={navigation.state === "submitting"}

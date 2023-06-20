@@ -15,8 +15,16 @@ import Typography from "@mui/material/Typography";
 import { useColorModeStore } from "../App";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export function loader() {
-  return fetch("/api/users/1/preferences");
+export async function loader({ params }) {
+  const [user, userPreferences] = await Promise.all([
+    fetch(`/api/users/${params.userId}`).then((res) => res.json()),
+    fetch(`/api/users/${params.userId}/preferences`).then((res) => res.json()),
+  ]);
+
+  return {
+    user,
+    userPreferences,
+  };
 }
 
 const Search = styled("div")(({ theme }) => ({
@@ -61,7 +69,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function Root() {
   const setMode = useColorModeStore((state) => state.setMode);
-  const userPreferences = useLoaderData();
+  const { user, userPreferences } = useLoaderData();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -118,7 +126,12 @@ export default function Root() {
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <IconButton component={Link} sx={{ p: 0 }} to="users/1/edit">
-            <Avatar>JD</Avatar>
+            <Avatar>
+              {user.name
+                .split(" ")
+                .map((word) => word.slice(0, 1))
+                .join("")}
+            </Avatar>
           </IconButton>
         </Toolbar>
       </AppBar>
