@@ -74,7 +74,9 @@ export default function WatchedTags({ tags, watchedTags }) {
           ) : null}
           {isEditing ? (
             <Autocomplete
-              getOptionDisabled={(option) => watchedTags.includes(option)}
+              getOptionDisabled={(option) =>
+                watchedTags.includes(parseInt(option, 10))
+              }
               getOptionLabel={(option) => tags[option].name}
               onChange={(_event, value) => setPendingTagId(value)}
               options={Object.keys(tags)}
