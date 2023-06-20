@@ -8,11 +8,13 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListSubHeader from "@mui/material/ListSubheader";
 
+import LaunchIcon from "@mui/icons-material/Launch";
+
 const drawerWidth = 240;
 
 export default function Settings() {
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", p: 0 }}>
       <Drawer
         PaperProps={{ sx: { position: "relative" } }}
         sx={{
@@ -30,27 +32,28 @@ export default function Settings() {
             overflow: "auto",
             display: "flex",
             flexDirection: "column",
-            gap: 1,
+            gap: 0,
           }}
         >
           <List
             subheader={
-              <ListSubHeader sx={{ fontWeight: 700, pt: 1 }}>
+              <ListSubHeader sx={{ fontWeight: 700, pt: 3 }}>
                 PERSONAL INFORMATION
               </ListSubHeader>
             }
           >
             <ListItem disablePadding>
               <ListItemButton>
-                <Link style={{ textDecoration: "none" }}>
-                  {" "}
+                <Link to={"edit"} style={{ textDecoration: "none" }}>
                   <ListItemText primary="Edit profile" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary="Delete profile" />
+                <Link to={"delete"} style={{ textDecoration: "none" }}>
+                  <ListItemText primary="Delete profile" />
+                </Link>
               </ListItemButton>
             </ListItem>
           </List>
@@ -81,12 +84,20 @@ export default function Settings() {
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary="Community digests" />
+                <Link to={"email/digests"} style={{ textDecoration: "none" }}>
+                  <ListItemText primary="Community digests" />
+                </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary="Question subscriptions" />
+                <Link
+                  to={"https://stackexchange.com"}
+                  style={{ textDecoration: "none" }}
+                >
+                  <ListItemText primary="Question subscriptions" />
+                  <LaunchIcon />
+                </Link>
               </ListItemButton>
             </ListItem>
           </List>
@@ -129,15 +140,16 @@ export default function Settings() {
           >
             <ListItem disablePadding>
               <ListItemButton>
-                <Link style={{ textDecoration: "none" }}>
-                  {" "}
+                <Link to={"my-collectives"} style={{ textDecoration: "none" }}>
                   <ListItemText primary="Your collectives" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton>
-                <ListItemText primary="Your logins" />
+                <Link to={"mylogins"} style={{ textDecoration: "none" }}>
+                  <ListItemText primary="Your logins" />
+                </Link>
               </ListItemButton>
             </ListItem>
           </List>
@@ -149,8 +161,7 @@ export default function Settings() {
           >
             <ListItem disablePadding>
               <ListItemButton>
-                <Link style={{ textDecoration: "none" }}>
-                  {" "}
+                <Link to={"apps"} style={{ textDecoration: "none" }}>
                   <ListItemText primary="Authorized applications" />
                 </Link>
               </ListItemButton>

@@ -7,6 +7,9 @@ import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
+import AuthorizedApplications from "./routes/AuthorizedApplications";
+import CommunityDigests from "./routes/CommunityDigests";
+import DeleteUser from "./routes/DeleteUser";
 import EditUser from "./routes/EditUser";
 import EditEmailSettings from "./routes/EditEmailSettings";
 import Flair from "./routes/Flair";
@@ -23,6 +26,12 @@ import Questions, {
   loader as questionsLoader,
 } from "./routes/Questions";
 import Root, { loader as rootLoader } from "./routes/Root";
+
+import {
+  action as saveWatchedTagsAction,
+  loader as saveWatchedTagsLoader,
+} from "./routes/SaveWatchedTags";
+
 import Settings from "./routes/Settings";
 import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
@@ -31,6 +40,9 @@ import TagWatching, {
 } from "./routes/TagWatching";
 import Users, { loader as usersLoader } from "./routes/Users";
 import User from "./routes/User";
+import UserCollectives from "./routes/UserCollectives";
+import UserLogins from "./routes/UserLogins";
+
 import { create } from "zustand";
 
 const router = createBrowserRouter([
@@ -85,6 +97,14 @@ const router = createBrowserRouter([
                 element: <Settings />,
                 children: [
                   {
+                    path: "edit",
+                    element: <EditUser />,
+                  },
+                  {
+                    path: "delete",
+                    element: <DeleteUser />,
+                  },
+                  {
                     path: "email/settings",
                     element: <EditEmailSettings />,
                   },
@@ -93,7 +113,10 @@ const router = createBrowserRouter([
                     element: <TagWatching />,
                     loader: watchingTagsLoader,
                   },
-
+                  {
+                    path: "email/digests",
+                    element: <CommunityDigests />,
+                  },
                   {
                     path: "preferences",
                     element: <Preferences />,
@@ -107,6 +130,19 @@ const router = createBrowserRouter([
                   {
                     path: "hidecommunities",
                     element: <HideCommunities />,
+                  },
+
+                  {
+                    path: "my-collectives",
+                    element: <UserCollectives />,
+                  },
+                  {
+                    path: "mylogins",
+                    element: <UserLogins />,
+                  },
+                  {
+                    path: "apps",
+                    element: <AuthorizedApplications />,
                   },
                 ],
               },
@@ -127,6 +163,12 @@ const router = createBrowserRouter([
       },
     ],
     loader: rootLoader,
+  },
+
+  {
+    path: "/save-watched-tags",
+    action: saveWatchedTagsAction,
+    loader: saveWatchedTagsLoader,
   },
 ]);
 
