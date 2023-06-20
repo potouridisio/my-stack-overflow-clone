@@ -475,18 +475,36 @@ app.post("/users/:userId/lists", (req, res) => {
   const userId = req.params.userId;
   const listName = req.body.name;
 
-  // Insert the new list into the database
-  db.run(
-    "INSERT INTO lists (name, userId) VALUES (?, ?)",
+  // Check if a list with the same name already exists
+  db.get(
+    "SELECT id FROM lists WHERE name = ? AND userId = ?",
     [listName, userId],
-    function (err) {
+    (err, row) => {
       if (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
         return;
       }
 
-      res.json({ message: "New list created." });
+      if (row) {
+        // A list with the same name already exists
+        res.status(400).json({ message: "List name already exists." });
+      } else {
+        // Insert the new list into the database
+        db.run(
+          "INSERT INTO lists (name, userId) VALUES (?, ?)",
+          [listName, userId],
+          function (err) {
+            if (err) {
+              console.error(err);
+              res.status(500).send("Internal Server Error");
+              return;
+            }
+
+            res.json({ message: "New list created." });
+          }
+        );
+      }
     }
   );
 });
@@ -567,21 +585,39 @@ app.put("/users/:userId/lists/:listId", (req, res) => {
   const listId = req.params.listId;
   const newListName = req.body.name;
 
-  // Update the name of the list
-  db.run(
-    "UPDATE lists SET name = ? WHERE id = ? AND userId = ?",
-    [newListName, listId, userId],
-    function (err) {
+  // Check if a list with the same name already exists
+  db.get(
+    "SELECT id FROM lists WHERE name = ? AND userId = ?",
+    [newListName, userId],
+    (err, row) => {
       if (err) {
         console.error(err);
         res.status(500).send("Internal Server Error");
         return;
       }
 
-      if (this.changes === 0) {
-        res.status(404).send("List not found.");
+      if (row) {
+        // A list with the same name already exists
+        res.status(400).json({ message: "List name already exists." });
       } else {
-        res.json({ message: `${newListName} updated.` });
+        // Update the name of the list
+        db.run(
+          "UPDATE lists SET name = ? WHERE id = ? AND userId = ?",
+          [newListName, listId, userId],
+          function (err) {
+            if (err) {
+              console.error(err);
+              res.status(500).send("Internal Server Error");
+              return;
+            }
+
+            if (this.changes === 0) {
+              res.status(404).send("List not found.");
+            } else {
+              res.json({ message: `${newListName} updated.` });
+            }
+          }
+        );
       }
     }
   );
