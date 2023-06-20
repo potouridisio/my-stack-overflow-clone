@@ -7,6 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
+import AllSaves from "./routes/AllSaves";
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import EditUser from "./routes/EditUser";
 import LeftSidebar from "./routes/LeftSidebar";
@@ -21,6 +22,7 @@ import Questions, {
   loader as questionsLoader,
 } from "./routes/Questions";
 import Root, { loader as rootLoader } from "./routes/Root";
+import Saves from "./routes/Saves";
 import {
   action as saveWatchedTagsAction,
   loader as saveWatchedTagsLoader,
@@ -87,6 +89,16 @@ const router = createBrowserRouter([
                   {
                     path: "edit",
                     element: <EditUser />,
+                  },
+                ],
+              },
+              {
+                path: "saves",
+                element: <Saves />,
+                children: [
+                  {
+                    index: true,
+                    element: <AllSaves />,
                   },
                 ],
               },
