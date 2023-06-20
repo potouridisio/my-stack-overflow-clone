@@ -39,6 +39,15 @@ db.serialize(() => {
   );
 
   db.run(
+    `CREATE TABLE lists (
+      id INTEGER PRIMARY KEY,
+      name TEXT,
+      userId INTEGER,
+      FOREIGN KEY (userId) REFERENCES users(id)
+    )`
+  );
+
+  db.run(
     `CREATE TABLE questions (
       answerCount INTEGER,
       body TEXT,

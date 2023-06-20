@@ -455,6 +455,138 @@ app.put("/users/:userId/filters/:filterId", (req, res) => {
   );
 });
 
+// Retrieve all lists of a user
+app.get("/users/:userId/lists", (req, res) => {
+  const userId = req.params.userId;
+
+  db.all("SELECT * FROM lists WHERE userId = ?", [userId], (err, rows) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    res.json(rows);
+  });
+});
+
+// Create a new list
+app.post("/users/:userId/lists", (req, res) => {
+  const userId = req.params.userId;
+  const listName = req.body.name;
+
+  // Insert the new list into the database
+  db.run(
+    "INSERT INTO lists (name, userId) VALUES (?, ?)",
+    [listName, userId],
+    function (err) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      res.json({ message: "New list created." });
+    }
+  );
+});
+
+// Get a specific list
+app.get("/users/:userId/lists/:listId", (req, res) => {
+  const userId = req.params.userId;
+  const listId = req.params.listId;
+
+  db.get(
+    "SELECT * FROM lists WHERE id = ? AND userId = ?",
+    [listId, userId],
+    (err, row) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      if (!row) {
+        res.status(404).send("List not found.");
+      } else {
+        res.json(row);
+      }
+    }
+  );
+});
+
+// Delete a list
+app.delete("/users/:userId/lists/:listId", (req, res) => {
+  const userId = req.params.userId;
+  const listId = req.params.listId;
+
+  // Retrieve the name of the list before deleting it
+  db.get(
+    "SELECT name FROM lists WHERE id = ? AND userId = ?",
+    [listId, userId],
+    (err, row) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      if (!row) {
+        res.status(404).send("List not found.");
+      } else {
+        const listName = row.name;
+
+        // Delete the list
+        db.run(
+          "DELETE FROM lists WHERE id = ? AND userId = ?",
+          [listId, userId],
+          function (err) {
+            if (err) {
+              console.error(err);
+              res.status(500).send("Internal Server Error");
+              return;
+            }
+
+            if (this.changes === 0) {
+              res.status(404).send("List not found.");
+            } else {
+              res.json({
+                message: `${listName} has been deleted from your lists.`,
+              });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+// Edit a list
+app.put("/users/:userId/lists/:listId", (req, res) => {
+  const userId = req.params.userId;
+  const listId = req.params.listId;
+  const newListName = req.body.name;
+
+  // Update the name of the list
+  db.run(
+    "UPDATE lists SET name = ? WHERE id = ? AND userId = ?",
+    [newListName, listId, userId],
+    function (err) {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      if (this.changes === 0) {
+        res.status(404).send("List not found.");
+      } else {
+        res.json({ message: `${newListName} updated.` });
+      }
+    }
+  );
+});
+
 // Get user preferences for a specific user
 app.get("/users/:userId/preferences", (req, res) => {
   const userId = req.params.userId; // Extract the userId from the URL parameter
