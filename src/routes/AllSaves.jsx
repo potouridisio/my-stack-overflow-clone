@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
@@ -13,9 +11,7 @@ export default function AllSaves() {
           All saves
         </Typography>
 
-        <Button component={Link} to="/users/1/saves" variant="contained">
-          Create new list
-        </Button>
+        <Button variant="contained">Create new list</Button>
       </Toolbar>
 
       <Toolbar disableGutters>
