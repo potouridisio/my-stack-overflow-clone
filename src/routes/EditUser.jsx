@@ -1,12 +1,4 @@
-import { useState } from "react";
-
-import {
-  Form,
-  useNavigation,
-  redirect,
-  useActionData,
-  useLoaderData,
-} from "react-router-dom";
+import { Form, useNavigation, useActionData } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import Box from "@mui/material/Box";
@@ -29,31 +21,12 @@ function validateUserName(name) {
   }
 }
 
-// export async function loader({ params }) {
-//   const user = await fetch(`/api/users/${params.userId}`)
-//     .then((res) => res.json())
-//     .then((data) => console.log(data));
-
-//   return user;
-// }
-
 export async function action({ params, request }) {
   const formData = await request.formData();
   console.log({ params });
 
-  // const userData = {
-  //   name: formData.get("name"),
-  //   location: formData.get("location"),
-  // };
-
   const name = formData.get("name");
   const location = formData.get("location");
-
-  // const user = await fetch(`/users/${params.userId}`)
-  //   .then((res) => res.json())
-  //   .then((data) => console.log(data));
-
-  // // console.log(user);
 
   const errors = {
     name: validateUserName(name),
