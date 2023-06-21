@@ -84,7 +84,7 @@ export default function EditUser() {
   return (
     <>
       <Helmet>
-        <title>User - John Doe - Edit - Stack Overflow Clone</title>
+        <title>User - {user?.name} - Edit - Stack Overflow Clone</title>
       </Helmet>
 
       <Box sx={{ flexGrow: 1, p: 3 }}>

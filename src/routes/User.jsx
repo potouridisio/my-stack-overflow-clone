@@ -3,6 +3,7 @@ import { Outlet, useOutletContext, useLoaderData } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
@@ -25,7 +26,10 @@ export default function User() {
       <Card>
         <CardContent>
           <Typography variant="h4">{user.name}</Typography>
-          <Typography variant="h5">{user.location}</Typography>
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <LocationOnIcon sx={{ mt: 0.4 }} />
+            <Typography variant="h5">{user.location}</Typography>
+          </Box>
         </CardContent>
       </Card>
 
