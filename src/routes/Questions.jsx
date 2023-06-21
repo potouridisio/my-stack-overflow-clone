@@ -7,8 +7,9 @@ import {
   useActionData,
   useLoaderData,
   useNavigation,
-  useRevalidator,
+  //useRevalidator,
   useSearchParams,
+  useSubmit,
 } from "react-router-dom";
 import { create } from "zustand";
 
@@ -54,9 +55,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import CustomFilters from "../components/CustomFilters";
-import WatchedTags, {
-  useSelectedWatchedTagIds,
-} from "../components/WatchedTags";
+import WatchedTags from //useSelectedWatchedTagIds,
+"../components/WatchedTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 import IgnoredTags, {
   useSelectedIgnoredTagIds,
@@ -68,13 +68,14 @@ export async function loader({ request }) {
   const url = new URL(request.url);
   const searchTerm = url.searchParams.get("q");
 
-  const [questions, tags, users, filters] = await Promise.all([
+  const [questions, tags, users, filters, watchedTags] = await Promise.all([
     fetch(`/api/questions${searchTerm ? `?q=${searchTerm}` : ""}`).then((res) =>
       res.json()
     ),
     fetch("/api/tags").then((res) => res.json()),
     fetch("/api/users").then((res) => res.json()),
     fetch("/api/users/1/filters").then((res) => res.json()),
+    fetch("/api/users/1/watchedTags").then((res) => res.json()),
   ]);
 
   return {
@@ -82,6 +83,7 @@ export async function loader({ request }) {
     tags: indexBy(tags, "id"),
     users: indexBy(users, "id"),
     filters,
+    watchedTags,
   };
 }
 
@@ -100,7 +102,7 @@ export const handle = {
       </ListItem>
 
       <ListItem>
-        <WatchedTags tags={data.tags} />
+        <WatchedTags tags={data.tags} watchedTags={data.watchedTags} />
       </ListItem>
 
       <ListItem>
@@ -176,13 +178,11 @@ function PaperComponent(props) {
 export default function Questions() {
   const actionData = useActionData();
   const { expanded, toggle } = useFilterStore();
-  const { selectedWatchedTagIds, setSelectedWatchedTagIds } =
-    useSelectedWatchedTagIds();
   const { selectedIgnoredTagIds, setSelectedIgnoredTagIds } =
     useSelectedIgnoredTagIds();
   const { selectedRadioButton, setSelectedRadioButton } =
     useSelectedRadioButton();
-  const { questions, tags, users } = useLoaderData();
+  const { questions, tags, users, watchedTags } = useLoaderData();
   const navigation = useNavigation();
   const inputRef = useRef(null);
   const [searchParams] = useSearchParams();
@@ -198,6 +198,8 @@ export default function Questions() {
   const urlFilters = searchParams.get("filters");
   const urlSort = searchParams.get("sort");
   const urlTagWith = searchParams.get("tagWith");
+
+  const submit = useSubmit();
 
   useEffect(() => {
     if (urlFilters) {
@@ -251,13 +253,41 @@ export default function Questions() {
         .id.toString()
     : "";
 
-  let isAlreadyWatched = selectedWatchedTagIds.some(
-    (tagId) => tagId === clickedTag
+  let isAlreadyWatched = watchedTags.some(
+    (tagId) => tagId.toString() === clickedTag
   );
 
   let isAlreadyIgnored = selectedIgnoredTagIds.some(
     (tagId) => tagId === clickedTag
   );
+
+  const handleWatchButton = () => {
+    if (isAlreadyWatched) {
+      const formData = new FormData();
+
+      const newWatchedTags = watchedTags.filter(
+        (tagId) => tagId.toString() !== clickedTag
+      );
+
+      console.log(newWatchedTags);
+
+      formData.append("watchedTags", newWatchedTags.join(","));
+
+      submit(formData, { action: "/save-watched-tags", method: "post" });
+    } else if (!isAlreadyWatched) {
+      const formData = new FormData();
+
+      const newWatchedTags = [...watchedTags, parseInt(clickedTag)];
+
+      console.log(newWatchedTags);
+
+      formData.append("watchedTags", newWatchedTags.join(","));
+
+      console.log(formData);
+
+      submit(formData, { action: "/save-watched-tags", method: "post" });
+    }
+  };
 
   return (
     <>
@@ -465,9 +495,7 @@ export default function Questions() {
               key={question.id}
               sx={{
                 bgcolor: (theme) =>
-                  question.tagIds.some((tagId) =>
-                    selectedWatchedTagIds.includes(tagId.toString())
-                  )
+                  question.tagIds.some((tagId) => watchedTags.includes(tagId))
                     ? theme.palette.mode === "light"
                       ? yellow[50]
                       : grey[900]
@@ -531,11 +559,7 @@ export default function Questions() {
                       onClick={() => {}}
                       onMouseEnter={handlePopoverOpen}
                       icon={
-                        selectedWatchedTagIds.includes(tagId.toString()) ? (
-                          <VisibilityIcon />
-                        ) : (
-                          ""
-                        )
+                        watchedTags.includes(tagId) ? <VisibilityIcon /> : ""
                       }
                     />
                   ))}
@@ -611,18 +635,7 @@ export default function Questions() {
               startIcon={
                 isAlreadyWatched ? <VisibilityOffIcon /> : <VisibilityIcon />
               }
-              onClick={() => {
-                isAlreadyWatched
-                  ? setSelectedWatchedTagIds(
-                      selectedWatchedTagIds.filter(
-                        (tagId) => tagId !== clickedTag
-                      )
-                    )
-                  : setSelectedWatchedTagIds([
-                      ...selectedWatchedTagIds,
-                      clickedTag,
-                    ]);
-              }}
+              onClick={handleWatchButton}
             >
               {isAlreadyWatched ? "Unwatch tag" : "Watch tag"}
             </Button>

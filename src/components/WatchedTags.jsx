@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 import { useRef, useState } from "react";
 
+import { useSubmit } from "react-router-dom";
+
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,41 +12,38 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
 import ClickAwayListener from "@mui/base/ClickAwayListener";
+
+import LoadingButton from "@mui/lab/LoadingButton";
+
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import { grey, yellow } from "@mui/material/colors";
+import { grey } from "@mui/material/colors";
 
-import { create } from "zustand";
-
-export const useSelectedWatchedTagIds = create((set) => ({
-  selectedWatchedTagIds: [],
-  setSelectedWatchedTagIds: (selectedWatchedTagIds) =>
-    set({ selectedWatchedTagIds }),
-}));
-
-export default function WatchedTags({ tags }) {
+export default function WatchedTags({ tags, watchedTags }) {
   const [isEditing, setIsEditing] = useState(false);
-
   const [pendingTag, setPendingTag] = useState(null);
-
-  const { selectedWatchedTagIds, setSelectedWatchedTagIds } =
-    useSelectedWatchedTagIds();
-
+  const submit = useSubmit();
   const inputRef = useRef(null);
 
   function handleAddTag() {
-    if (pendingTag && !selectedWatchedTagIds.includes(pendingTag)) {
-      setSelectedWatchedTagIds([...selectedWatchedTagIds, pendingTag]);
+    if (pendingTag) {
+      const formData = new FormData();
+      const newWatchedTags = [...watchedTags, pendingTag];
+      formData.append("watchedTags", newWatchedTags.join(","));
+      submit(formData, { action: "/save-watched-tags", method: "post" });
       setPendingTag(null);
     }
   }
 
   function handleDeleteTag(tagId) {
-    setSelectedWatchedTagIds(
-      selectedWatchedTagIds.filter((selectedTag) => selectedTag !== tagId)
+    const formData = new FormData();
+    const newWatchedTags = watchedTags.filter(
+      (selectedTag) => selectedTag !== tagId
     );
+    formData.append("watchedTags", newWatchedTags.join(","));
+    submit(formData, { action: "/save-watched-tags", method: "post" });
   }
 
   return (
@@ -63,7 +62,7 @@ export default function WatchedTags({ tags }) {
           }}
         >
           <CardHeader title="Watched Tags" />
-          {!isEditing && selectedWatchedTagIds.length > 0 ? (
+          {!isEditing && watchedTags.length > 0 ? (
             <Button
               sx={{ textTransform: "none" }}
               onClick={() => setIsEditing(true)}
@@ -76,14 +75,14 @@ export default function WatchedTags({ tags }) {
         </Box>
 
         <CardContent>
-          {selectedWatchedTagIds.length > 0 ? (
+          {watchedTags.length > 0 ? (
             <Stack
               direction="row"
               fullWidth
               spacing={1}
               sx={{ mb: 1.5, flexGrow: 1 }}
             >
-              {selectedWatchedTagIds.map((selectedTag) => (
+              {watchedTags.map((selectedTag) => (
                 <Chip
                   key={selectedTag}
                   label={tags[selectedTag].name}
@@ -108,11 +107,11 @@ export default function WatchedTags({ tags }) {
                 value={pendingTag}
                 onChange={(_event, value) => setPendingTag(value)}
               />
-              <Button variant="contained" onClick={handleAddTag}>
+              <LoadingButton variant="contained" onClick={handleAddTag}>
                 Add
-              </Button>
+              </LoadingButton>
             </Box>
-          ) : selectedWatchedTagIds.length === 0 ? (
+          ) : watchedTags.length === 0 ? (
             <>
               <Typography color="text.secondary" variant="body2">
                 Watch tags to curate your list of questions.
@@ -123,7 +122,7 @@ export default function WatchedTags({ tags }) {
           )}
         </CardContent>
 
-        {!isEditing && selectedWatchedTagIds.length === 0 ? (
+        {!isEditing && watchedTags.length === 0 ? (
           <CardActions sx={{ display: "flex", justifyContent: "center" }}>
             <Button
               sx={{ textTransform: "none", mb: 1 }}

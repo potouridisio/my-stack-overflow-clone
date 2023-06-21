@@ -1,20 +1,22 @@
 import { useState } from "react";
 
+import { useSubmit } from "react-router-dom";
+
 import Autocomplete from "@mui/material/Autocomplete";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import CardHeader from "@mui/material/CardHeader";
 import Chip from "@mui/material/Chip";
-import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 
-import { useSelectedWatchedTagIds } from "../components/WatchedTags";
+import { create } from "zustand";
+
+//import { useSelectedWatchedTagIds } from "../components/WatchedTags";
 import { useSelectedIgnoredTagIds } from "../components/IgnoredTags";
 import { indexBy } from "../lib/utils";
 import { useLoaderData } from "react-router-dom";
@@ -23,38 +25,55 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { grey } from "@mui/material/colors";
 
 export async function loader() {
-  const tags = await fetch("/api/tags").then((res) => res.json());
+  const [tags, watchedTags] = await Promise.all([
+    fetch("/api/tags").then((res) => res.json()),
+    fetch("/api/users/1/watchedTags").then((res) => res.json()),
+  ]);
 
   return {
     tags: indexBy(tags, "id"),
+    watchedTags,
   };
 }
 
 export default function TagWatching() {
-  const { selectedWatchedTagIds, setSelectedWatchedTagIds } =
-    useSelectedWatchedTagIds();
   const { selectedIgnoredTagIds, setSelectedIgnoredTagIds } =
     useSelectedIgnoredTagIds();
   const [pendingIgnoredTag, setPendingIgnoredTag] = useState(null);
   const [pendingWatchedTag, setPendingWatchedTag] = useState(null);
   const [isWatchedEditing, setIsWatchedEditing] = useState(false);
   const [isIgnoredEditing, setIsIgnoredEditing] = useState(false);
-  const { tags } = useLoaderData();
+
+  let { tags, watchedTags } = useLoaderData();
+
+  const submit = useSubmit();
 
   function handleAddWatchedTag() {
-    if (
-      pendingWatchedTag &&
-      !selectedWatchedTagIds.includes(pendingWatchedTag)
-    ) {
-      setSelectedWatchedTagIds([...selectedWatchedTagIds, pendingWatchedTag]);
+    if (pendingWatchedTag && !watchedTags.includes(pendingWatchedTag)) {
+      const formData = new FormData();
+
+      const newWatchedTags = [...watchedTags, pendingWatchedTag];
+
+      formData.append("watchedTags", newWatchedTags.join(","));
+      formData.append("submitLocation", "tagWatching");
+
+      submit(formData, { action: "/save-watched-tags", method: "post" });
+
       setPendingWatchedTag(null);
     }
   }
 
   function handleDeleteWatchedTag(tagId) {
-    setSelectedWatchedTagIds(
-      selectedWatchedTagIds.filter((selectedTag) => selectedTag !== tagId)
+    const formData = new FormData();
+
+    const newWatchedTags = watchedTags.filter(
+      (selectedTag) => selectedTag !== tagId
     );
+
+    formData.append("watchedTags", newWatchedTags.join(","));
+    formData.append("submitLocation", "tagWatching");
+
+    submit(formData, { action: "/save-watched-tags", method: "post" });
   }
 
   function handleAddIgnoredTag() {
@@ -98,7 +117,7 @@ export default function TagWatching() {
         <Typography sx={{ mb: 1 }} component="div" variant="h6">
           Watched Tags
         </Typography>
-        <Card sx={{ border: 1 }}>
+        <Card sx={{ border: 1, borderColor: "grey" }}>
           <Toolbar
             sx={{
               display: "flex",
@@ -112,7 +131,7 @@ export default function TagWatching() {
             <Box
               sx={{ display: "flex", justifyContent: "flex-end", flexGrow: 1 }}
             >
-              {selectedWatchedTagIds.length === 0 ? (
+              {watchedTags.length === 0 ? (
                 <Typography sx={{ mt: 1, mr: 1 }}>
                   There are no watched tags.
                 </Typography>
@@ -120,13 +139,13 @@ export default function TagWatching() {
                 ""
               )}
               <Button
-                sx={{ color: "black", textTransform: "none" }}
+                sx={{ textTransform: "none" }}
                 onClick={() => setIsWatchedEditing(true)}
               >
                 Add a tag
               </Button>
               <Button
-                sx={{ color: "black", textTransform: "none" }}
+                sx={{ textTransform: "none" }}
                 onClick={() => setIsWatchedEditing(false)}
               >
                 Done
@@ -137,7 +156,7 @@ export default function TagWatching() {
           <CardContent
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
           >
-            {isWatchedEditing && selectedWatchedTagIds.length === 0 ? (
+            {isWatchedEditing && watchedTags.length === 0 ? (
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Autocomplete
                   sx={{ flexGrow: 1 }}
@@ -162,7 +181,7 @@ export default function TagWatching() {
                   Watch tag
                 </Button>
               </Box>
-            ) : isWatchedEditing && selectedWatchedTagIds.length > 0 ? (
+            ) : isWatchedEditing && watchedTags.length > 0 ? (
               <>
                 <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                   <Autocomplete
@@ -194,7 +213,7 @@ export default function TagWatching() {
                   spacing={2}
                   sx={{ mb: 1, mt: 0, p: 2, flexGrow: 1 }}
                 >
-                  {selectedWatchedTagIds.map((selectedTag) => (
+                  {watchedTags.map((selectedTag) => (
                     <Box sx={{ display: "flex", gap: 2 }}>
                       <ClearIcon
                         fontSize="small"
@@ -205,14 +224,14 @@ export default function TagWatching() {
                   ))}
                 </Stack>
               </>
-            ) : selectedWatchedTagIds.length > 0 && !isWatchedEditing ? (
+            ) : watchedTags.length > 0 && !isWatchedEditing ? (
               <Stack
                 direction="column"
                 fullWidth
                 spacing={2}
                 sx={{ mb: 1, mt: 0, p: 2, flexGrow: 1 }}
               >
-                {selectedWatchedTagIds.map((selectedTag) => (
+                {watchedTags.map((selectedTag) => (
                   <Box sx={{ display: "flex", gap: 2 }}>
                     <ClearIcon
                       fontSize="small"
@@ -248,10 +267,7 @@ export default function TagWatching() {
                   flexGrow: 1,
                 }}
               >
-                <Button
-                  sx={{ color: "black", textTransform: "none" }}
-                  variant="outlined"
-                >
+                <Button sx={{ textTransform: "none" }} variant="outlined">
                   Unsubscribe from all
                 </Button>
               </Box>
@@ -286,13 +302,13 @@ export default function TagWatching() {
                 ""
               )}
               <Button
-                sx={{ color: "black", textTransform: "none" }}
+                sx={{ textTransform: "none" }}
                 onClick={() => setIsIgnoredEditing(true)}
               >
                 Add a tag
               </Button>
               <Button
-                sx={{ color: "black", textTransform: "none" }}
+                sx={{ textTransform: "none" }}
                 onClick={() => setIsIgnoredEditing(false)}
               >
                 Done
