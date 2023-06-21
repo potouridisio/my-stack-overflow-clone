@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,9 +19,15 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import TextField from "@mui/material/TextField";
 
+// eslint-disable-next-line react-refresh/only-export-components
+export function loader() {
+  return fetch("/api/users/1/lists");
+}
+
 const drawerWidth = 240;
 
 export default function Saves() {
+  const lists = useLoaderData();
   const { pathname } = useLocation();
   const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -132,11 +138,17 @@ export default function Saves() {
                 />
               </ListItem>
 
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemText primary="My first list" />
-                </ListItemButton>
-              </ListItem>
+              {lists.map((list) => (
+                <ListItem disablePadding key={list.id}>
+                  <ListItemButton
+                    component={Link}
+                    selected={pathname === `/users/1/saves/${list.id}`}
+                    to={`/users/1/saves/${list.id}`}
+                  >
+                    <ListItemText primary={list.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
             </List>
           </Box>
         </Drawer>
