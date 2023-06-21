@@ -1,9 +1,11 @@
+import { useSnackbar } from "notistack";
 import { useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import {
   Form,
   Link,
   Outlet,
+  useActionData,
   useLoaderData,
   useLocation,
 } from "react-router-dom";
@@ -31,11 +33,27 @@ export function loader() {
   return fetch("/api/users/1/lists");
 }
 
+function validateListName(name) {
+  if (!name) {
+    return "List name cannot be empty.";
+  }
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export async function action({ request }) {
   const formData = await request.formData();
 
   const newList = Object.fromEntries(formData);
+
+  const fieldErrors = {
+    name: validateListName(newList.name),
+  };
+
+  if (Object.values(fieldErrors).some(Boolean)) {
+    return {
+      fieldErrors,
+    };
+  }
 
   await fetch("/api/users/1/lists", {
     method: "POST",
@@ -57,12 +75,14 @@ export const useNewListDialogStore = create((set) => ({
 const drawerWidth = 240;
 
 export default function Saves() {
+  const actionData = useActionData();
   const lists = useLoaderData();
   const { pathname } = useLocation();
   const { open, setOpen } = useNewListDialogStore();
   const inputRef = useRef(null);
   // Keep track of the number of lists
   const numOfLists = useRef(lists.length);
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     // When the dialog is opened
@@ -84,6 +104,15 @@ export default function Saves() {
     numOfLists.current = lists.length;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lists]);
+
+  useEffect(() => {
+    if (actionData?.fieldErrors?.name) {
+      enqueueSnackbar(actionData.fieldErrors.name, {
+        variant: "error",
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actionData]);
 
   const handleClickOpen = () => {
     setOpen(true);
