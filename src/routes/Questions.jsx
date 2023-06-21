@@ -57,7 +57,12 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import CustomFilters from "../components/CustomFilters";
 import WatchedTags, { useIsEditingStore } from "../components/WatchedTags";
-import { convertToRelativeDate, indexBy } from "../lib/utils";
+import {
+  convertToRelativeDate,
+  indexBy,
+  handleAddTag,
+  handleDeleteTag,
+} from "../lib/utils";
 import IgnoredTags, {
   useIsIgnoredStore,
   useSelectedIgnoredTagIds,
@@ -262,32 +267,20 @@ export default function Questions() {
   };
 
   let clickedTag = anchorEl
-    ? Object.values(tags)
-        .find((tag) => tag.name === anchorEl.textContent)
-        .id.toString()
+    ? Object.values(tags).find((tag) => tag.name === anchorEl.textContent).id
     : "";
 
-  let isAlreadyWatched = watchedTags.some(
-    (tagId) => tagId.toString() === clickedTag
-  );
+  let isAlreadyWatched = watchedTags.some((tagId) => tagId === clickedTag);
 
   let isAlreadyIgnored = selectedIgnoredTagIds.some(
-    (tagId) => tagId === clickedTag
+    (tagId) => parseInt(tagId) === clickedTag
   );
 
-  const handleWatchButton = () => {
+  const handlePopoverWatchButton = () => {
     if (isAlreadyWatched) {
-      const formData = new FormData();
-      const newWatchedTags = watchedTags.filter(
-        (tagId) => tagId.toString() !== clickedTag
-      );
-      formData.append("watchedTags", newWatchedTags.join(","));
-      submit(formData, { action: "/save-watched-tags", method: "post" });
+      handleDeleteTag(clickedTag, watchedTags, submit, false);
     } else if (!isAlreadyWatched) {
-      const formData = new FormData();
-      const newWatchedTags = [...watchedTags, parseInt(clickedTag)];
-      formData.append("watchedTags", newWatchedTags.join(","));
-      submit(formData, { action: "/save-watched-tags", method: "post" });
+      handleAddTag(clickedTag, watchedTags, submit, false);
     }
   };
 
@@ -637,7 +630,7 @@ export default function Questions() {
               startIcon={
                 isAlreadyWatched ? <VisibilityOffIcon /> : <VisibilityIcon />
               }
-              onClick={handleWatchButton}
+              onClick={handlePopoverWatchButton}
             >
               {isAlreadyWatched ? "Unwatch tag" : "Watch tag"}
             </Button>
@@ -651,7 +644,7 @@ export default function Questions() {
                 isAlreadyIgnored
                   ? setSelectedIgnoredTagIds(
                       selectedIgnoredTagIds.filter(
-                        (tagId) => tagId !== clickedTag
+                        (tagId) => parseInt(tagId) !== clickedTag
                       )
                     )
                   : setSelectedIgnoredTagIds([

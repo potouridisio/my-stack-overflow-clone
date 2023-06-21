@@ -21,6 +21,8 @@ import Typography from "@mui/material/Typography";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { grey } from "@mui/material/colors";
 
+import { handleAddTag, handleDeleteTag } from "../lib/utils";
+
 import { create } from "zustand";
 
 export const useIsEditingStore = create((set) => ({
@@ -35,25 +37,15 @@ export default function WatchedTags({ tags, watchedTags }) {
   const submit = useSubmit();
   const inputRef = useRef(null);
 
-  function handleAddTag() {
+  function handleAddWatchTag() {
     if (pendingTag && !watchedTags.includes(parseInt(pendingTag))) {
-      const formData = new FormData();
-      const newWatchedTags = [...watchedTags, pendingTag];
-      formData.append("watchedTags", newWatchedTags.join(","));
-      submit(formData, { action: "/save-watched-tags", method: "post" });
+      handleAddTag(pendingTag, watchedTags, submit, false);
       setPendingTag(null);
-      console.log(pendingTag);
-      console.log(watchedTags);
     }
   }
 
-  function handleDeleteTag(tagId) {
-    const formData = new FormData();
-    const newWatchedTags = watchedTags.filter(
-      (selectedTag) => selectedTag !== tagId
-    );
-    formData.append("watchedTags", newWatchedTags.join(","));
-    submit(formData, { action: "/save-watched-tags", method: "post" });
+  function handleDeleteWatchTag(tagId) {
+    handleDeleteTag(tagId, watchedTags, submit, false);
   }
 
   return (
@@ -95,7 +87,9 @@ export default function WatchedTags({ tags, watchedTags }) {
               <Chip
                 key={selectedTag}
                 label={tags[selectedTag].name}
-                onDelete={isEditing ? () => handleDeleteTag(selectedTag) : ""}
+                onDelete={
+                  isEditing ? () => handleDeleteWatchTag(selectedTag) : ""
+                }
               />
             ))}
           </Stack>
@@ -116,7 +110,7 @@ export default function WatchedTags({ tags, watchedTags }) {
               value={pendingTag}
               onChange={(_event, value) => setPendingTag(value)}
             />
-            <LoadingButton variant="contained" onClick={handleAddTag}>
+            <LoadingButton variant="contained" onClick={handleAddWatchTag}>
               Add
             </LoadingButton>
           </Box>

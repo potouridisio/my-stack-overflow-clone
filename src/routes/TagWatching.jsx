@@ -14,11 +14,11 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Toolbar from "@mui/material/Toolbar";
 
-import { create } from "zustand";
+//import { create } from "zustand";
 
 //import { useSelectedWatchedTagIds } from "../components/WatchedTags";
 import { useSelectedIgnoredTagIds } from "../components/IgnoredTags";
-import { indexBy } from "../lib/utils";
+import { indexBy, handleAddTag, handleDeleteTag } from "../lib/utils";
 import { useLoaderData } from "react-router-dom";
 
 import ClearIcon from "@mui/icons-material/Clear";
@@ -53,23 +53,13 @@ export default function TagWatching() {
       pendingWatchedTag &&
       !watchedTags.includes(parseInt(pendingWatchedTag))
     ) {
-      const formData = new FormData();
-      const newWatchedTags = [...watchedTags, pendingWatchedTag];
-      formData.append("watchedTags", newWatchedTags.join(","));
-      formData.append("submitLocation", "tagWatching");
-      submit(formData, { action: "/save-watched-tags", method: "post" });
+      handleAddTag(pendingWatchedTag, watchedTags, submit, true);
       setPendingWatchedTag(null);
     }
   }
 
   function handleDeleteWatchedTag(tagId) {
-    const formData = new FormData();
-    const newWatchedTags = watchedTags.filter(
-      (selectedTag) => selectedTag !== tagId
-    );
-    formData.append("watchedTags", newWatchedTags.join(","));
-    formData.append("submitLocation", "tagWatching");
-    submit(formData, { action: "/save-watched-tags", method: "post" });
+    handleDeleteTag(tagId, watchedTags, submit, true);
   }
 
   function handleAddIgnoredTag() {

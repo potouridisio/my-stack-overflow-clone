@@ -38,3 +38,26 @@ export function indexBy(array, key) {
 
   return indexedData;
 }
+
+export function handleAddTag(
+  pendingTag,
+  watchedTagsList,
+  submit,
+  isTagWatchingPage
+) {
+  const formData = new FormData();
+  const newWatchedTags = [...watchedTagsList, pendingTag];
+  formData.append("watchedTags", newWatchedTags.join(","));
+  isTagWatchingPage ? formData.append("submitLocation", "tagWatching") : "";
+  submit(formData, { action: "/save-watched-tags", method: "post" });
+}
+
+export function handleDeleteTag(tagId, watchedTags, submit, isTagWatchingPage) {
+  const formData = new FormData();
+  const newWatchedTags = watchedTags.filter(
+    (selectedTag) => selectedTag !== tagId
+  );
+  formData.append("watchedTags", newWatchedTags.join(","));
+  isTagWatchingPage ? formData.append("submitLocation", "tagWatching") : "";
+  submit(formData, { action: "/save-watched-tags", method: "post" });
+}
