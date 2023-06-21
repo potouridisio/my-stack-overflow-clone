@@ -1,8 +1,9 @@
+import { useRef, useEffect } from "react";
+
 import { Form, useNavigation, useActionData } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import Box from "@mui/material/Box";
-// import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -23,7 +24,6 @@ function validateUserName(name) {
 
 export async function action({ params, request }) {
   const formData = await request.formData();
-  console.log({ params });
 
   const name = formData.get("name");
   const location = formData.get("location");
@@ -53,9 +53,11 @@ export async function action({ params, request }) {
 export default function EditUser() {
   const navigation = useNavigation();
   const errors = useActionData();
+  const inputRef = useRef(null);
 
-  // const [currentName, setCurrentName] = useState("");
-  // const [currentLocation, setCurrentLocation] = useState("");
+  useEffect(() => {
+    errors?.name && inputRef.current.focus();
+  }, [errors]);
 
   return (
     <>
@@ -79,16 +81,11 @@ export default function EditUser() {
                 autoFocus
                 label="Name"
                 name="name"
-                // onChange={(event) => setCurrentName(event.target.value)}
-                // value={currentName}
+                error={errors?.name && true}
+                ref={inputRef}
               />
 
-              <TextField
-                label="Location"
-                name="location"
-                // onChange={(event) => setCurrentLocation(event.target.value)}
-                // value={currentLocation}
-              />
+              <TextField label="Location" name="location" />
             </Stack>
 
             {errors?.name ? (

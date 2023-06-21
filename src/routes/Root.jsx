@@ -15,10 +15,10 @@ import Typography from "@mui/material/Typography";
 import { useColorModeStore } from "../App";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export async function loader({ params }) {
+export async function loader() {
   const [user, userPreferences] = await Promise.all([
-    fetch(`/api/users/${params.userId}`).then((res) => res.json()),
-    fetch(`/api/users/${params.userId}/preferences`).then((res) => res.json()),
+    fetch(`/api/users/1`).then((res) => res.json()),
+    fetch(`/api/users/1/preferences`).then((res) => res.json()),
   ]);
 
   return {
@@ -130,7 +130,8 @@ export default function Root() {
               {user.name
                 .split(" ")
                 .map((word) => word.slice(0, 1))
-                .join("")}
+                .join("")
+                .toUpperCase()}
             </Avatar>
           </IconButton>
         </Toolbar>
