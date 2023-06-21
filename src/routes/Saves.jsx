@@ -121,6 +121,12 @@ export default function Saves() {
         variant: "error",
       });
     }
+
+    if (actionData?.message) {
+      enqueueSnackbar(actionData.message, {
+        variant: "success",
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actionData]);
 
