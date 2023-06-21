@@ -1,6 +1,11 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 
-import { Form, useNavigation, useActionData } from "react-router-dom";
+import {
+  Form,
+  useNavigation,
+  useActionData,
+  useLoaderData,
+} from "react-router-dom";
 import { Helmet } from "react-helmet";
 
 import Box from "@mui/material/Box";
@@ -13,6 +18,14 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+
+async function loader({ params }) {
+  const user = await fetch(`/api/users/${params.userId}`).then((res) =>
+    res.json()
+  );
+
+  return user;
+}
 
 function validateUserName(name) {
   if (!name) {
@@ -51,9 +64,18 @@ export async function action({ params, request }) {
 }
 
 export default function EditUser() {
+  const user = useLoaderData();
   const navigation = useNavigation();
   const errors = useActionData();
   const inputRef = useRef(null);
+  const [userName, setUserName] = useState(user?.name);
+  const [userLocation, setUserLocation] = useState(user?.location);
+
+  function handleChange(event) {
+    event.target.name === "name"
+      ? setUserName(event.target.value)
+      : setUserLocation(event.target.value);
+  }
 
   useEffect(() => {
     errors?.name && inputRef.current.focus();
@@ -83,9 +105,16 @@ export default function EditUser() {
                 name="name"
                 error={errors?.name && true}
                 ref={inputRef}
+                onChange={handleChange}
+                value={userName}
               />
 
-              <TextField label="Location" name="location" />
+              <TextField
+                label="Location"
+                name="location"
+                onChange={handleChange}
+                value={userLocation}
+              />
             </Stack>
 
             {errors?.name ? (

@@ -85,6 +85,7 @@ const router = createBrowserRouter([
                     path: "edit",
                     element: <EditUser />,
                     action: editUserAction,
+                    loader: userLoader,
                   },
                 ],
               },
