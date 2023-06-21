@@ -26,6 +26,7 @@ import CardContent from "@mui/material/CardContent";
 import CardHeader from "@mui/material/CardHeader";
 import Checkbox from "@mui/material/Checkbox";
 import Chip from "@mui/material/Chip";
+import ClickAwayListener from "@mui/material/ClickAwayListener";
 import Collapse from "@mui/material/Collapse";
 import { grey, yellow } from "@mui/material/colors";
 import Dialog from "@mui/material/Dialog";
@@ -55,10 +56,10 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 import CustomFilters from "../components/CustomFilters";
-import WatchedTags from //useSelectedWatchedTagIds,
-"../components/WatchedTags";
+import WatchedTags, { useIsEditingStore } from "../components/WatchedTags";
 import { convertToRelativeDate, indexBy } from "../lib/utils";
 import IgnoredTags, {
+  useIsIgnoredStore,
   useSelectedIgnoredTagIds,
   useSelectedRadioButton,
 } from "../components/IgnoredTags";
@@ -95,21 +96,34 @@ export const useFilterStore = create((set) => ({
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const handle = {
-  sidebar: (data) => (
-    <List>
-      <ListItem>
-        <CustomFilters filters={data.filters} />
-      </ListItem>
+  sidebar: (data) => {
+    const { setIsEditing } = useIsEditingStore();
+    const { setIsIgnoredTag } = useIsIgnoredStore();
+    return (
+      <List>
+        <ListItem>
+          <CustomFilters filters={data.filters} />
+        </ListItem>
 
-      <ListItem>
-        <WatchedTags tags={data.tags} watchedTags={data.watchedTags} />
-      </ListItem>
+        <ClickAwayListener
+          onClickAway={() => {
+            setIsIgnoredTag(false);
+            setIsEditing(false);
+          }}
+        >
+          <Box>
+            <ListItem>
+              <WatchedTags tags={data.tags} watchedTags={data.watchedTags} />
+            </ListItem>
 
-      <ListItem>
-        <IgnoredTags tags={data.tags} />
-      </ListItem>
-    </List>
-  ),
+            <ListItem>
+              <IgnoredTags tags={data.tags} />
+            </ListItem>
+          </Box>
+        </ClickAwayListener>
+      </List>
+    );
+  },
 };
 
 function validateFilterName(name) {
