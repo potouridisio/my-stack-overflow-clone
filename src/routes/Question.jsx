@@ -6,16 +6,19 @@ import {
   useLoaderData,
 } from "react-router-dom";
 
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
+import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import { convertToRelativeDate, indexBy } from "../lib/utils";
@@ -119,8 +122,14 @@ export default function Question() {
             </Stack>
           </CardContent>
 
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            <Typography variant="body2">
+          <CardActions>
+            <Tooltip title="Save this question.">
+              <IconButton sx={{ border: 1, borderColor: "transparent" }}>
+                <BookmarkBorderIcon />
+              </IconButton>
+            </Tooltip>
+
+            <Typography sx={{ ml: "auto" }} variant="body2">
               asked {convertToRelativeDate(question.createdAt)}{" "}
               <Link href="#" onClick={(event) => event.preventDefault()}>
                 {users[question.userId].name}
