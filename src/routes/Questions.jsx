@@ -278,27 +278,15 @@ export default function Questions() {
   const handleWatchButton = () => {
     if (isAlreadyWatched) {
       const formData = new FormData();
-
       const newWatchedTags = watchedTags.filter(
         (tagId) => tagId.toString() !== clickedTag
       );
-
-      console.log(newWatchedTags);
-
       formData.append("watchedTags", newWatchedTags.join(","));
-
       submit(formData, { action: "/save-watched-tags", method: "post" });
     } else if (!isAlreadyWatched) {
       const formData = new FormData();
-
       const newWatchedTags = [...watchedTags, parseInt(clickedTag)];
-
-      console.log(newWatchedTags);
-
       formData.append("watchedTags", newWatchedTags.join(","));
-
-      console.log(formData);
-
       submit(formData, { action: "/save-watched-tags", method: "post" });
     }
   };

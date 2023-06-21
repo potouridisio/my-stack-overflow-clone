@@ -49,30 +49,26 @@ export default function TagWatching() {
   const submit = useSubmit();
 
   function handleAddWatchedTag() {
-    if (pendingWatchedTag && !watchedTags.includes(pendingWatchedTag)) {
+    if (
+      pendingWatchedTag &&
+      !watchedTags.includes(parseInt(pendingWatchedTag))
+    ) {
       const formData = new FormData();
-
       const newWatchedTags = [...watchedTags, pendingWatchedTag];
-
       formData.append("watchedTags", newWatchedTags.join(","));
       formData.append("submitLocation", "tagWatching");
-
       submit(formData, { action: "/save-watched-tags", method: "post" });
-
       setPendingWatchedTag(null);
     }
   }
 
   function handleDeleteWatchedTag(tagId) {
     const formData = new FormData();
-
     const newWatchedTags = watchedTags.filter(
       (selectedTag) => selectedTag !== tagId
     );
-
     formData.append("watchedTags", newWatchedTags.join(","));
     formData.append("submitLocation", "tagWatching");
-
     submit(formData, { action: "/save-watched-tags", method: "post" });
   }
 

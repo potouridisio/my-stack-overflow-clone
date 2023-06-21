@@ -36,12 +36,14 @@ export default function WatchedTags({ tags, watchedTags }) {
   const inputRef = useRef(null);
 
   function handleAddTag() {
-    if (pendingTag) {
+    if (pendingTag && !watchedTags.includes(parseInt(pendingTag))) {
       const formData = new FormData();
       const newWatchedTags = [...watchedTags, pendingTag];
       formData.append("watchedTags", newWatchedTags.join(","));
       submit(formData, { action: "/save-watched-tags", method: "post" });
       setPendingTag(null);
+      console.log(pendingTag);
+      console.log(watchedTags);
     }
   }
 
