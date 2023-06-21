@@ -27,7 +27,7 @@ export default function User() {
         <CardContent>
           <Typography variant="h4">{user.name}</Typography>
           <Box sx={{ display: "flex", gap: 1 }}>
-            <LocationOnIcon sx={{ mt: 0.4 }} />
+            <LocationOnIcon sx={{ alignSelf: "center" }} />
             <Typography variant="h5">{user.location}</Typography>
           </Box>
         </CardContent>
