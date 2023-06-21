@@ -55,15 +55,23 @@ export async function action({ request }) {
     };
   }
 
-  await fetch("/api/users/1/lists", {
+  const list = await fetch("/api/users/1/lists", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(newList),
-  });
+  }).then((res) => res.json());
 
-  return {};
+  if (list.error) {
+    return {
+      fieldErrors: {
+        name: list.error,
+      },
+    };
+  }
+
+  return list;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

@@ -488,7 +488,7 @@ app.post("/users/:userId/lists", (req, res) => {
 
       if (row) {
         // A list with the same name already exists
-        res.status(400).json({ message: "List name already exists." });
+        res.status(400).json({ error: "List name already exists." });
       } else {
         // Insert the new list into the database
         db.run(
