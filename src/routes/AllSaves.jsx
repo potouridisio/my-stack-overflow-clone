@@ -3,7 +3,15 @@ import Button from "@mui/material/Button";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
+import { useNewListDialogStore } from "./Saves";
+
 export default function AllSaves() {
+  const setOpen = useNewListDialogStore((state) => state.setOpen);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
   return (
     <Box sx={{ flexGrow: 1, p: 3 }}>
       <Toolbar disableGutters>
@@ -11,7 +19,9 @@ export default function AllSaves() {
           All saves
         </Typography>
 
-        <Button variant="contained">Create new list</Button>
+        <Button onClick={handleClickOpen} variant="contained">
+          Create new list
+        </Button>
       </Toolbar>
 
       <Toolbar disableGutters>

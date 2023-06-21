@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Helmet } from "react-helmet";
 import {
   Form,
@@ -7,6 +7,7 @@ import {
   useLoaderData,
   useLocation,
 } from "react-router-dom";
+import { create } from "zustand";
 
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -47,19 +48,28 @@ export async function action({ request }) {
   return {};
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+export const useNewListDialogStore = create((set) => ({
+  open: false,
+  setOpen: (open) => set({ open }),
+}));
+
 const drawerWidth = 240;
 
 export default function Saves() {
   const lists = useLoaderData();
   const { pathname } = useLocation();
+  const { open, setOpen } = useNewListDialogStore();
   const inputRef = useRef(null);
   // Keep track of the number of lists
   const numOfLists = useRef(lists.length);
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    // When the dialog is opened
     if (inputRef.current && open) {
+      // Clear the input
       inputRef.current.value = "";
+      // Focus on the input
       inputRef.current.focus();
     }
   }, [open]);
@@ -72,6 +82,7 @@ export default function Saves() {
 
     // Update the number of lists
     numOfLists.current = lists.length;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lists]);
 
   const handleClickOpen = () => {
@@ -114,7 +125,9 @@ export default function Saves() {
                 </ListItemButton>
               </ListItem>
             </List>
+
             <Divider />
+
             <List>
               <ListItem
                 secondaryAction={
