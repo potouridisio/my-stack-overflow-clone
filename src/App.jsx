@@ -11,6 +11,7 @@ import AllSaves from "./routes/AllSaves";
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import EditUser from "./routes/EditUser";
 import LeftSidebar from "./routes/LeftSidebar";
+import List, { loader as listLoader } from "./routes/List";
 import Preferences, { action as preferencesAction } from "./routes/Preferences";
 import Question, {
   action as questionAction,
@@ -102,6 +103,11 @@ const router = createBrowserRouter([
                   {
                     index: true,
                     element: <AllSaves />,
+                  },
+                  {
+                    path: ":listId",
+                    element: <List />,
+                    loader: listLoader,
                   },
                 ],
                 loader: savesLoader,
