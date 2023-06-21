@@ -8,11 +8,13 @@ import {
   useActionData,
   useLoaderData,
   useLocation,
+  useNavigation,
 } from "react-router-dom";
 import { create } from "zustand";
 
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -86,10 +88,13 @@ export default function Saves() {
   const actionData = useActionData();
   const lists = useLoaderData();
   const { pathname } = useLocation();
+  const navigation = useNavigation();
+  const isReloading =
+    navigation.state === "loading" &&
+    navigation.formData != null &&
+    navigation.formAction === navigation.location.pathname;
   const { open, setOpen } = useNewListDialogStore();
   const inputRef = useRef(null);
-  // Keep track of the number of lists
-  const numOfLists = useRef(lists.length);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -103,15 +108,12 @@ export default function Saves() {
   }, [open]);
 
   useEffect(() => {
-    // Close the dialog when a new list is added
-    if (numOfLists.current < lists.length) {
+    // Close the dialog when there are no field errors and the lists are reloading
+    if (!actionData?.fieldErrors && isReloading) {
       setOpen(false);
     }
-
-    // Update the number of lists
-    numOfLists.current = lists.length;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lists]);
+  }, [actionData, isReloading]);
 
   useEffect(() => {
     if (actionData?.fieldErrors?.name) {
@@ -214,9 +216,13 @@ export default function Saves() {
 
                       <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button form="new-list" type="submit">
+                        <LoadingButton
+                          form="new-list"
+                          loading={navigation.state === "submitting"}
+                          type="submit"
+                        >
                           Save
-                        </Button>
+                        </LoadingButton>
                       </DialogActions>
                     </Dialog>
                   </>
