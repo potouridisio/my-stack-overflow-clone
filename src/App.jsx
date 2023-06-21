@@ -22,7 +22,10 @@ import Questions, {
   loader as questionsLoader,
 } from "./routes/Questions";
 import Root, { loader as rootLoader } from "./routes/Root";
-import Saves, { loader as savesLoader } from "./routes/Saves";
+import Saves, {
+  action as savesAction,
+  loader as savesLoader,
+} from "./routes/Saves";
 import {
   action as saveWatchedTagsAction,
   loader as saveWatchedTagsLoader,
@@ -102,6 +105,7 @@ const router = createBrowserRouter([
                   },
                 ],
                 loader: savesLoader,
+                action: savesAction,
               },
             ],
           },

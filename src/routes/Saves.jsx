@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet";
-import { Link, Outlet, useLoaderData, useLocation } from "react-router-dom";
+import {
+  Form,
+  Link,
+  Outlet,
+  useLoaderData,
+  useLocation,
+} from "react-router-dom";
 
 import AddIcon from "@mui/icons-material/Add";
 import CloseIcon from "@mui/icons-material/Close";
@@ -24,19 +30,49 @@ export function loader() {
   return fetch("/api/users/1/lists");
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
+export async function action({ request }) {
+  const formData = await request.formData();
+
+  const newList = Object.fromEntries(formData);
+
+  await fetch("/api/users/1/lists", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newList),
+  });
+
+  return {};
+}
+
 const drawerWidth = 240;
 
 export default function Saves() {
   const lists = useLoaderData();
   const { pathname } = useLocation();
   const inputRef = useRef(null);
+  // Keep track of the number of lists
+  const numOfLists = useRef(lists.length);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (inputRef.current && open) {
+      inputRef.current.value = "";
       inputRef.current.focus();
     }
   }, [open]);
+
+  useEffect(() => {
+    // Close the dialog when a new list is added
+    if (numOfLists.current < lists.length) {
+      setOpen(false);
+    }
+
+    // Update the number of lists
+    numOfLists.current = lists.length;
+  }, [lists]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -115,18 +151,22 @@ export default function Saves() {
                       </DialogTitle>
 
                       <DialogContent>
-                        <TextField
-                          fullWidth
-                          inputRef={inputRef}
-                          margin="dense"
-                          name="name"
-                          placeholder="Enter list name"
-                        />
+                        <Form id="new-list" method="post">
+                          <TextField
+                            fullWidth
+                            inputRef={inputRef}
+                            margin="dense"
+                            name="name"
+                            placeholder="Enter list name"
+                          />
+                        </Form>
                       </DialogContent>
 
                       <DialogActions>
                         <Button onClick={handleClose}>Cancel</Button>
-                        <Button type="submit">Save</Button>
+                        <Button form="new-list" type="submit">
+                          Save
+                        </Button>
                       </DialogActions>
                     </Dialog>
                   </>
