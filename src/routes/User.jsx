@@ -1,4 +1,4 @@
-import { Outlet, useOutletContext, useLoaderData } from "react-router-dom";
+import { Outlet, useOutletContext } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
@@ -9,16 +9,8 @@ import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 
-export async function loader({ params }) {
-  const user = await fetch(`/api/users/${params.userId}`).then((res) =>
-    res.json()
-  );
-
-  return user;
-}
-
 export default function User() {
-  const user = useLoaderData();
+  const { user } = useOutletContext();
 
   return (
     <Box component="main" sx={{ flexGrow: 1 }}>
@@ -32,13 +24,11 @@ export default function User() {
           </Box>
         </CardContent>
       </Card>
-
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs value={0}>
           <Tab label="Settings" />
         </Tabs>
       </Box>
-
       <Outlet context={useOutletContext()} />
     </Box>
   );

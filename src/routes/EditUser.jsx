@@ -4,7 +4,7 @@ import {
   Form,
   useNavigation,
   useActionData,
-  useLoaderData,
+  useOutletContext,
 } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
@@ -18,14 +18,6 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-
-async function loader({ params }) {
-  const user = await fetch(`/api/users/${params.userId}`).then((res) =>
-    res.json()
-  );
-
-  return user;
-}
 
 function validateUserName(name) {
   if (!name) {
@@ -64,7 +56,7 @@ export async function action({ params, request }) {
 }
 
 export default function EditUser() {
-  const user = useLoaderData();
+  const { user } = useOutletContext();
   const navigation = useNavigation();
   const errors = useActionData();
   const inputRef = useRef(null);
@@ -78,13 +70,15 @@ export default function EditUser() {
   }
 
   useEffect(() => {
-    errors?.name && inputRef.current.focus();
+    if (errors?.name) {
+      inputRef.current.focus();
+    }
   }, [errors]);
 
   return (
     <>
       <Helmet>
-        <title>User - {user?.name} - Edit - Stack Overflow Clone</title>
+        <title>User - {user.name} - Edit - Stack Overflow Clone</title>
       </Helmet>
 
       <Box sx={{ flexGrow: 1, p: 3 }}>

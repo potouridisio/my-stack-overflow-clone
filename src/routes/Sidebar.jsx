@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Outlet, useMatches } from "react-router-dom";
+import { Outlet, useMatches, useOutletContext } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -20,7 +20,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <Outlet />
+      <Outlet context={useOutletContext()} />
 
       {/* Sidebar */}
       <Drawer

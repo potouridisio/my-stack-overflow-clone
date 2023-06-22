@@ -48,7 +48,7 @@ export default function Preferences() {
     navigation.state === "loading" &&
     navigation.formData != null &&
     navigation.formAction === navigation.location.pathname;
-  const userPreferences = useOutletContext();
+  const { userPreferences } = useOutletContext();
   const [theme, setTheme] = useState(
     userPreferences.theme === 0 ? "light" : "dark"
   );

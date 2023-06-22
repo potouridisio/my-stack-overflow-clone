@@ -137,7 +137,7 @@ export default function Root() {
         </Toolbar>
       </AppBar>
 
-      <Outlet context={userPreferences} />
+      <Outlet context={{ user, userPreferences }} />
     </Box>
   );
 }

@@ -24,7 +24,7 @@ import Root, { loader as rootLoader } from "./routes/Root";
 import Settings from "./routes/Settings";
 import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
-import User, { loader as userLoader } from "./routes/User";
+import User from "./routes/User";
 import Users, { loader as usersLoader } from "./routes/Users";
 
 const router = createBrowserRouter([
@@ -71,7 +71,6 @@ const router = createBrowserRouter([
           {
             path: "users/:userId",
             element: <User />,
-            loader: userLoader,
             children: [
               {
                 element: <Settings />,
@@ -85,7 +84,6 @@ const router = createBrowserRouter([
                     path: "edit",
                     element: <EditUser />,
                     action: editUserAction,
-                    loader: userLoader,
                   },
                 ],
               },

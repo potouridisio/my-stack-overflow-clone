@@ -18,7 +18,7 @@ export default function LeftSidebar() {
   const isRootPath = /^\/$/.test(pathname);
   const isQuestionsPath = /^\/questions\/.*$/.test(pathname);
   const isSearchPath = /^\/search(\/.*)?$/.test(pathname);
-  const userPreferences = useOutletContext();
+  const { userPreferences } = useOutletContext();
 
   return (
     <>
@@ -77,7 +77,7 @@ export default function LeftSidebar() {
       )}
 
       {/* Main */}
-      <Outlet context={userPreferences} />
+      <Outlet context={useOutletContext()} />
     </>
   );
 }
