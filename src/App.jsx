@@ -6,6 +6,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
+import Activity from "./routes/Activity";
+import AllSaves from "./routes/AllSaves";
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import AuthorizedApplications from "./routes/AuthorizedApplications";
 import CommunityDigests from "./routes/CommunityDigests";
@@ -25,13 +27,17 @@ import Questions, {
   handle as questionsHandle,
   loader as questionsLoader,
 } from "./routes/Questions";
+import Profile, { loader as ProfileLoader } from "./routes/Profile";
 import Root, { loader as rootLoader } from "./routes/Root";
 
 import {
   action as saveWatchedTagsAction,
   loader as saveWatchedTagsLoader,
 } from "./routes/SaveWatchedTags";
-
+import Saves, {
+  action as savesAction,
+  loader as savesLoader,
+} from "./routes/Saves";
 import Settings from "./routes/Settings";
 import Sidebar from "./routes/Sidebar";
 import Tags, { loader as tagsLoader } from "./routes/Tags";
@@ -88,10 +94,32 @@ const router = createBrowserRouter([
             action: questionAction,
           },
           {
-            //path: "users/:userId/preferences",
             element: <User />,
-
             children: [
+              {
+                path: "users/:userId/:userName/Profile",
+                element: <Profile />,
+                loader: ProfileLoader,
+              },
+
+              {
+                path: "users/:userId/:userName",
+                element: <Activity />,
+              },
+
+              {
+                path: "users/1/saves/all",
+                element: <Saves />,
+                children: [
+                  {
+                    index: true,
+                    element: <AllSaves />,
+                  },
+                ],
+                loader: savesLoader,
+                action: savesAction,
+              },
+
               {
                 path: "users/:userId",
                 element: <Settings />,
@@ -122,7 +150,6 @@ const router = createBrowserRouter([
                     element: <Preferences />,
                     action: preferencesAction,
                   },
-
                   {
                     path: ":userName/flair",
                     element: <Flair />,
