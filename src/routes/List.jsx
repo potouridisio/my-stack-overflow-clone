@@ -92,8 +92,6 @@ export default function List() {
           </DialogContent>
 
           <DialogActions>
-            <Button>Delete list</Button>
-            <Box sx={{ flexGrow: 1 }} />
             <Button onClick={handleClose}>Cancel</Button>
             <Button form="edit-list" type="submit">
               Save
