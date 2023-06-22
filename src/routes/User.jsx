@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
+import {
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -28,7 +34,7 @@ const tabClass = {
 };
 
 export default function User() {
-  const [tabValue, setTabValue] = useState(0);
+  const [tabValue, setTabValue] = useState(1);
   //const { pathname } = useLocation();
 
   useEffect(() => {
@@ -38,6 +44,8 @@ export default function User() {
   const handleTabChange = (e) => {
     setTabValue(e.target.value);
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -125,7 +133,7 @@ export default function User() {
           </Box>
 
           <Tabs value={tabValue} onChange={handleTabChange}>
-            <Link to={"users/1/John-Doe"}>
+            <Link to={"users/1/John-Doe/Profile"}>
               <Tab
                 label="Profile"
                 sx={tabClass}
@@ -133,7 +141,7 @@ export default function User() {
               />
             </Link>
 
-            <Link to={"users/1/John-Doe/Activity"}>
+            <Link to={"users/1/John-Doe"}>
               <Tab
                 label="Activity"
                 sx={tabClass}
