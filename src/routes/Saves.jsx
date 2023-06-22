@@ -242,11 +242,7 @@ export default function Saves() {
 
               {lists.map((list) => (
                 <ListItem disablePadding key={list.id}>
-                  <ListItemButton
-                    component={Link}
-                    selected={pathname === `/users/1/saves/${list.id}`}
-                    to={`/users/1/saves/${list.id}`}
-                  >
+                  <ListItemButton>
                     <ListItemText primary={list.name} />
                   </ListItemButton>
                 </ListItem>
