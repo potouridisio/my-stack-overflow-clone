@@ -186,33 +186,11 @@ app.post("/questions", (req, res) => {
   );
 });
 
-// Save a question
-app.post("/questions/:questionId/save", (req, res) => {
-  const questionId = req.params.questionId;
-  const listId = req.query.listId; // Optional parameter
-  const userId = req.body.userId; // Assuming userId is passed in the request body
-
-  // Save the question
-  db.run(
-    "INSERT INTO saved_questions (listId, questionId, userId) VALUES (?, ?, ?)",
-    [listId, questionId, userId],
-    function (error) {
-      if (error) {
-        console.error(error);
-        res
-          .status(500)
-          .json({ error: "An error occurred while saving the question." });
-      } else {
-        res.status(200).json({ message: "Question saved." });
-      }
-    }
-  );
-});
-
-// Unsave a question
+// Save or unsave a question
 app.post("/questions/:questionId/save", (req, res) => {
   const questionId = req.params.questionId;
   const isUndo = req.query.isUndo === "true";
+  const listId = req.query.listId; // Optional parameter
   const userId = req.body.userId; // Assuming userId is passed in the request body
 
   if (isUndo) {
@@ -232,9 +210,21 @@ app.post("/questions/:questionId/save", (req, res) => {
       }
     );
   } else {
-    res.status(400).json({
-      error: "Invalid request. Specify isUndo=true to unsave the question.",
-    });
+    // Save the question
+    db.run(
+      "INSERT INTO saved_questions (listId, questionId, userId) VALUES (?, ?, ?)",
+      [listId, questionId, userId],
+      function (error) {
+        if (error) {
+          console.error(error);
+          res
+            .status(500)
+            .json({ error: "An error occurred while saving the question." });
+        } else {
+          res.status(200).json({ message: "Question saved." });
+        }
+      }
+    );
   }
 });
 
@@ -726,6 +716,7 @@ app.put("/users/:userId/preferences", (req, res) => {
   );
 });
 
+// Get all saved questions for a user
 app.get("/users/:userId/savedQuestions", (req, res) => {
   const userId = req.params.userId;
 
@@ -758,6 +749,31 @@ app.get("/users/:userId/savedQuestions", (req, res) => {
           tagIds: row.tagIds ? row.tagIds.split(",").map(Number) : [],
         }));
         res.status(200).json(savedQuestions);
+      }
+    }
+  );
+});
+
+// Check if a question is saved
+app.get("/users/:userId/savedQuestions/:savedQuestionId", (req, res) => {
+  const userId = req.params.userId;
+  const savedQuestionId = req.params.savedQuestionId;
+
+  // Check if the question is saved for the specified user
+  db.get(
+    `SELECT COUNT(*) AS count
+    FROM saved_questions
+    WHERE userId = ? AND id = ?`,
+    [userId, savedQuestionId],
+    function (error, row) {
+      if (error) {
+        console.error(error);
+        res.status(500).json({
+          error: "An error occurred while checking the saved question.",
+        });
+      } else {
+        const isSaved = row && row.count > 0;
+        res.status(200).json({ isSaved });
       }
     }
   );
