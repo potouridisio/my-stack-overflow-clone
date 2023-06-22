@@ -62,6 +62,18 @@ db.serialize(() => {
   );
 
   db.run(
+    `CREATE TABLE saved_questions (
+      id INTEGER PRIMARY KEY,
+      listId INTEGER,
+      questionId INTEGER,
+      userId INTEGER,
+      FOREIGN KEY (listId) REFERENCES lists(id),
+      FOREIGN KEY (questionId) REFERENCES questions(id),
+      FOREIGN KEY (userId) REFERENCES users(id)
+    )`
+  );
+
+  db.run(
     `CREATE TABLE questions_tags (
       id INTEGER PRIMARY KEY,
       questionId INTEGER,

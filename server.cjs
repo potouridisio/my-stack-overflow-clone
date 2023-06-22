@@ -186,6 +186,62 @@ app.post("/questions", (req, res) => {
   );
 });
 
+// Save a question
+app.post("/questions/:questionId/save", (req, res) => {
+  const questionId = req.params.questionId;
+  const listId = req.query.listId; // Optional parameter
+  const userId = req.body.userId; // Assuming userId is passed in the request body
+
+  // Save the question
+  db.run(
+    "INSERT INTO saved_questions (listId, questionId, userId) VALUES (?, ?, ?)",
+    [listId, questionId, userId],
+    function (error) {
+      if (error) {
+        console.error(error);
+        res
+          .status(500)
+          .json({ error: "An error occurred while saving the question." });
+      } else {
+        res
+          .status(200)
+          .json({ message: `Question ${questionId} saved successfully.` });
+      }
+    }
+  );
+});
+
+// Unsave a question
+app.post("/questions/:questionId/save", (req, res) => {
+  const questionId = req.params.questionId;
+  const isUndo = req.query.isUndo === "true";
+  const userId = req.body.userId; // Assuming userId is passed in the request body
+
+  if (isUndo) {
+    // Unsave the question
+    db.run(
+      "DELETE FROM saved_questions WHERE questionId = ? AND userId = ?",
+      [questionId, userId],
+      function (error) {
+        if (error) {
+          console.error(error);
+          res
+            .status(500)
+            .json({ error: "An error occurred while unsaving the question." });
+        } else {
+          res
+            .status(200)
+            .json({ message: `Question ${questionId} unsaved successfully.` });
+        }
+      }
+    );
+  } else {
+    res.status(400).json({
+      error: "Invalid request. Specify isUndo=true to unsave the question.",
+    });
+  }
+});
+
 app.get("/tags", (req, res) => {
   const sortBy = req.query.sortBy || "popularity";
   const searchText = req.query.q;
