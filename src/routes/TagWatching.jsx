@@ -92,7 +92,7 @@ export default function TagWatching() {
     >
       <Toolbar
         disableGutters
-        sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}
+        sx={{ borderBottom: 1, borderColor: "divider", mb: 1 }}
       >
         <Typography component="div" variant="h6">
           Tag Watching
@@ -108,7 +108,8 @@ export default function TagWatching() {
             sx={{
               display: "flex",
               borderBottom: isWatchedEditing ? 1 : 0,
-              p: 3,
+              p: 2,
+              pl: 3,
               alignItems: "center",
             }}
             disableGutters
@@ -266,12 +267,13 @@ export default function TagWatching() {
         <Typography sx={{ mb: 1 }} component="div" variant="h6">
           Ignored Tags
         </Typography>
-        <Card sx={{ border: 1 }}>
+        <Card sx={{ border: 1, p: 0 }}>
           <Toolbar
             sx={{
               display: "flex",
               borderBottom: isIgnoredEditing ? 1 : 0,
-              p: 3,
+              p: 1,
+              pl: 3,
               alignItems: "center",
             }}
             disableGutters

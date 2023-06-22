@@ -1,4 +1,4 @@
-import { Link, Outlet, useOutletContext } from "react-router-dom";
+import { Link, NavLink, Outlet, useOutletContext } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -27,32 +27,25 @@ export default function Settings() {
         }}
         variant="permanent"
       >
-        <Box
-          sx={{
-            overflow: "auto",
-            display: "flex",
-            flexDirection: "column",
-            gap: 0,
-          }}
-        >
+        <Box sx={{ overflow: "auto" }}>
           <List
             subheader={
-              <ListSubHeader sx={{ fontWeight: 700, pt: 3 }}>
+              <ListSubHeader sx={{ fontWeight: 700, pt: 1 }}>
                 PERSONAL INFORMATION
               </ListSubHeader>
             }
           >
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 1 }}>
                 <Link to={"edit"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Edit profile" />
+                  <ListItemText sx={{ m: 0 }} secondary="Edit profile" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
                 <Link to={"delete"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Delete profile" />
+                  <ListItemText sx={{ m: 0 }} secondary="Delete profile" />
                 </Link>
               </ListItemButton>
             </ListItem>
@@ -60,43 +53,51 @@ export default function Settings() {
 
           <List
             subheader={
-              <ListSubHeader sx={{ fontWeight: 700 }}>
+              <ListSubHeader sx={{ fontWeight: 700, pt: 0 }}>
                 EMAIL SETTINGS
               </ListSubHeader>
             }
           >
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 1 }}>
                 <Link to={"email/settings"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Edit email settings" />
+                  <ListItemText sx={{ m: 0 }} secondary="Edit email settings" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 1 }}>
                 <Link
                   to={"tag-notifications"}
                   style={{ textDecoration: "none" }}
                 >
-                  <ListItemText primary="Tag watching & ignoring" />
+                  <ListItemText
+                    sx={{ m: 0 }}
+                    secondary="Tag watching & ignoring"
+                  />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 1 }}>
                 <Link to={"email/digests"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Community digests" />
+                  <ListItemText sx={{ m: 0 }} secondary="Community digests" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
                 <Link
                   to={"https://stackexchange.com"}
                   style={{ textDecoration: "none" }}
                 >
-                  <ListItemText primary="Question subscriptions" />
-                  <LaunchIcon />
+                  <Box sx={{ display: "flex" }}>
+                    <ListItemText
+                      sx={{ m: 0, mr: 1 }}
+                      secondary="Question subscriptions"
+                    />
+                    <LaunchIcon fontSize="x-small" sx={{ color: "grey" }} />
+                  </Box>
                 </Link>
               </ListItemButton>
             </ListItem>
@@ -110,24 +111,24 @@ export default function Settings() {
             }
           >
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 1 }}>
                 <Link to={"preferences"} style={{ textDecoration: "none" }}>
                   {" "}
-                  <ListItemText primary="Preferences" />
+                  <ListItemText sx={{ m: 0 }} secondary="Preferences" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 1 }}>
                 <Link to={"JohnDoe/flair"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Flair" />
+                  <ListItemText sx={{ m: 0 }} secondary="Flair" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
                 <Link to={"hidecommunities"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Hide Communities" />
+                  <ListItemText sx={{ m: 0 }} secondary="Hide Communities" />
                 </Link>
               </ListItemButton>
             </ListItem>
@@ -139,16 +140,16 @@ export default function Settings() {
             }
           >
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 1 }}>
                 <Link to={"my-collectives"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Your collectives" />
+                  <ListItemText sx={{ m: 0 }} secondary="Your collectives" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
                 <Link to={"mylogins"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Your logins" />
+                  <ListItemText sx={{ m: 0 }} secondary="Your logins" />
                 </Link>
               </ListItemButton>
             </ListItem>
@@ -160,9 +161,12 @@ export default function Settings() {
             }
           >
             <ListItem disablePadding>
-              <ListItemButton>
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
                 <Link to={"apps"} style={{ textDecoration: "none" }}>
-                  <ListItemText primary="Authorized applications" />
+                  <ListItemText
+                    sx={{ m: 0 }}
+                    secondary="Authorized applications"
+                  />
                 </Link>
               </ListItemButton>
             </ListItem>

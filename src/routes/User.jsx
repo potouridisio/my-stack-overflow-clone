@@ -1,4 +1,6 @@
-import { Link, Outlet, useOutletContext } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
 
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -21,9 +23,22 @@ const tabClass = {
   mr: 2,
   padding: 1,
   textTransform: "none",
+  color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
+  fontWeight: 700,
 };
 
 export default function User() {
+  const [tabValue, setTabValue] = useState(0);
+  //const { pathname } = useLocation();
+
+  useEffect(() => {
+    document.title = "User John Doe - Stack Overflow Clone";
+  }, []);
+
+  const handleTabChange = (e) => {
+    setTabValue(e.target.value);
+  };
+
   return (
     <>
       <Box component="main" sx={{ flexGrow: 1, mt: 2, ml: 2 }}>
@@ -52,15 +67,14 @@ export default function User() {
                 <Button
                   sx={{
                     p: 0,
-                    color: "black",
+                    color: (theme) =>
+                      theme.palette.mode === "light" ? "black" : "white",
                     fontWeight: 400,
                     textTransform: "none",
                   }}
                   title="Click to view daily visit calendar"
                 >
-                  <CalendarMonthIcon
-                    sx={{ fontSize: 20, color: "black", mr: 2 }}
-                  />
+                  <CalendarMonthIcon sx={{ fontSize: 20, mr: 2 }} />
                   Visited 23 days, 20 consecutive
                 </Button>
               </Box>
@@ -76,13 +90,27 @@ export default function User() {
                 justifyContent: "flex-end",
               }}
             >
-              <Button sx={{ border: 1, color: "black" }}>
+              <Button
+                sx={{
+                  border: 1,
+                  color: (theme) =>
+                    theme.palette.mode === "light" ? "black" : "white",
+                  fontWeight: 700,
+                }}
+              >
                 <EditIcon sx={{ fontSize: 20, mr: 1 }} />
                 <Link to={"users/1/edit"} style={{ textDecoration: "none" }}>
                   Edit profile
                 </Link>
               </Button>
-              <Button sx={{ border: 1, color: "black" }}>
+              <Button
+                sx={{
+                  border: 1,
+                  color: (theme) =>
+                    theme.palette.mode === "light" ? "black" : "white",
+                  fontWeight: 700,
+                }}
+              >
                 <InsertCommentIcon
                   sx={{ fontSize: 20, color: "blue", mr: 1 }}
                 />
@@ -96,18 +124,37 @@ export default function User() {
             </Box>
           </Box>
 
-          <Tabs>
+          <Tabs value={tabValue} onChange={handleTabChange}>
             <Link to={"users/1/John-Doe"}>
-              <Tab label="Profile" value="profile" sx={tabClass} />
+              <Tab
+                label="Profile"
+                sx={tabClass}
+                onChange={() => setTabValue(0)}
+              />
             </Link>
-            <Link to={"users/1/John-Doe"}>
-              <Tab label="Activity" value="activity" sx={tabClass} />
+
+            <Link to={"users/1/John-Doe/Activity"}>
+              <Tab
+                label="Activity"
+                sx={tabClass}
+                onChange={() => setTabValue(1)}
+              />
             </Link>
+
             <Link to={"users/1/saves/all"}>
-              <Tab label="Saves" value="saves" sx={tabClass} />
+              <Tab
+                label="Saves"
+                sx={tabClass}
+                onChange={() => setTabValue(2)}
+              />
             </Link>
+
             <Link to={"users/1"}>
-              <Tab label="Settings" value="settings" sx={tabClass} />
+              <Tab
+                label="Settings"
+                sx={tabClass}
+                onChange={() => setTabValue(3)}
+              />
             </Link>
           </Tabs>
         </Box>
