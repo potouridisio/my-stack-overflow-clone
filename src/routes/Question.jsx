@@ -124,7 +124,7 @@ export default function Question() {
 
           <CardActions>
             <Tooltip title="Save this question.">
-              <IconButton sx={{ border: 1, borderColor: "transparent" }}>
+              <IconButton>
                 <BookmarkBorderIcon />
               </IconButton>
             </Tooltip>
