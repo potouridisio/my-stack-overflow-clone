@@ -58,7 +58,7 @@ export async function action({ params, request }) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(newAnswer),
-  }).then((res) => res.json());
+  });
 
   return {};
 }
