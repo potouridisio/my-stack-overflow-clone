@@ -203,9 +203,7 @@ app.post("/questions/:questionId/save", (req, res) => {
           .status(500)
           .json({ error: "An error occurred while saving the question." });
       } else {
-        res
-          .status(200)
-          .json({ message: `Question ${questionId} saved successfully.` });
+        res.status(200).json({ message: "Question saved." });
       }
     }
   );
@@ -229,9 +227,7 @@ app.post("/questions/:questionId/save", (req, res) => {
             .status(500)
             .json({ error: "An error occurred while unsaving the question." });
         } else {
-          res
-            .status(200)
-            .json({ message: `Question ${questionId} unsaved successfully.` });
+          res.status(200).json({ message: "Question removed from saves." });
         }
       }
     );
@@ -725,6 +721,43 @@ app.put("/users/:userId/preferences", (req, res) => {
         } else {
           res.sendStatus(204);
         }
+      }
+    }
+  );
+});
+
+app.get("/users/:userId/savedQuestions", (req, res) => {
+  const userId = req.params.userId;
+
+  // Fetch saved questions for the specified user
+  db.all(
+    `SELECT q.answerCount, q.body, q.createdAt, q.id, q.title, q.updatedAt, q.userId, q.voteCount, GROUP_CONCAT(t.id) AS tagIds
+    FROM saved_questions AS sq
+    JOIN questions AS q ON sq.questionId = q.id
+    LEFT JOIN questions_tags AS qt ON q.id = qt.questionId
+    LEFT JOIN tags AS t ON qt.tagId = t.id
+    WHERE sq.userId = ?
+    GROUP BY q.id`,
+    [userId],
+    function (error, rows) {
+      if (error) {
+        console.error(error);
+        res
+          .status(500)
+          .json({ error: "An error occurred while fetching saved questions." });
+      } else {
+        const savedQuestions = rows.map((row) => ({
+          answerCount: row.answerCount,
+          body: row.body,
+          createdAt: row.createdAt,
+          id: row.id,
+          title: row.title,
+          updatedAt: row.updatedAt,
+          userId: row.userId,
+          voteCount: row.voteCount,
+          tagIds: row.tagIds ? row.tagIds.split(",").map(Number) : [],
+        }));
+        res.status(200).json(savedQuestions);
       }
     }
   );
