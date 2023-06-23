@@ -1,13 +1,11 @@
 import { Link as RouterLink, useLoaderData } from "react-router-dom";
 
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
-import CardHeader from "@mui/material/CardHeader";
+import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
-import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
@@ -60,52 +58,42 @@ export default function AllSaves() {
       <Stack spacing={2}>
         {savedQuestions.map((savedQuestion) => (
           <Card key={savedQuestion.id}>
-            <CardHeader
-              action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              disableTypography
-              subheader={
-                <Link
-                  component={RouterLink}
-                  sx={{ display: "block" }}
-                  to={`/questions/${savedQuestion.id}`}
-                  variant="h5"
-                >
-                  {savedQuestion.title}
-                </Link>
-              }
-              title={
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{ alignItems: "center", mb: 1.5 }}
-                >
+            <CardContent>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ alignItems: "center", mb: 1.5 }}
+              >
+                <Typography color="text.secondary" sx={{ fontSize: 14 }}>
+                  {savedQuestion.voteCount} vote
+                  {savedQuestion.voteCount === 1 ? "" : "s"}
+                </Typography>
+                {savedQuestion.answerCount > 0 ? (
+                  <Chip
+                    color="success"
+                    label={`${savedQuestion.answerCount} answer${
+                      savedQuestion.answerCount === 1 ? "" : "s"
+                    }`}
+                    variant="outlined"
+                  />
+                ) : (
                   <Typography color="text.secondary" sx={{ fontSize: 14 }}>
-                    {savedQuestion.voteCount} vote
-                    {savedQuestion.voteCount === 1 ? "" : "s"}
+                    {savedQuestion.answerCount} answer
+                    {savedQuestion.answerCount === 1 ? "" : "s"}
                   </Typography>
-                  {savedQuestion.answerCount > 0 ? (
-                    <Chip
-                      color="success"
-                      label={`${savedQuestion.answerCount} answer${
-                        savedQuestion.answerCount === 1 ? "" : "s"
-                      }`}
-                      variant="outlined"
-                    />
-                  ) : (
-                    <Typography color="text.secondary" sx={{ fontSize: 14 }}>
-                      {savedQuestion.answerCount} answer
-                      {savedQuestion.answerCount === 1 ? "" : "s"}
-                    </Typography>
-                  )}
-                </Stack>
-              }
-            />
-            <CardActions sx={{ p: 2, pt: 0 }}>
-              <Stack direction="row" spacing={1} sx={{ flexGrow: 1 }}>
+                )}
+              </Stack>
+
+              <Link
+                component={RouterLink}
+                sx={{ display: "block", mb: 1.5 }}
+                to={`/questions/${savedQuestion.id}`}
+                variant="h5"
+              >
+                {savedQuestion.title}
+              </Link>
+
+              <Stack direction="row" spacing={1}>
                 {savedQuestion.tagIds.map((tagId) => (
                   <Chip
                     key={tagId}
@@ -114,6 +102,9 @@ export default function AllSaves() {
                   />
                 ))}
               </Stack>
+            </CardContent>
+
+            <CardActions sx={{ justifyContent: "flex-end" }}>
               <Typography variant="body2">
                 <Link href="#" onClick={(event) => event.preventDefault()}>
                   {users[savedQuestion.userId].name}
