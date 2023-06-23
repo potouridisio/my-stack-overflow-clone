@@ -1,4 +1,10 @@
-import { Link, NavLink, Outlet, useOutletContext } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  Outlet,
+  useLocation,
+  useOutletContext,
+} from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
@@ -13,6 +19,8 @@ import LaunchIcon from "@mui/icons-material/Launch";
 const drawerWidth = 240;
 
 export default function Settings() {
+  const { pathname } = useLocation();
+
   return (
     <Box sx={{ display: "flex", p: 0 }}>
       <Drawer
@@ -36,16 +44,38 @@ export default function Settings() {
             }
           >
             <ListItem disablePadding>
-              <ListItemButton sx={{ pt: 0, pb: 1 }}>
-                <Link to={"edit"} style={{ textDecoration: "none" }}>
-                  <ListItemText sx={{ m: 0 }} secondary="Edit profile" />
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
+                <Link
+                  to={"edit"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("edit") ? "#f48225" : "",
+                    borderRadius: "30%",
+                  }}
+                >
+                  <ListItemText
+                    sx={{ m: 0, p: 0.8 }}
+                    secondary="Edit profile"
+                  />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton sx={{ pt: 0, pb: 0 }}>
-                <Link to={"delete"} style={{ textDecoration: "none" }}>
-                  <ListItemText sx={{ m: 0 }} secondary="Delete profile" />
+                <Link
+                  to={"delete"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("delete")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
+                >
+                  <ListItemText
+                    sx={{ m: 0, p: 0.8 }}
+                    secondary="Delete profile"
+                  />
                 </Link>
               </ListItemButton>
             </ListItem>
@@ -59,29 +89,59 @@ export default function Settings() {
             }
           >
             <ListItem disablePadding>
-              <ListItemButton sx={{ pt: 0, pb: 1 }}>
-                <Link to={"email/settings"} style={{ textDecoration: "none" }}>
-                  <ListItemText sx={{ m: 0 }} secondary="Edit email settings" />
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
+                <Link
+                  to={"email/settings"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("email/settings")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
+                >
+                  <ListItemText
+                    sx={{ m: 0, p: 0.8 }}
+                    secondary="Edit email settings"
+                  />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton sx={{ pt: 0, pb: 1 }}>
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
                 <Link
                   to={"tag-notifications"}
-                  style={{ textDecoration: "none" }}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("tag-notifications")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
                 >
                   <ListItemText
-                    sx={{ m: 0 }}
+                    sx={{ m: 0, p: 0.8 }}
                     secondary="Tag watching & ignoring"
                   />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
-              <ListItemButton sx={{ pt: 0, pb: 1 }}>
-                <Link to={"email/digests"} style={{ textDecoration: "none" }}>
-                  <ListItemText sx={{ m: 0 }} secondary="Community digests" />
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
+                <Link
+                  to={"email/digests"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("digests")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
+                >
+                  <ListItemText
+                    sx={{ m: 0, p: 0.8 }}
+                    secondary="Community digests"
+                  />
                 </Link>
               </ListItemButton>
             </ListItem>
@@ -93,7 +153,7 @@ export default function Settings() {
                 >
                   <Box sx={{ display: "flex" }}>
                     <ListItemText
-                      sx={{ m: 0, mr: 1 }}
+                      sx={{ m: 0, mr: 1, p: 0.8 }}
                       secondary="Question subscriptions"
                     />
                     <LaunchIcon fontSize="x-small" sx={{ color: "grey" }} />
@@ -111,24 +171,54 @@ export default function Settings() {
             }
           >
             <ListItem disablePadding>
-              <ListItemButton sx={{ pt: 0, pb: 1 }}>
-                <Link to={"preferences"} style={{ textDecoration: "none" }}>
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
+                <Link
+                  to={"preferences"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("preferences")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
+                >
                   {" "}
-                  <ListItemText sx={{ m: 0 }} secondary="Preferences" />
-                </Link>
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton sx={{ pt: 0, pb: 1 }}>
-                <Link to={"JohnDoe/flair"} style={{ textDecoration: "none" }}>
-                  <ListItemText sx={{ m: 0 }} secondary="Flair" />
+                  <ListItemText sx={{ m: 0, p: 0.8 }} secondary="Preferences" />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton sx={{ pt: 0, pb: 0 }}>
-                <Link to={"hidecommunities"} style={{ textDecoration: "none" }}>
-                  <ListItemText sx={{ m: 0 }} secondary="Hide Communities" />
+                <Link
+                  to={"JohnDoe/flair"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("flair")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
+                >
+                  <ListItemText sx={{ m: 0, p: 0.8 }} secondary="Flair" />
+                </Link>
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton sx={{ pt: 0, pb: 0 }}>
+                <Link
+                  to={"hidecommunities"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("hidecommunities")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
+                >
+                  <ListItemText
+                    sx={{ m: 0, p: 0.8 }}
+                    secondary="Hide Communities"
+                  />
                 </Link>
               </ListItemButton>
             </ListItem>
@@ -141,15 +231,36 @@ export default function Settings() {
           >
             <ListItem disablePadding>
               <ListItemButton sx={{ pt: 0, pb: 1 }}>
-                <Link to={"my-collectives"} style={{ textDecoration: "none" }}>
-                  <ListItemText sx={{ m: 0 }} secondary="Your collectives" />
+                <Link
+                  to={"my-collectives"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("my-collectives")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
+                >
+                  <ListItemText
+                    sx={{ m: 0, p: 0.8 }}
+                    secondary="Your collectives"
+                  />
                 </Link>
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
               <ListItemButton sx={{ pt: 0, pb: 0 }}>
-                <Link to={"mylogins"} style={{ textDecoration: "none" }}>
-                  <ListItemText sx={{ m: 0 }} secondary="Your logins" />
+                <Link
+                  to={"mylogins"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("mylogins")
+                      ? "#f48225"
+                      : "",
+                    borderRadius: "30%",
+                  }}
+                >
+                  <ListItemText sx={{ m: 0, p: 0.8 }} secondary="Your logins" />
                 </Link>
               </ListItemButton>
             </ListItem>
@@ -162,9 +273,16 @@ export default function Settings() {
           >
             <ListItem disablePadding>
               <ListItemButton sx={{ pt: 0, pb: 0 }}>
-                <Link to={"apps"} style={{ textDecoration: "none" }}>
+                <Link
+                  to={"apps"}
+                  style={{
+                    textDecoration: "none",
+                    backgroundColor: pathname.includes("apps") ? "#f48225" : "",
+                    borderRadius: "30%",
+                  }}
+                >
                   <ListItemText
-                    sx={{ m: 0 }}
+                    sx={{ m: 0, p: 0.8 }}
                     secondary="Authorized applications"
                   />
                 </Link>

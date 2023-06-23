@@ -12,7 +12,8 @@ import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import AuthorizedApplications from "./routes/AuthorizedApplications";
 import CommunityDigests from "./routes/CommunityDigests";
 import DeleteUser from "./routes/DeleteUser";
-import EditUser from "./routes/EditUser";
+import EditUser from //{ action as editUserAction }
+"./routes/EditUser";
 import EditEmailSettings from "./routes/EditEmailSettings";
 import Flair from "./routes/Flair";
 import HideCommunities from "./routes/HideCommunities";
@@ -121,12 +122,13 @@ const router = createBrowserRouter([
               },
 
               {
-                path: "users/:userId",
+                path: "users/:userId/",
                 element: <Settings />,
                 children: [
                   {
                     path: "edit",
                     element: <EditUser />,
+                    //action: editUserAction,
                   },
                   {
                     path: "delete",

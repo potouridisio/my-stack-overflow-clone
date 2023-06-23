@@ -6,6 +6,7 @@ import {
   useLocation,
   useNavigate,
   useOutletContext,
+  useSearchParams,
 } from "react-router-dom";
 
 import Tabs from "@mui/material/Tabs";
@@ -24,34 +25,40 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import EditIcon from "@mui/icons-material/Edit";
 import InsertCommentIcon from "@mui/icons-material/InsertComment";
 
-const tabClass = {
-  borderRadius: "40%",
-  mr: 2,
-  padding: 1,
-  textTransform: "none",
-  color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
-  fontWeight: 700,
-};
-
 export default function User() {
   const [tabValue, setTabValue] = useState(1);
-  //const { pathname } = useLocation();
+  const { pathname } = useLocation();
+  //console.log(pathname);
+
+  const [tabLabel, setTabLabel] = useState("");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(searchParams);
+  const tab = searchParams.get("tab");
+  console.log(tab);
 
   useEffect(() => {
     document.title = "User John Doe - Stack Overflow Clone";
   }, []);
 
-  const handleTabChange = (e) => {
-    setTabValue(e.target.value);
+  const handleTabChange = (_event, value) => {
+    setTabValue(value);
   };
 
-  const navigate = useNavigate();
+  const tabClass = {
+    borderRadius: "40%",
+    mr: 0,
+    padding: 1,
+    textTransform: "none",
+    color: (theme) => (theme.palette.mode === "light" ? "black" : "white"),
+    fontWeight: 700,
+  };
 
   return (
     <>
       <Box component="main" sx={{ flexGrow: 1, mt: 2, ml: 2 }}>
         <Toolbar />
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box>
           <Box sx={{ display: "flex" }}>
             <PersonIcon sx={{ fontSize: 140 }} />
 
@@ -132,36 +139,45 @@ export default function User() {
             </Box>
           </Box>
 
-          <Tabs value={tabValue} onChange={handleTabChange}>
-            <Link to={"users/1/John-Doe/Profile"}>
+          <Tabs>
+            {" "}
+            {/*value={tabValue} onChange={handleTabChange}*/}
+            <Link to={`users/1/John-Doe/Profile?tab=profile`} style={{ p: 0 }}>
               <Tab
                 label="Profile"
-                sx={tabClass}
-                onChange={() => setTabValue(0)}
+                sx={{
+                  ...tabClass,
+                  backgroundColor: tab === "profile" ? "#f48225" : "",
+                }}
               />
             </Link>
-
-            <Link to={"users/1/John-Doe"}>
+            <Link to={`users/1/John-Doe?tab=toactivity`}>
               <Tab
                 label="Activity"
-                sx={tabClass}
-                onChange={() => setTabValue(1)}
+                sx={{
+                  ...tabClass,
+                  backgroundColor: tab === "toactivity" ? "#f48225" : "",
+                }}
               />
             </Link>
-
             <Link to={"users/1/saves/all"}>
               <Tab
                 label="Saves"
-                sx={tabClass}
-                onChange={() => setTabValue(2)}
+                sx={{
+                  ...tabClass,
+                  backgroundColor: pathname.includes("saves") ? "#f48225" : "",
+                }}
               />
             </Link>
-
-            <Link to={"users/1"}>
+            <Link to={"users/1/preferences"}>
               <Tab
                 label="Settings"
-                sx={tabClass}
-                onChange={() => setTabValue(3)}
+                sx={{
+                  ...tabClass,
+                  backgroundColor: pathname.includes("preferences")
+                    ? "#f48225"
+                    : "",
+                }}
               />
             </Link>
           </Tabs>
