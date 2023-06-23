@@ -7,7 +7,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme } from "@mui/material/styles";
 import { ThemeProvider } from "@mui/material/styles";
 
-import AllSaves from "./routes/AllSaves";
+import AllSaves, { loader as allSavesLoader } from "./routes/AllSaves";
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
 import EditUser from "./routes/EditUser";
 import LeftSidebar from "./routes/LeftSidebar";
@@ -102,6 +102,7 @@ const router = createBrowserRouter([
                   {
                     index: true,
                     element: <AllSaves />,
+                    loader: allSavesLoader,
                   },
                 ],
                 loader: savesLoader,
