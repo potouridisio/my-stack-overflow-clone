@@ -754,31 +754,6 @@ app.get("/users/:userId/savedQuestions", (req, res) => {
   );
 });
 
-// Check if a question is saved
-app.get("/users/:userId/savedQuestions/:savedQuestionId", (req, res) => {
-  const userId = req.params.userId;
-  const savedQuestionId = req.params.savedQuestionId;
-
-  // Check if the question is saved for the specified user
-  db.get(
-    `SELECT COUNT(*) AS count
-    FROM saved_questions
-    WHERE userId = ? AND id = ?`,
-    [userId, savedQuestionId],
-    function (error, row) {
-      if (error) {
-        console.error(error);
-        res.status(500).json({
-          error: "An error occurred while checking the saved question.",
-        });
-      } else {
-        const isSaved = row && row.count > 0;
-        res.status(200).json({ isSaved });
-      }
-    }
-  );
-});
-
 // Endpoint to fetch watched tags for a user
 app.get("/users/:userId/watchedTags", (req, res) => {
   const userId = req.params.userId;

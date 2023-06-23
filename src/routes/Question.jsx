@@ -90,7 +90,7 @@ export async function action({ params, request }) {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export async function loader({ params }) {
-  const [question, tagsResponse, users, answers, savedQuestion] =
+  const [question, tagsResponse, users, answers, savedQuestions] =
     await Promise.all([
       fetch(`/api/questions/${params.questionId}`).then((res) => res.json()),
       fetch("/api/tags").then((res) => res.json()),
@@ -98,9 +98,7 @@ export async function loader({ params }) {
       fetch(`/api/questions/${params.questionId}/answers`).then((res) =>
         res.json()
       ),
-      fetch(`/api/users/1/savedQuestions/${params.questionId}`).then((res) =>
-        res.json()
-      ),
+      fetch("/api/users/1/savedQuestions").then((res) => res.json()),
     ]);
 
   return {
@@ -108,7 +106,9 @@ export async function loader({ params }) {
     tags: indexBy(tagsResponse.tags, "id"),
     users: indexBy(users, "id"),
     answers,
-    isSaved: savedQuestion.isSaved,
+    isSaved: savedQuestions.some(
+      (savedQuestion) => savedQuestion.id == params.questionId
+    ),
   };
 }
 
