@@ -169,7 +169,7 @@ export default function Question() {
 
           <CardActions>
             <Form method="post">
-              <input name="isSaved" type="hidden" value={isSaved} />
+              <input name="isSaved" type="hidden" value={initialIsSaved} />
               <Tooltip title={`${isSaved ? "Unsave" : "Save"} this question.`}>
                 <IconButton
                   name="intent"
