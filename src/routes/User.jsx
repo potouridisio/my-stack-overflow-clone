@@ -8,7 +8,7 @@ import Toolbar from "@mui/material/Toolbar";
 
 export default function User() {
   const { pathname } = useLocation();
-  const [value, setValue] = useState(pathname.includes("saves"));
+  const [value, setValue] = useState(pathname.includes("saves") ? 0 : 1);
 
   useEffect(() => {
     if (pathname.includes("saves")) {
