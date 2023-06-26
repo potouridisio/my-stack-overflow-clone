@@ -305,12 +305,12 @@ app.get("/users/:userId", (req, res) => {
 // Update a specific user by ID
 app.put("/users/:userId", (req, res) => {
   const userId = req.params.userId; // Extract the userId from the URL parameter
-  const { name, location } = req.body; // Assuming the fields to be updated are provided in the request body
+  const { name, location, reputation } = req.body; // Assuming the fields to be updated are provided in the request body
 
   // Update the user in the database
   db.run(
-    "UPDATE users SET name = ?, location = ? WHERE id = ?",
-    [name, location, userId],
+    "UPDATE users SET name = ?, location = ?, reputation = ? WHERE id = ?",
+    [name, location, reputation, userId],
     function (err) {
       if (err) {
         console.error(err);

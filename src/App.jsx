@@ -9,7 +9,7 @@ import { ThemeProvider } from "@mui/material/styles";
 
 import AllSaves from "./routes/AllSaves";
 import Ask, { action as askAction, loader as askLoader } from "./routes/Ask";
-import EditUser from "./routes/EditUser";
+import EditUser, { action as editUserAction } from "./routes/EditUser";
 import LeftSidebar from "./routes/LeftSidebar";
 import Preferences, { action as preferencesAction } from "./routes/Preferences";
 import Question, {
@@ -92,6 +92,8 @@ const router = createBrowserRouter([
                   {
                     path: "edit",
                     element: <EditUser />,
+
+                    action: editUserAction,
                   },
                 ],
               },
