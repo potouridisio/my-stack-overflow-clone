@@ -1,5 +1,7 @@
+// import { Form, useNavigation } from "react-router-dom";
+
 import { Helmet } from "react-helmet";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useOutletContext } from "react-router-dom";
 
 import SearchIcon from "@mui/icons-material/Search";
 import Box from "@mui/material/Box";
@@ -76,7 +78,11 @@ export default function Users() {
                   </Typography>
 
                   <Typography sx={{ mb: 1.5 }} variant="body2">
-                    {user.reputation}
+                    {Number(user.reputation)}
+                  </Typography>
+
+                  <Typography sx={{ mb: 1.5 }} variant="body2">
+                    {user.title}
                   </Typography>
 
                   <Stack direction="row" divider={<>,&nbsp;</>}>
